@@ -1,6 +1,18 @@
+import "server-only";
+
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from "./providers";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
+
+const poppins = Poppins({
+  weight: ['400', '700'], // Specify the weights you need
+  subsets: ['latin'], // Specify the subsets
+  display: 'swap', // Ensures text remains visible during font load
+  variable: '--font-poppins', // (Optional) for use with CSS variables
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,10 +36,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta charSet="utf-8" />
+      <link rel="icon" href="/favicon.ico" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Providers>
+            {children}
+            <Toaster position="top-center" richColors />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   );

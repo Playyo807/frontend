@@ -1,0 +1,23 @@
+"use client";
+
+import { signIn } from "next-auth/react";
+
+export default function SignInPage() {
+  return (
+    <main className="min-h-screen flex items-center justify-center bg-black">
+      <div className="p-6 rounded-xl bg-zinc-900 text-white">
+        <h1 className="text-2xl font-bold mb-4">Entrar</h1>
+
+        <button
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+          className="px-4 py-2 bg-white text-black rounded-lg font-bold cursor-pointer hover:bg-gray-300 flex flex-row text-center align-middle justify-center items-center"
+        >
+          <svg className="w-12 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+            <path d="M564 325.8C564 467.3 467.1 568 324 568C186.8 568 76 457.2 76 320C76 182.8 186.8 72 324 72C390.8 72 447 96.5 490.3 136.9L422.8 201.8C334.5 116.6 170.3 180.6 170.3 320C170.3 406.5 239.4 476.6 324 476.6C422.2 476.6 459 406.2 464.8 369.7L324 369.7L324 284.4L560.1 284.4C562.4 297.1 564 309.3 564 325.8z" />
+          </svg>
+          Entrar com Google
+        </button>
+      </div>
+    </main>
+  );
+}

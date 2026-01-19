@@ -1,0 +1,47 @@
+.phone-input {
+  width: "100%";
+  background: "#1f2937";
+  border: "1px solid #374151";
+  color: "#fff";
+  border-radius: "0.375rem";
+  padding: "0.5rem 1rem";
+}
+.custom-phone-button {
+  background: #1f2937 !important; /* Força o estilo de fundo */
+  color: #fff !important; /* Força a cor do texto */
+  border: none !important;
+  border-radius: 0.375rem !important;
+  transition: background 0.3s ease !important;
+}
+
+.custom-phone-button:hover {
+  background: #374151 !important; /* Cor ao passar o mouse */
+  color: #e5e7eb !important; /* Texto mais claro */
+}
+.selected-flag {
+  background: #1f2937 !important; /* Força o estilo de fundo */
+  color: #fff !important; /* Força a cor do texto */
+  border: none !important;
+  border-radius: 0.375rem !important;
+  transition: background 0.3s ease !important;
+}
+.selected-flag:hover {
+  background: #374151 !important; /* Cor ao passar o mouse */
+  color: #e5e7eb !important; /* Texto mais claro */
+}
+.country-list {
+  background: rgba(31, 41, 55, 0.3) !important; /* Força o estilo de fundo */
+  backdrop-filter: blur(12px) !important; /* Adiciona o efeito de desfoque */
+  color: #fff !important; /* Força a cor do texto */
+  border: none !important;
+  border-radius: 0.375rem !important;
+  transition: background 0.3s ease !important;
+}
+.country-list li:hover {
+  background: rgba(55, 65, 81, 0.6) !important; /* Cor ao passar o mouse */
+  color: #e5e7eb !important; /* Texto mais claro */
+}
+.country-list li.highlight {
+  background: rgba(0, 0, 0, 0.6) !important; /* Cor ao passar o mouse */
+  color: #e5e7eb !important; /* Texto mais claro */
+}
