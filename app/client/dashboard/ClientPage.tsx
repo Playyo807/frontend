@@ -35,6 +35,10 @@ import {
   Scissors,
   AlertCircle,
   ClockAlert,
+  ArrowLeft,
+  Trophy,
+  BookOpen,
+  UserCircle,
 } from "lucide-react";
 import { UserBookings } from "./page";
 import { Separator } from "@radix-ui/react-separator";
@@ -55,9 +59,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Service } from "@/prisma/generated/prisma/client";
+import Link from "next/link";
 
 type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED";
+type TabType = "profile" | "bookings" | "points";
 
 export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
   const searchParams = useSearchParams();
@@ -70,7 +75,7 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
   const [alert, setAlert] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const [userProfileOpen, setUserProfileOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>("bookings");
 
   const [barberProfileOpen, setBarberProfileOpen] = useState(false);
   const [selectedBarber, setSelectedBarber] = useState<
@@ -299,52 +304,6 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
         </DialogContent>
       </Dialog>
 
-      {/* User Profile Dialog */}
-      <Dialog open={userProfileOpen} onOpenChange={setUserProfileOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Meu Perfil</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <div className="flex justify-center">
-              <img
-                src={session?.user?.image ?? "http://example.com"}
-                referrerPolicy="no-referrer"
-                className="rounded-full h-24 w-24 border-4 border-sky-500"
-              />
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
-                <User className="text-sky-500" size={20} />
-                <div>
-                  <p className="text-sm text-gray-400">Nome</p>
-                  <p className="font-semibold">{session?.user?.name}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
-                <Mail className="text-sky-500" size={20} />
-                <div>
-                  <p className="text-sm text-gray-400">Email</p>
-                  <p className="font-semibold text-sm">
-                    {session?.user?.email}
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-slate-800 rounded-lg">
-                <Phone className="text-sky-500" size={20} />
-                <div>
-                  <p className="text-sm text-gray-400">Telefone</p>
-                  <p className="font-semibold">
-                    {/* @ts-expect-error */}
-                    {session?.user?.phone || "Não informado"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-
       {/* Barber Profile Dialog */}
       <Dialog open={barberProfileOpen} onOpenChange={setBarberProfileOpen}>
         <DialogContent className="sm:max-w-md">
@@ -427,13 +386,16 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
         {/* Header */}
         <header className="bg-black w-full p-4 flex flex-row align-middle justify-between sticky top-0 z-40">
           <div className="flex flex-row align-middle items-center gap-2">
-            <button onClick={() => setUserProfileOpen(true)}>
-              <img
-                src={session?.user?.image ?? "http://example.com"}
-                referrerPolicy="no-referrer"
-                className="rounded-full h-10 w-10 md:h-12 md:w-12 hover:ring-2 hover:ring-sky-500 transition-all cursor-pointer"
-              />
-            </button>
+            <Link href="/client">
+              <Button variant="ghost" size="icon" className="hover:bg-slate-800">
+                <ArrowLeft size={20} />
+              </Button>
+            </Link>
+            <img
+              src={session?.user?.image ?? "http://example.com"}
+              referrerPolicy="no-referrer"
+              className="rounded-full h-10 w-10 md:h-12 md:w-12"
+            />
             <h1 className="text-lg md:text-xl font-semibold hidden sm:block">
               {session?.user?.name}
             </h1>
@@ -455,278 +417,408 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
             animate={{ opacity: 1, y: 0 }}
             className="text-2xl md:text-3xl text-white font-bold mb-6"
           >
-            Seus agendamentos
+            Minha Conta
           </motion.h1>
 
-          {/* Filters */}
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
-            <div className="relative flex-1">
-              <Search
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                size={20}
-              />
-              <Input
-                placeholder="Buscar por barbeiro ou serviço..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-slate-800 border-slate-700"
-              />
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                  <Filter size={16} />
-                  <span className="hidden sm:inline">Filtrar:</span>
-                  {statusFilter === "ALL"
-                    ? "Todos"
-                    : statusFilter === "CONFIRMED"
-                      ? "Confirmados"
-                      : statusFilter === "PENDING"
-                        ? "Pendentes"
-                        : "Cancelados"}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setStatusFilter("ALL")}>
-                  Todos
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter("CONFIRMED")}>
-                  Confirmados
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter("PENDING")}>
-                  Pendentes
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setStatusFilter("CANCELED")}>
-                  Cancelados
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+          {/* Tab Navigation */}
+          <div className="flex gap-2 mb-6 border-b border-slate-800">
+            <button
+              onClick={() => setActiveTab("profile")}
+              className={`flex items-center gap-2 px-4 py-3 font-medium transition-all ${
+                activeTab === "profile"
+                  ? "text-sky-500 border-b-2 border-sky-500"
+                  : "text-gray-400 hover:text-gray-300"
+              }`}
+            >
+              <UserCircle size={20} />
+              <span className="hidden sm:inline">Perfil</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("bookings")}
+              className={`flex items-center gap-2 px-4 py-3 font-medium transition-all ${
+                activeTab === "bookings"
+                  ? "text-sky-500 border-b-2 border-sky-500"
+                  : "text-gray-400 hover:text-gray-300"
+              }`}
+            >
+              <BookOpen size={20} />
+              <span className="hidden sm:inline">Agendamentos</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("points")}
+              className={`flex items-center gap-2 px-4 py-3 font-medium transition-all ${
+                activeTab === "points"
+                  ? "text-sky-500 border-b-2 border-sky-500"
+                  : "text-gray-400 hover:text-gray-300"
+              }`}
+            >
+              <Trophy size={20} />
+              <span className="hidden sm:inline">Pontos</span>
+            </button>
           </div>
 
-          {/* Bookings List */}
-          {filteredBookings.length === 0 ? (
-            <div className="text-center py-12">
-              <AlertCircle className="mx-auto text-gray-500 mb-4" size={48} />
-              <p className="text-gray-400 text-lg">
-                Nenhum agendamento encontrado
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {filteredBookings.map((booking) => {
-                const isPastBooking = new Date(booking.date) < new Date();
-                const canCancel =
-                  booking.status !== "CANCELED" && !isPastBooking;
+          {/* Profile Tab */}
+          {activeTab === "profile" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-6"
+            >
+              <div className="flex justify-center">
+                <img
+                  src={session?.user?.image ?? "http://example.com"}
+                  referrerPolicy="no-referrer"
+                  className="rounded-full h-32 w-32 border-4 border-sky-500"
+                />
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-slate-800 rounded-lg">
+                  <User className="text-sky-500" size={24} />
+                  <div>
+                    <p className="text-sm text-gray-400">Nome</p>
+                    <p className="font-semibold text-lg">{session?.user?.name}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-slate-800 rounded-lg">
+                  <Mail className="text-sky-500" size={24} />
+                  <div>
+                    <p className="text-sm text-gray-400">Email</p>
+                    <p className="font-semibold break-all">
+                      {session?.user?.email}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-4 bg-slate-800 rounded-lg">
+                  <Phone className="text-sky-500" size={24} />
+                  <div>
+                    <p className="text-sm text-gray-400">Telefone</p>
+                    <p className="font-semibold">
+                      {/* @ts-expect-error */}
+                      {session?.user?.phone || "Não informado"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
-                return (
-                  <Accordion
-                    key={booking.id}
-                    type="single"
-                    collapsible
-                    className={`${booking.status == "CANCELED" || isPastBooking ? "opacity-60" : ""}`}
-                  >
-                    <AccordionItem value="item-1" className="border-none">
-                      <div className="bg-slate-950 rounded-lg flex flex-col md:flex-row">
-                        {/* Time Section */}
-                        <div className="flex flex-row p-4 gap-3 items-center border-b md:border-b-0 md:border-r border-slate-800">
-                          <AccordionTrigger className="hover:no-underline hover:scale-110 transition-all [&[data-state=open]>svg]:rotate-180">
-                            <ChevronDown className="transition-transform duration-200" />
-                          </AccordionTrigger> 
-                          <div className="flex flex-col">
-                            <span className="font-bold text-lg">
-                              {formatTime12Hour(booking.date)}
-                            </span>
-                            <span className="text-gray-400 text-sm">
-                              {formatTime12Hour(
-                                addMinutes(booking.date, booking.barber.timeInterval),
-                              )}
-                            </span>
-                          </div>
-                        </div>
+          {/* Bookings Tab */}
+          {activeTab === "bookings" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              {/* Filters */}
+              <div className="flex flex-col sm:flex-row gap-3 mb-6">
+                <div className="relative flex-1">
+                  <Search
+                    className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
+                  <Input
+                    placeholder="Buscar por barbeiro ou serviço..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 bg-slate-800 border-slate-700"
+                  />
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="gap-2">
+                      <Filter size={16} />
+                      <span className="hidden sm:inline">Filtrar:</span>
+                      {statusFilter === "ALL"
+                        ? "Todos"
+                        : statusFilter === "CONFIRMED"
+                          ? "Confirmados"
+                          : statusFilter === "PENDING"
+                            ? "Pendentes"
+                            : "Cancelados"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem onClick={() => setStatusFilter("ALL")}>
+                      Todos
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter("CONFIRMED")}>
+                      Confirmados
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter("PENDING")}>
+                      Pendentes
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setStatusFilter("CANCELED")}>
+                      Cancelados
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
 
-                        <Separator
-                          orientation="vertical"
-                          className="hidden md:block bg-sky-600 w-1 my-3 rounded-full"
-                        />
+              {/* Bookings List */}
+              {filteredBookings.length === 0 ? (
+                <div className="text-center py-12">
+                  <AlertCircle className="mx-auto text-gray-500 mb-4" size={48} />
+                  <p className="text-gray-400 text-lg">
+                    Nenhum agendamento encontrado
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {filteredBookings.map((booking) => {
+                    const isPastBooking = new Date(booking.date) < new Date();
+                    const canCancel =
+                      booking.status !== "CANCELED" && !isPastBooking;
 
-                        {/* Main Info */}
-                        <div className="flex-1 p-4 space-y-3">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <h2 className="font-semibold text-base md:text-lg">
-                              {booking.services
-                                .map((service) => service.service.name)
-                                .join(", ")}
-                            </h2>
-                            <span className="bg-sky-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-sky-200 text-xs md:text-sm">
-                              <Calendar className="mr-1" size={14} />
-                              {booking.date.toLocaleDateString("pt-BR", {
-                                month: "2-digit",
-                                day: "2-digit",
-                                year: "numeric",
-                              })}
-                            </span>
-                          </div>
-
-                          <div className="flex flex-wrap gap-2">
-                            <span
-                              className={`${
-                                isPastBooking
-                                  ? "bg-gray-600/80"
-                                  : booking.status == "CONFIRMED"
-                                    ? "bg-emerald-500/80 text-emerald-200"
-                                    : booking.status == "PENDING"
-                                      ? "bg-amber-500/80 text-amber-200"
-                                      : "bg-red-500/80 text-red-200"
-                              } flex flex-row w-fit px-2 py-1 rounded-md items-center text-xs md:text-sm`}
-                            >
-                              {isPastBooking ? (
-                                <ClockAlert size={14} className="mr-1" />
-                              ) : booking.status == "CONFIRMED" ? (
-                                <CircleCheck size={14} className="mr-1" />
-                              ) : booking.status == "PENDING" ? (
-                                <CircleQuestionMark
-                                  size={14}
-                                  className="mr-1"
-                                />
-                              ) : (
-                                <CircleX size={14} className="mr-1" />
-                              )}
-                              {isPastBooking
-                                ? "Passou"
-                                : booking.status == "CONFIRMED"
-                                  ? "Confirmado"
-                                  : booking.status == "PENDING"
-                                    ? "Aguardando"
-                                    : "Cancelado"}
-                            </span>
-                            <span className="bg-rose-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-rose-200 text-xs md:text-sm">
-                              <Clock3 className="mr-1" size={14} />
-                              {booking.totalDuration > 40
-                                ? 40
-                                : booking.totalDuration}{" "}
-                              min
-                            </span>
-                            <span className="bg-emerald-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-emerald-200 text-xs md:text-sm">
-                              <Banknote className="mr-1" size={14} />
-                              {handleDiscount(
-                                booking.totalPrice,
-                                booking.services,
-                              ).toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL",
-                              })}
-                            </span>
-                          </div>
-
-                          {/* User/Barber Info - Mobile */}
-                          <div className="flex md:hidden flex-wrap gap-3 pt-2">
-                            <button
-                              onClick={() => setUserProfileOpen(true)}
-                              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                            >
-                              <img
-                                src={
-                                  session?.user?.image ?? "http://example.com"
-                                }
-                                referrerPolicy="no-referrer"
-                                className="rounded-full h-8 w-8"
-                              />
-                              <span className="font-semibold text-sm">
-                                Você
-                              </span>
-                            </button>
-                            <button
-                              onClick={() => handleBarberClick(booking.barber)}
-                              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                            >
-                              <img
-                                src={
-                                  booking.barber.user.image ??
-                                  "http://example.com"
-                                }
-                                referrerPolicy="no-referrer"
-                                className="rounded-full h-8 w-8"
-                              />
-                              <span className="font-semibold text-sm">
-                                {booking.barber.displayName}
-                              </span>
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* User/Barber Info - Desktop */}
-                        <div className="hidden md:flex flex-col justify-center items-end p-4 gap-3 min-w-50">
-                          <button
-                            onClick={() => setUserProfileOpen(true)}
-                            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                          >
-                            <img
-                              src={session?.user?.image ?? "http://example.com"}
-                              referrerPolicy="no-referrer"
-                              className="rounded-full h-10 w-10"
-                            />
-                            <span className="font-semibold">
-                              {session?.user?.name}
-                            </span>
-                          </button>
-                          <button
-                            onClick={() => handleBarberClick(booking.barber)}
-                            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                          >
-                            <img
-                              src={
-                                booking.barber.user.image ??
-                                "http://example.com"
-                              }
-                              referrerPolicy="no-referrer"
-                              className="rounded-full h-10 w-10"
-                            />
-                            <span className="font-semibold">
-                              {booking.barber.displayName}
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-
-                      <AccordionContent className="bg-slate-950 rounded-b-lg mx-2 md:mx-4 p-4 border-t border-slate-800">
-                        <div className="space-y-4">
-                          <div>
-                            <h3 className="font-semibold mb-2">Serviços:</h3>
-                            <ul className="space-y-2">
-                              {booking.services.map((service, idx) => (
-                                <li
-                                  key={idx}
-                                  className="flex justify-between items-center bg-slate-900 p-2 rounded"
-                                >
-                                  <span>{service.service.name}</span>
-                                  <div className="flex gap-3 text-sm text-gray-400">
-                                    <span>{service.service.duration} min</span>
-                                    <span>R$ {service.service.price}</span>
-                                  </div>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          {canCancel && (
-                            <div className="flex justify-end pt-2">
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={() => handleCancelBooking(booking.id)}
-                                disabled={isPending}
-                              >
-                                Cancelar Agendamento
-                              </Button>
+                    return (
+                      <Accordion
+                        key={booking.id}
+                        type="single"
+                        collapsible
+                        className={`${booking.status == "CANCELED" || isPastBooking ? "opacity-60" : ""}`}
+                      >
+                        <AccordionItem value="item-1" className="border-none">
+                          <div className="bg-slate-950 rounded-lg flex flex-col md:flex-row">
+                            {/* Time Section */}
+                            <div className="flex flex-row p-4 gap-3 items-center border-b md:border-b-0 md:border-r border-slate-800">
+                              <AccordionTrigger className="hover:no-underline hover:scale-110 transition-all [&[data-state=open]>svg]:rotate-180">
+                                <ChevronDown className="transition-transform duration-200" />
+                              </AccordionTrigger>
+                              <div className="flex flex-col">
+                                <span className="font-bold text-lg">
+                                  {formatTime12Hour(booking.date)}
+                                </span>
+                                <span className="text-gray-400 text-sm">
+                                  {formatTime12Hour(
+                                    addMinutes(booking.date, booking.barber.timeInterval),
+                                  )}
+                                </span>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                );
-              })}
-            </div>
+
+                            <Separator
+                              orientation="vertical"
+                              className="hidden md:block bg-sky-600 w-1 my-3 rounded-full"
+                            />
+
+                            {/* Main Info */}
+                            <div className="flex-1 p-4 space-y-3">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <h2 className="font-semibold text-base md:text-lg">
+                                  {booking.services
+                                    .map((service) => service.service.name)
+                                    .join(", ")}
+                                </h2>
+                                <span className="bg-sky-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-sky-200 text-xs md:text-sm">
+                                  <Calendar className="mr-1" size={14} />
+                                  {booking.date.toLocaleDateString("pt-BR", {
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    year: "numeric",
+                                  })}
+                                </span>
+                              </div>
+
+                              <div className="flex flex-wrap gap-2">
+                                <span
+                                  className={`${
+                                    isPastBooking
+                                      ? "bg-gray-600/80"
+                                      : booking.status == "CONFIRMED"
+                                        ? "bg-emerald-500/80 text-emerald-200"
+                                        : booking.status == "PENDING"
+                                          ? "bg-amber-500/80 text-amber-200"
+                                          : "bg-red-500/80 text-red-200"
+                                  } flex flex-row w-fit px-2 py-1 rounded-md items-center text-xs md:text-sm`}
+                                >
+                                  {isPastBooking ? (
+                                    <ClockAlert size={14} className="mr-1" />
+                                  ) : booking.status == "CONFIRMED" ? (
+                                    <CircleCheck size={14} className="mr-1" />
+                                  ) : booking.status == "PENDING" ? (
+                                    <CircleQuestionMark
+                                      size={14}
+                                      className="mr-1"
+                                    />
+                                  ) : (
+                                    <CircleX size={14} className="mr-1" />
+                                  )}
+                                  {isPastBooking
+                                    ? "Passou"
+                                    : booking.status == "CONFIRMED"
+                                      ? "Confirmado"
+                                      : booking.status == "PENDING"
+                                        ? "Aguardando"
+                                        : "Cancelado"}
+                                </span>
+                                <span className="bg-rose-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-rose-200 text-xs md:text-sm">
+                                  <Clock3 className="mr-1" size={14} />
+                                  {booking.totalDuration > 40
+                                    ? 40
+                                    : booking.totalDuration}{" "}
+                                  min
+                                </span>
+                                <span className="bg-emerald-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-emerald-200 text-xs md:text-sm">
+                                  <Banknote className="mr-1" size={14} />
+                                  {handleDiscount(
+                                    booking.totalPrice,
+                                    booking.services,
+                                  ).toLocaleString("pt-BR", {
+                                    style: "currency",
+                                    currency: "BRL",
+                                  })}
+                                </span>
+                              </div>
+
+                              {/* User/Barber Info - Mobile */}
+                              <div className="flex md:hidden flex-wrap gap-3 pt-2">
+                                <div className="flex items-center gap-2">
+                                  <img
+                                    src={
+                                      session?.user?.image ?? "http://example.com"
+                                    }
+                                    referrerPolicy="no-referrer"
+                                    className="rounded-full h-8 w-8"
+                                  />
+                                  <span className="font-semibold text-sm">
+                                    Você
+                                  </span>
+                                </div>
+                                <button
+                                  onClick={() => handleBarberClick(booking.barber)}
+                                  className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                                >
+                                  <img
+                                    src={
+                                      booking.barber.user.image ??
+                                      "http://example.com"
+                                    }
+                                    referrerPolicy="no-referrer"
+                                    className="rounded-full h-8 w-8"
+                                  />
+                                  <span className="font-semibold text-sm">
+                                    {booking.barber.displayName}
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* User/Barber Info - Desktop */}
+                            <div className="hidden md:flex flex-col justify-center items-end p-4 gap-3 min-w-50">
+                              <div className="flex items-center gap-2">
+                                <img
+                                  src={session?.user?.image ?? "http://example.com"}
+                                  referrerPolicy="no-referrer"
+                                  className="rounded-full h-10 w-10"
+                                />
+                                <span className="font-semibold">
+                                  {session?.user?.name}
+                                </span>
+                              </div>
+                              <button
+                                onClick={() => handleBarberClick(booking.barber)}
+                                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                              >
+                                <img
+                                  src={
+                                    booking.barber.user.image ??
+                                    "http://example.com"
+                                  }
+                                  referrerPolicy="no-referrer"
+                                  className="rounded-full h-10 w-10"
+                                />
+                                <span className="font-semibold">
+                                  {booking.barber.displayName}
+                                </span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <AccordionContent className="bg-slate-950 rounded-b-lg mx-2 md:mx-4 p-4 border-t border-slate-800">
+                            <div className="space-y-4">
+                              <div>
+                                <h3 className="font-semibold mb-2">Serviços:</h3>
+                                <ul className="space-y-2">
+                                  {booking.services.map((service, idx) => (
+                                    <li
+                                      key={idx}
+                                      className="flex justify-between items-center bg-slate-900 p-2 rounded"
+                                    >
+                                      <span>{service.service.name}</span>
+                                      <div className="flex gap-3 text-sm text-gray-400">
+                                        <span>{service.service.duration} min</span>
+                                        <span>R$ {service.service.price}</span>
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {canCancel && (
+                                <div className="flex justify-end pt-2">
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    onClick={() => handleCancelBooking(booking.id)}
+                                    disabled={isPending}
+                                  >
+                                    Cancelar Agendamento
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    );
+                  })}
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* Points Tab */}
+          {activeTab === "points" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col items-center justify-center py-16 space-y-6"
+            >
+              <div className="bg-slate-800/50 rounded-full p-8">
+                <Trophy size={80} className="text-amber-500" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-300">
+                Sistema de Pontos
+              </h2>
+              <p className="text-gray-400 text-center max-w-md">
+                Em breve! Ganhe pontos a cada visita e troque por descontos e
+                recompensas exclusivas.
+              </p>
+              <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full">
+                <h3 className="font-semibold mb-4 text-center">
+                  Funcionalidades Futuras:
+                </h3>
+                <ul className="space-y-3 text-gray-300">
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="text-emerald-500" size={20} />
+                    <span>Acumule pontos por agendamento</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="text-emerald-500" size={20} />
+                    <span>Troque pontos por descontos</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="text-emerald-500" size={20} />
+                    <span>Benefícios exclusivos de fidelidade</span>
+                  </li>
+                  <li className="flex items-center gap-3">
+                    <CheckCircle2 className="text-emerald-500" size={20} />
+                    <span>Rankings e premiações mensais</span>
+                  </li>
+                </ul>
+              </div>
+            </motion.div>
           )}
         </div>
       </main>
