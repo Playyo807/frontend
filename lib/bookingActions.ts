@@ -2,8 +2,21 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { startOfDay, endOfDay, addMinutes, isBefore, isAfter } from "date-fns";
-import { auth } from "@/auth";
+import {
+  startOfDay,
+  endOfDay,
+  addMinutes,
+  isBefore,
+  isAfter,
+  isWeekend,
+} from "date-fns";
+import { auth } from "@/auth"; // Auth.js v5
+import {
+  Prisma,
+  DisabledDay,
+  ExtraTimeDay,
+  DisabledTime,
+} from "@/prisma/generated/prisma/client";
 
 interface TimeSlot {
   start: Date;
@@ -26,11 +39,26 @@ interface TimeSlotResponse {
   isBooked: boolean;
 }
 
+export type BookingWithRelations = Prisma.BookingGetPayload<{
+  include: {
+    services: {
+      include: {
+        service: true;
+      };
+    };
+    barber: {
+      include: {
+        user: true;
+      };
+    };
+  };
+}>;
+
 // Get monthly availability for a barber
 export async function getBarberAvailability(
   barberId: string,
   month: string, // Format: YYYY-MM
-  timezone: string = "America/Sao_Paulo"
+  timezone: string = "America/Sao_Paulo",
 ): Promise<{ availability: DayAvailability[] }> {
   try {
     // Get barber profile
@@ -66,6 +94,25 @@ export async function getBarberAvailability(
       },
     });
 
+    // Get manually disabled days for this barber in the month
+    const disabledDays = await prisma.disabledDay.findMany({
+      where: {
+        barberId,
+        date: {
+          gte: startOfDay(firstDay),
+          lte: endOfDay(lastDay),
+        },
+      },
+      select: {
+        date: true,
+      },
+    });
+
+    // Create a Set of disabled dates for quick lookup
+    const disabledDatesSet = new Set(
+      disabledDays.map((d) => startOfDay(new Date(d.date)).getTime()),
+    );
+
     // Generate availability for each day
     const availability: DayAvailability[] = [];
     const current = new Date(firstDay);
@@ -74,6 +121,35 @@ export async function getBarberAvailability(
     while (current <= lastDay) {
       const dayStart = startOfDay(current);
       const dayEnd = endOfDay(current);
+
+      // Check if it's a Sunday (0)
+      const dayOfWeek = current.getDay();
+      const isWeekend = dayOfWeek === 0;
+      const isManuallyDisabled = disabledDatesSet.has(dayStart.getTime());
+
+      if (isWeekend && !isManuallyDisabled) {
+        availability.push({
+          date: current.toISOString().split("T")[0],
+          status: "full",
+          availableSlots: 0,
+          totalSlots: 0,
+        });
+        current.setDate(current.getDate() + 1);
+        continue;
+      }
+
+      // Check if day is manually disabled
+
+      if (isManuallyDisabled && !isWeekend) {
+        availability.push({
+          date: current.toISOString().split("T")[0],
+          status: "full",
+          availableSlots: 0,
+          totalSlots: 0,
+        });
+        current.setDate(current.getDate() + 1);
+        continue;
+      }
 
       // Check if day is in the past
       if (isBefore(dayEnd, now)) {
@@ -93,8 +169,11 @@ export async function getBarberAvailability(
         return bookingDate >= dayStart && bookingDate <= dayEnd;
       });
 
-      // Generate time slots for the day (9 AM to 6 PM)
-      const slots = generateTimeSlots(current, barber.timeInterval);
+      const slots = await generateTimeSlots(
+        current,
+        barberId,
+        barber.timeInterval,
+      );
 
       // Mark slots as unavailable based on bookings
       const availableSlots = slots.filter((slot) => {
@@ -145,14 +224,15 @@ export async function getBarberAvailability(
   }
 }
 
-// Get available time slots for a specific day
 export async function getBarberSlots(
   barberId: string,
   dateStr: string, // Format: YYYY-MM-DD
-  timezone: string = "America/Sao_Paulo"
+  timezone: string = "America/Sao_Paulo",
 ): Promise<{ slots: TimeSlotResponse[] }> {
   try {
     const date = new Date(dateStr + "T12:00:00");
+    const dayOfWeek = date.getDay();
+    const isSunday = dayOfWeek === 0;
 
     // Get barber profile
     const barber = await prisma.barberProfile.findUnique({
@@ -162,6 +242,29 @@ export async function getBarberSlots(
 
     if (!barber) {
       throw new Error("Barber not found");
+    }
+
+    // Check if day is manually disabled
+    const dayStart = startOfDay(date);
+    const isDisabled = await prisma.disabledDay.findFirst({
+      where: {
+        barberId,
+        date: dayStart,
+      },
+    });
+
+    // For Sundays: reversed logic (need to be ENABLED via disabledDays table)
+    if (isSunday) {
+      // If Sunday is NOT in table, it's disabled by default
+      if (!isDisabled) {
+        return { slots: [] };
+      }
+      // If Sunday IS in table, it's enabled, continue to show slots
+    }
+
+    // For non-Sundays: normal logic (in table = disabled)
+    if (!isSunday && isDisabled) {
+      return { slots: [] };
     }
 
     // Get bookings for this day
@@ -182,8 +285,8 @@ export async function getBarberSlots(
       },
     });
 
-    // Generate time slots
-    const slots = generateTimeSlots(date, barber.timeInterval);
+    // Generate time slots - THIS IS THE KEY FIX
+    const slots = await generateTimeSlots(date, barberId, barber.timeInterval);
     const now = new Date();
 
     // Mark slots as available/unavailable
@@ -221,9 +324,12 @@ export async function getBarberSlots(
 export async function createBooking(
   barberId: string,
   serviceIds: string[],
-  dateTime: string, // ISO string
-  timezone: string
-) {
+  dateTime: string,
+  timezone: string,
+): Promise<{
+  success: boolean;
+  booking: BookingWithRelations;
+}> {
   try {
     const session = await auth();
 
@@ -268,11 +374,11 @@ export async function createBooking(
 
     const totalPrice = services.reduce(
       (sum, service) => sum + service.price,
-      0
+      0,
     );
     const totalDuration = services.reduce(
       (sum, service) => sum + service.duration,
-      0
+      0,
     );
 
     const bookingDate = new Date(dateTime);
@@ -320,7 +426,7 @@ export async function createBooking(
       const newBooking = await tx.booking.create({
         data: {
           date: bookingDate,
-          status: "PENDING",
+          status: "CONFIRMED",
           userId: user.id,
           barberId,
           totalPrice,
@@ -359,7 +465,9 @@ export async function createBooking(
 }
 
 // Get user's bookings
-export async function getUserBookings() {
+export async function getUserBookings(): Promise<{
+  bookings: BookingWithRelations[];
+}> {
   try {
     const session = await auth();
 
@@ -404,31 +512,77 @@ export async function getUserBookings() {
 }
 
 // Helper function to generate time slots
-function generateTimeSlots(date: Date, intervalMinutes: number): TimeSlot[] {
+// Add this debug version to check what's happening
+
+// Helper function to generate time slots (DEBUGGED VERSION)
+async function generateTimeSlots(
+  date: Date,
+  barberId: string,
+  intervalMinutes: number,
+): Promise<TimeSlot[]> {
   const slots: TimeSlot[] = [];
+  
+  // Get extra time for this day
+  const extraTimeDay = await getExtraTimeDay(date, barberId);
+  console.log('🔍 Extra Time Day:', extraTimeDay); // DEBUG
+  
+  // Get disabled times
+  const disabledTimes = await getDisabledTimes(barberId);
+  const disabledDates = disabledTimes.map((d) => d.date);
 
-  // Business hours: 9 AM to 6 PM
   const workStart = new Date(date);
-  workStart.setHours(8, 0, 0, 0);
-
   const workEnd = new Date(date);
-  workEnd.setHours(21, 0, 0, 0);
+
+  const isWeekend_ = workStart.getDay() == 0 || workStart.getDay() == 6;
+
+  if (isWeekend_) {
+    workStart.setHours(8, 0, 0, 0);
+    workEnd.setHours(19, 0, 0, 0);
+  } else {
+    workStart.setHours(8, 0, 0, 0);
+    workEnd.setHours(21, 0, 0, 0);
+  }
+
+  console.log('⏰ Work End BEFORE extra time:', workEnd); // DEBUG
+
+  if (extraTimeDay) {
+    const extraMinutes = intervalMinutes * extraTimeDay.amount;
+    workEnd.setMinutes(workEnd.getMinutes() + extraMinutes);
+    console.log('➕ Adding extra minutes:', extraMinutes); // DEBUG
+    console.log('⏰ Work End AFTER extra time:', workEnd); // DEBUG
+  }
 
   let currentSlot = new Date(workStart);
+  let slotCount = 0;
 
   while (isBefore(currentSlot, workEnd)) {
     const slotEnd = addMinutes(currentSlot, intervalMinutes);
     const interval1 = new Date(workStart);
-    interval1.setHours(11, 30, 0, 0);
-    const interval2 = new Date(interval1);
-    interval2.setHours(14, 0, 0, 0);
+    interval1.setHours(11, 20, 0, 0);
+    const interval2 = new Date(workStart);
+    interval2.setHours(12, 30, 0, 0);
+    
+    const currentSlotDisabled = disabledDates.some(
+      (d) => d.getTime() === currentSlot.getTime(),
+    );
 
     if (isAfter(slotEnd, workEnd)) {
       break;
     }
 
+    if (currentSlotDisabled) {
+      console.log('🚫 Skipping disabled slot:', currentSlot);
+      currentSlot = slotEnd;
+      continue;
+    }
+
+    // Lunch break logic
     if (currentSlot > interval1 && currentSlot < interval2) {
-      currentSlot = addMinutes(currentSlot, intervalMinutes);
+      if (isWeekend_) {
+        currentSlot.setHours(13, 0, 0, 0);
+      } else {
+        currentSlot.setHours(14, 0, 0, 0);
+      }
       continue;
     }
 
@@ -438,8 +592,671 @@ function generateTimeSlots(date: Date, intervalMinutes: number): TimeSlot[] {
       isAvailable: true,
     });
 
+    slotCount++;
     currentSlot = slotEnd;
   }
 
+  console.log('✅ Total slots generated:', slotCount); // DEBUG
+  console.log('📊 Last slot end time:', slots[slots.length - 1]?.end); // DEBUG
+
   return slots;
+}
+
+export async function getExtraTimeDay(
+  date: Date,
+  barberId: string,
+): Promise<ExtraTimeDay | null> {
+  const dayStart = startOfDay(date);
+  
+  const extraTimeDay = await prisma.extraTimeDay.findFirst({
+    where: { 
+      date: dayStart,
+      barberId 
+    },
+  });
+  
+  console.log('🔎 Searching for extra time:', { date: dayStart, barberId }); // DEBUG
+  console.log('🔎 Found:', extraTimeDay); // DEBUG
+  
+  return extraTimeDay;
+}
+
+// Disable a day for a barber
+export async function disableDay(
+  barberId: string,
+  date: Date,
+  reason?: string,
+) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    // Verify user is the barber or admin
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        barberProfile: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Check if user is authorized (is the barber or admin)
+    const isAuthorized =
+      user.barberProfile?.id === barberId ||
+      user.role === "ADMIN" ||
+      user.role === "SUPERADMIN";
+
+    if (!isAuthorized) {
+      throw new Error("Not authorized to disable days for this barber");
+    }
+
+    const dayStart = startOfDay(date);
+
+    // Check if day is in the past
+    if (isBefore(dayStart, startOfDay(new Date()))) {
+      throw new Error("Cannot disable past days");
+    }
+
+    // Create or update disabled day
+    const disabledDay = await prisma.disabledDay.upsert({
+      where: {
+        barberId_date: {
+          barberId,
+          date: dayStart,
+        },
+      },
+      create: {
+        barberId,
+        date: dayStart,
+        reason: reason || "Indisponível",
+      },
+      update: {
+        reason: reason || "Indisponível",
+      },
+    });
+
+    return { success: true, disabledDay };
+  } catch (error) {
+    console.error("Error disabling day:", error);
+    throw error;
+  }
+}
+
+// Enable a previously disabled day
+export async function enableDay(barberId: string, date: Date) {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    // Verify user is the barber or admin
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        barberProfile: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Check if user is authorized
+    const isAuthorized =
+      user.barberProfile?.id === barberId ||
+      user.role === "ADMIN" ||
+      user.role === "SUPERADMIN";
+
+    if (!isAuthorized) {
+      throw new Error("Not authorized to enable days for this barber");
+    }
+
+    const dayStart = startOfDay(date);
+
+    await prisma.disabledDay.delete({
+      where: {
+        barberId_date: {
+          barberId,
+          date: dayStart,
+        },
+      },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error enabling day:", error);
+    throw error;
+  }
+}
+
+// Get all disabled days for a barber
+export async function getDisabledDays(
+  barberId: string,
+  startDate?: Date,
+  endDate?: Date,
+): Promise<{
+  disabledDays: DisabledDay[];
+}> {
+  try {
+    const where: {
+      barberId: string;
+      date?: {
+        gte?: Date;
+        lte?: Date;
+      };
+    } = { barberId };
+
+    if (startDate || endDate) {
+      where.date = {};
+      if (startDate) where.date.gte = startOfDay(startDate);
+      if (endDate) where.date.lte = endOfDay(endDate);
+    }
+
+    const disabledDays = await prisma.disabledDay.findMany({
+      where,
+      orderBy: {
+        date: "asc",
+      },
+    });
+
+    return { disabledDays };
+  } catch (error) {
+    console.error("Error fetching disabled days:", error);
+    throw error;
+  }
+}
+
+export async function getDisabledTimes(
+  barberId: string,
+): Promise<DisabledTime[]> {
+  const disabledTimes = await prisma.disabledTime.findMany({
+    where: { barberId },
+  });
+  return disabledTimes;
+}
+
+// Disable a specific time slot
+export async function disableTimeSlot(
+  barberId: string,
+  dateTime: Date
+): Promise<{ success: boolean; disabledTime: DisabledTime }> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { barberProfile: true },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isAuthorized =
+      user.barberProfile?.id === barberId ||
+      user.role === "ADMIN" ||
+      user.role === "SUPERADMIN";
+
+    if (!isAuthorized) {
+      throw new Error("Not authorized");
+    }
+
+    if (isBefore(dateTime, new Date())) {
+      throw new Error("Cannot disable past time slots");
+    }
+
+    const disabledTime = await prisma.disabledTime.create({
+      data: {
+        barberId,
+        date: dateTime,
+      },
+    });
+
+    return { success: true, disabledTime };
+  } catch (error) {
+    console.error("Error disabling time slot:", error);
+    throw error;
+  }
+}
+
+// Enable a specific time slot
+export async function enableTimeSlot(
+  disabledTimeId: string
+): Promise<{ success: boolean }> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    await prisma.disabledTime.delete({
+      where: { id: disabledTimeId },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error enabling time slot:", error);
+    throw error;
+  }
+}
+
+// Get disabled times for a specific day
+export async function getDisabledTimesForDay(
+  barberId: string,
+  dateStr: string
+): Promise<DisabledTime[]> {
+  try {
+    const date = new Date(dateStr + "T00:00:00");
+    const dayStart = startOfDay(date);
+    const dayEnd = endOfDay(date);
+
+    const disabledTimes = await prisma.disabledTime.findMany({
+      where: {
+        barberId,
+        date: {
+          gte: dayStart,
+          lte: dayEnd,
+        },
+      },
+      orderBy: {
+        date: "asc",
+      },
+    });
+
+    return disabledTimes;
+  } catch (error) {
+    console.error("Error fetching disabled times:", error);
+    throw error;
+  }
+}
+
+// Add extra time to a specific day
+export async function addExtraTime(
+  barberId: string,
+  date: Date,
+  amount: number
+): Promise<{ success: boolean; extraTimeDay: ExtraTimeDay }> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { barberProfile: true },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isAuthorized =
+      user.barberProfile?.id === barberId ||
+      user.role === "ADMIN" ||
+      user.role === "SUPERADMIN";
+
+    if (!isAuthorized) {
+      throw new Error("Not authorized");
+    }
+
+    const dayStart = startOfDay(date);
+
+    if (isBefore(dayStart, startOfDay(new Date()))) {
+      throw new Error("Cannot add extra time to past days");
+    }
+
+    if (amount < 1 || amount > 20) {
+      throw new Error("Amount must be between 1 and 20");
+    }
+
+    const extraTimeDay = await prisma.extraTimeDay.upsert({
+      where: {
+        barberId_date: {
+          barberId,
+          date: dayStart,
+        },
+      },
+      create: {
+        barberId,
+        date: dayStart,
+        amount,
+      },
+      update: {
+        amount,
+      },
+    });
+
+    return { success: true, extraTimeDay };
+  } catch (error) {
+    console.error("Error adding extra time:", error);
+    throw error;
+  }
+}
+
+// Remove extra time from a day
+export async function removeExtraTime(
+  extraTimeId: string
+): Promise<{ success: boolean }> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    await prisma.extraTimeDay.delete({
+      where: { id: extraTimeId },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error removing extra time:", error);
+    throw error;
+  }
+}
+
+// Get all extra time days for a barber
+export async function getExtraTimeDays(
+  barberId: string
+): Promise<ExtraTimeDay[]> {
+  try {
+    const extraTimeDays = await prisma.extraTimeDay.findMany({
+      where: { barberId },
+      orderBy: { date: "asc" },
+    });
+
+    return extraTimeDays;
+  } catch (error) {
+    console.error("Error fetching extra time days:", error);
+    throw error;
+  }
+}
+
+// Get all users with booking count (for barber dashboard)
+export async function getAllUsers(): Promise<any[]> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { barberProfile: true },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const isAuthorized =
+      user.barberProfile ||
+      user.role === "ADMIN" ||
+      user.role === "SUPERADMIN";
+
+    if (!isAuthorized) {
+      throw new Error("Not authorized");
+    }
+
+    const users = await prisma.user.findMany({
+      where: {
+        role: "USER",
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        image: true,
+        createdAt: true,
+        role: true,
+        _count: {
+          select: {
+            bookings: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+}
+
+// Create booking as barber (for a specific user)
+export async function createBookingAsBarber(
+  userId: string,
+  barberId: string,
+  serviceIds: string[],
+  dateTime: string,
+  timezone: string
+): Promise<{
+  success: boolean;
+  booking: BookingWithRelations;
+}> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    const barber = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: { barberProfile: true },
+    });
+
+    if (!barber) {
+      throw new Error("Barber not found");
+    }
+
+    const isAuthorized =
+      barber.barberProfile?.id === barberId ||
+      barber.role === "ADMIN" ||
+      barber.role === "SUPERADMIN";
+
+    if (!isAuthorized) {
+      throw new Error("Not authorized");
+    }
+
+    // Validate input
+    if (!userId || !barberId || !serviceIds || serviceIds.length === 0 || !dateTime) {
+      throw new Error("Missing required fields");
+    }
+
+    // Get user
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Get barber profile
+    const barberProfile = await prisma.barberProfile.findUnique({
+      where: { id: barberId },
+      select: { timeInterval: true },
+    });
+
+    if (!barberProfile) {
+      throw new Error("Barber profile not found");
+    }
+
+    // Get services and calculate total price and duration
+    const services = await prisma.service.findMany({
+      where: {
+        id: { in: serviceIds },
+      },
+    });
+
+    if (services.length !== serviceIds.length) {
+      throw new Error("One or more services not found");
+    }
+
+    const totalPrice = services.reduce((sum, service) => sum + service.price, 0);
+    const totalDuration = services.reduce((sum, service) => sum + service.duration, 0);
+
+    const bookingDate = new Date(dateTime);
+    const now = new Date();
+
+    // Check if booking is in the past
+    if (isBefore(bookingDate, now)) {
+      throw new Error("Cannot book in the past");
+    }
+
+    // Check if slot is available
+    const bookingEnd = addMinutes(bookingDate, totalDuration);
+
+    const conflictingBookings = await prisma.booking.findMany({
+      where: {
+        barberId,
+        status: {
+          in: ["PENDING", "CONFIRMED"],
+        },
+        date: {
+          gte: startOfDay(bookingDate),
+          lte: endOfDay(bookingDate),
+        },
+      },
+    });
+
+    // Check for conflicts
+    const hasConflict = conflictingBookings.some((booking) => {
+      const existingStart = new Date(booking.date);
+      const existingEnd = addMinutes(existingStart, booking.totalDuration);
+
+      return (
+        (bookingDate >= existingStart && bookingDate < existingEnd) ||
+        (bookingEnd > existingStart && bookingEnd <= existingEnd) ||
+        (bookingDate <= existingStart && bookingEnd >= existingEnd)
+      );
+    });
+
+    if (hasConflict) {
+      throw new Error("This time slot is no longer available");
+    }
+
+    // Create booking
+    const booking = await prisma.booking.create({
+      data: {
+        date: bookingDate,
+        status: "CONFIRMED",
+        userId: user.id,
+        barberId,
+        totalPrice,
+        totalDuration,
+        services: {
+          create: serviceIds.map((serviceId) => ({
+            serviceId,
+          })),
+        },
+      },
+      include: {
+        services: {
+          include: {
+            service: true,
+          },
+        },
+        barber: {
+          include: {
+            user: true,
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      booking,
+    };
+  } catch (error) {
+    console.error("Error creating booking as barber:", error);
+    throw error;
+  }
+}
+
+// Update existing cancelBooking function
+export async function cancelBooking(
+  bookingId: string
+): Promise<{
+  success: boolean;
+}> {
+  try {
+    const session = await auth();
+
+    if (!session?.user?.email) {
+      throw new Error("Unauthorized");
+    }
+
+    // Get user
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Get booking to verify ownership
+    const booking = await prisma.booking.findUnique({
+      where: { id: bookingId },
+      select: {
+        userId: true,
+        status: true,
+        date: true,
+      },
+    });
+
+    if (!booking) {
+      throw new Error("Booking not found");
+    }
+
+    // Check if user owns this booking
+    if (booking.userId !== user.id) {
+      throw new Error("Not authorized to cancel this booking");
+    }
+
+    // Check if booking is already canceled
+    if (booking.status === "CANCELED") {
+      throw new Error("Booking is already canceled");
+    }
+
+    // Check if booking is in the past
+    if (new Date(booking.date) < new Date()) {
+      throw new Error("Cannot cancel past bookings");
+    }
+
+    // Update booking status to CANCELED
+    await prisma.booking.update({
+      where: { id: bookingId },
+      data: { status: "CANCELED" },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error canceling booking:", error);
+    throw error;
+  }
 }

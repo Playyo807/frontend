@@ -392,7 +392,10 @@ export const ModelName = {
   Service: 'Service',
   BarberProfileToService: 'BarberProfileToService',
   BookingService: 'BookingService',
-  Booking: 'Booking'
+  Booking: 'Booking',
+  DisabledDay: 'DisabledDay',
+  DisabledTime: 'DisabledTime',
+  ExtraTimeDay: 'ExtraTimeDay'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "barberProfile" | "account" | "session" | "verificationToken" | "service" | "barberProfileToService" | "bookingService" | "booking"
+    modelProps: "user" | "barberProfile" | "account" | "session" | "verificationToken" | "service" | "barberProfileToService" | "bookingService" | "booking" | "disabledDay" | "disabledTime" | "extraTimeDay"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1006,6 +1009,204 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    DisabledDay: {
+      payload: Prisma.$DisabledDayPayload<ExtArgs>
+      fields: Prisma.DisabledDayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DisabledDayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DisabledDayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>
+        }
+        findFirst: {
+          args: Prisma.DisabledDayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DisabledDayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>
+        }
+        findMany: {
+          args: Prisma.DisabledDayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>[]
+        }
+        create: {
+          args: Prisma.DisabledDayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>
+        }
+        createMany: {
+          args: Prisma.DisabledDayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.DisabledDayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>
+        }
+        update: {
+          args: Prisma.DisabledDayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>
+        }
+        deleteMany: {
+          args: Prisma.DisabledDayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DisabledDayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.DisabledDayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledDayPayload>
+        }
+        aggregate: {
+          args: Prisma.DisabledDayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDisabledDay>
+        }
+        groupBy: {
+          args: Prisma.DisabledDayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DisabledDayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DisabledDayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DisabledDayCountAggregateOutputType> | number
+        }
+      }
+    }
+    DisabledTime: {
+      payload: Prisma.$DisabledTimePayload<ExtArgs>
+      fields: Prisma.DisabledTimeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DisabledTimeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DisabledTimeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>
+        }
+        findFirst: {
+          args: Prisma.DisabledTimeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DisabledTimeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>
+        }
+        findMany: {
+          args: Prisma.DisabledTimeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>[]
+        }
+        create: {
+          args: Prisma.DisabledTimeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>
+        }
+        createMany: {
+          args: Prisma.DisabledTimeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.DisabledTimeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>
+        }
+        update: {
+          args: Prisma.DisabledTimeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>
+        }
+        deleteMany: {
+          args: Prisma.DisabledTimeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DisabledTimeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.DisabledTimeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DisabledTimePayload>
+        }
+        aggregate: {
+          args: Prisma.DisabledTimeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDisabledTime>
+        }
+        groupBy: {
+          args: Prisma.DisabledTimeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DisabledTimeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DisabledTimeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DisabledTimeCountAggregateOutputType> | number
+        }
+      }
+    }
+    ExtraTimeDay: {
+      payload: Prisma.$ExtraTimeDayPayload<ExtArgs>
+      fields: Prisma.ExtraTimeDayFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ExtraTimeDayFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ExtraTimeDayFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>
+        }
+        findFirst: {
+          args: Prisma.ExtraTimeDayFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ExtraTimeDayFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>
+        }
+        findMany: {
+          args: Prisma.ExtraTimeDayFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>[]
+        }
+        create: {
+          args: Prisma.ExtraTimeDayCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>
+        }
+        createMany: {
+          args: Prisma.ExtraTimeDayCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ExtraTimeDayDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>
+        }
+        update: {
+          args: Prisma.ExtraTimeDayUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>
+        }
+        deleteMany: {
+          args: Prisma.ExtraTimeDayDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ExtraTimeDayUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ExtraTimeDayUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExtraTimeDayPayload>
+        }
+        aggregate: {
+          args: Prisma.ExtraTimeDayAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateExtraTimeDay>
+        }
+        groupBy: {
+          args: Prisma.ExtraTimeDayGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExtraTimeDayGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ExtraTimeDayCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExtraTimeDayCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1151,6 +1352,38 @@ export const BookingScalarFieldEnum = {
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
+export const DisabledDayScalarFieldEnum = {
+  id: 'id',
+  barberId: 'barberId',
+  date: 'date',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type DisabledDayScalarFieldEnum = (typeof DisabledDayScalarFieldEnum)[keyof typeof DisabledDayScalarFieldEnum]
+
+
+export const DisabledTimeScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  barberId: 'barberId',
+  createdAt: 'createdAt'
+} as const
+
+export type DisabledTimeScalarFieldEnum = (typeof DisabledTimeScalarFieldEnum)[keyof typeof DisabledTimeScalarFieldEnum]
+
+
+export const ExtraTimeDayScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  barberId: 'barberId',
+  amount: 'amount',
+  createdAT: 'createdAT'
+} as const
+
+export type ExtraTimeDayScalarFieldEnum = (typeof ExtraTimeDayScalarFieldEnum)[keyof typeof ExtraTimeDayScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1255,6 +1488,31 @@ export const BookingOrderByRelevanceFieldEnum = {
 } as const
 
 export type BookingOrderByRelevanceFieldEnum = (typeof BookingOrderByRelevanceFieldEnum)[keyof typeof BookingOrderByRelevanceFieldEnum]
+
+
+export const DisabledDayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  barberId: 'barberId',
+  reason: 'reason'
+} as const
+
+export type DisabledDayOrderByRelevanceFieldEnum = (typeof DisabledDayOrderByRelevanceFieldEnum)[keyof typeof DisabledDayOrderByRelevanceFieldEnum]
+
+
+export const DisabledTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  barberId: 'barberId'
+} as const
+
+export type DisabledTimeOrderByRelevanceFieldEnum = (typeof DisabledTimeOrderByRelevanceFieldEnum)[keyof typeof DisabledTimeOrderByRelevanceFieldEnum]
+
+
+export const ExtraTimeDayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  barberId: 'barberId'
+} as const
+
+export type ExtraTimeDayOrderByRelevanceFieldEnum = (typeof ExtraTimeDayOrderByRelevanceFieldEnum)[keyof typeof ExtraTimeDayOrderByRelevanceFieldEnum]
 
 
 
@@ -1408,6 +1666,9 @@ export type GlobalOmitConfig = {
   barberProfileToService?: Prisma.BarberProfileToServiceOmit
   bookingService?: Prisma.BookingServiceOmit
   booking?: Prisma.BookingOmit
+  disabledDay?: Prisma.DisabledDayOmit
+  disabledTime?: Prisma.DisabledTimeOmit
+  extraTimeDay?: Prisma.ExtraTimeDayOmit
 }
 
 /* Types for Logging */

@@ -62,3 +62,18 @@ export type BookingService = Prisma.BookingServiceModel
  * 
  */
 export type Booking = Prisma.BookingModel
+/**
+ * Model DisabledDay
+ * 
+ */
+export type DisabledDay = Prisma.DisabledDayModel
+/**
+ * Model DisabledTime
+ * 
+ */
+export type DisabledTime = Prisma.DisabledTimeModel
+/**
+ * Model ExtraTimeDay
+ * 
+ */
+export type ExtraTimeDay = Prisma.ExtraTimeDayModel

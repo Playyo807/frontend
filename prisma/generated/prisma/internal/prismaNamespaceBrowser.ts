@@ -59,7 +59,10 @@ export const ModelName = {
   Service: 'Service',
   BarberProfileToService: 'BarberProfileToService',
   BookingService: 'BookingService',
-  Booking: 'Booking'
+  Booking: 'Booking',
+  DisabledDay: 'DisabledDay',
+  DisabledTime: 'DisabledTime',
+  ExtraTimeDay: 'ExtraTimeDay'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -184,6 +187,38 @@ export const BookingScalarFieldEnum = {
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
 
 
+export const DisabledDayScalarFieldEnum = {
+  id: 'id',
+  barberId: 'barberId',
+  date: 'date',
+  reason: 'reason',
+  createdAt: 'createdAt'
+} as const
+
+export type DisabledDayScalarFieldEnum = (typeof DisabledDayScalarFieldEnum)[keyof typeof DisabledDayScalarFieldEnum]
+
+
+export const DisabledTimeScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  barberId: 'barberId',
+  createdAt: 'createdAt'
+} as const
+
+export type DisabledTimeScalarFieldEnum = (typeof DisabledTimeScalarFieldEnum)[keyof typeof DisabledTimeScalarFieldEnum]
+
+
+export const ExtraTimeDayScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  barberId: 'barberId',
+  amount: 'amount',
+  createdAT: 'createdAT'
+} as const
+
+export type ExtraTimeDayScalarFieldEnum = (typeof ExtraTimeDayScalarFieldEnum)[keyof typeof ExtraTimeDayScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -288,4 +323,29 @@ export const BookingOrderByRelevanceFieldEnum = {
 } as const
 
 export type BookingOrderByRelevanceFieldEnum = (typeof BookingOrderByRelevanceFieldEnum)[keyof typeof BookingOrderByRelevanceFieldEnum]
+
+
+export const DisabledDayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  barberId: 'barberId',
+  reason: 'reason'
+} as const
+
+export type DisabledDayOrderByRelevanceFieldEnum = (typeof DisabledDayOrderByRelevanceFieldEnum)[keyof typeof DisabledDayOrderByRelevanceFieldEnum]
+
+
+export const DisabledTimeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  barberId: 'barberId'
+} as const
+
+export type DisabledTimeOrderByRelevanceFieldEnum = (typeof DisabledTimeOrderByRelevanceFieldEnum)[keyof typeof DisabledTimeOrderByRelevanceFieldEnum]
+
+
+export const ExtraTimeDayOrderByRelevanceFieldEnum = {
+  id: 'id',
+  barberId: 'barberId'
+} as const
+
+export type ExtraTimeDayOrderByRelevanceFieldEnum = (typeof ExtraTimeDayOrderByRelevanceFieldEnum)[keyof typeof ExtraTimeDayOrderByRelevanceFieldEnum]
 

@@ -1,10 +1,10 @@
 import prisma from "@/lib/prisma";
 
 async function main() {
-  await prisma.barberProfileToService.create({
+  await prisma.disabledTime.create({
     data: {
-      barberProfileId: 'cmkfsgh1j0000c0ycy8k4sy05',
-      serviceId: 'cmkfo0i0d0000bsyc0ffv1avb'
+      barberId: "cmkfsgh1j0000c0ycy8k4sy05",
+      date: "2026-01-23T11:40:00.000Z"
     }
   })
 }

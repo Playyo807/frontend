@@ -60,7 +60,7 @@ export default function ClientPage({
 
         if (result.success) {
           alert("Agendamento criado com sucesso!");
-          router.push("/bookings");
+          router.push("/client/dashboard?success=booked");
         }
       } catch (error) {
         console.error("Booking error:", error);

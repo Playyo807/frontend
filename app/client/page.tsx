@@ -8,7 +8,6 @@ dotenv.config();
 
 export default async function serverWrapper() {
   const services = await prisma.service.findMany();
-  const session = await auth();
 
   return (
     <Suspense fallback={<div>Loading...</div>}>

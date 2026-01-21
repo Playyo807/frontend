@@ -24,15 +24,18 @@ model User {
 }
 
 model BarberProfile {
-  id           String                   @id @default(cuid())
-  userId       String                   @unique
-  displayName  String
-  bio          String?
-  timeInterval Int                      @default(40)
-  createdAt    DateTime                 @default(now())
-  user         User                     @relation(fields: [userId], references: [id])
-  bookings     Booking[]
-  services     BarberProfileToService[]
+  id            String                   @id @default(cuid())
+  userId        String                   @unique
+  displayName   String
+  bio           String?
+  timeInterval  Int                      @default(40)
+  createdAt     DateTime                 @default(now())
+  user          User                     @relation(fields: [userId], references: [id])
+  bookings      Booking[]
+  services      BarberProfileToService[]
+  disabledDays  DisabledDay[]
+  extraTimeDays ExtraTimeDay[]
+  disabledTimes DisabledTime[]
 }
 
 model Account {
@@ -118,6 +121,43 @@ model Booking {
 
   @@index([barberId], map: "Booking_barberId_fkey")
   @@index([userId], map: "Booking_userId_fkey")
+}
+
+model DisabledDay {
+  id        String   @id @default(cuid())
+  barberId  String
+  date      DateTime
+  reason    String?
+  createdAt DateTime @default(now())
+
+  barber BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, date])
+  @@index([barberId])
+}
+
+model DisabledTime {
+  id        String   @id @default(cuid())
+  date      DateTime
+  barberId  String
+  createdAt DateTime @default(now())
+
+  barber BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, date])
+  @@index([barberId])
+}
+
+model ExtraTimeDay {
+  id        String        @id @default(cuid())
+  date      DateTime
+  barberId  String
+  amount    Int
+  createdAT DateTime      @default(now())
+  barber    BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, date])
+  @@index([barberId])
 }
 
 enum Role {
