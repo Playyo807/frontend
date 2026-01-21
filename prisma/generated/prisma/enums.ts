@@ -26,3 +26,13 @@ export const BookingStatus = {
 } as const
 
 export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
+
+
+export const TransactionType = {
+  EARNED: 'EARNED',
+  REDEEMED: 'REDEEMED',
+  EXPIRED: 'EXPIRED',
+  ADJUSTED: 'ADJUSTED'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]

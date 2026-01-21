@@ -218,6 +218,8 @@ export type UserWhereInput = {
   barberProfile?: Prisma.XOR<Prisma.BarberProfileNullableScalarRelationFilter, Prisma.BarberProfileWhereInput> | null
   bookings?: Prisma.BookingListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
+  pointSystem?: Prisma.XOR<Prisma.PointSystemNullableScalarRelationFilter, Prisma.PointSystemWhereInput> | null
+  plan?: Prisma.XOR<Prisma.PlanNullableScalarRelationFilter, Prisma.PlanWhereInput> | null
 }
 
 export type UserOrderByWithRelationInput = {
@@ -234,6 +236,8 @@ export type UserOrderByWithRelationInput = {
   barberProfile?: Prisma.BarberProfileOrderByWithRelationInput
   bookings?: Prisma.BookingOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
+  pointSystem?: Prisma.PointSystemOrderByWithRelationInput
+  plan?: Prisma.PlanOrderByWithRelationInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -254,6 +258,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   barberProfile?: Prisma.XOR<Prisma.BarberProfileNullableScalarRelationFilter, Prisma.BarberProfileWhereInput> | null
   bookings?: Prisma.BookingListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
+  pointSystem?: Prisma.XOR<Prisma.PointSystemNullableScalarRelationFilter, Prisma.PointSystemWhereInput> | null
+  plan?: Prisma.XOR<Prisma.PlanNullableScalarRelationFilter, Prisma.PlanWhereInput> | null
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -300,6 +306,8 @@ export type UserCreateInput = {
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -316,6 +324,8 @@ export type UserUncheckedCreateInput = {
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -332,6 +342,8 @@ export type UserUpdateInput = {
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -348,6 +360,8 @@ export type UserUncheckedUpdateInput = {
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -509,6 +523,34 @@ export type UserUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBookingsInput, Prisma.UserUpdateWithoutBookingsInput>, Prisma.UserUncheckedUpdateWithoutBookingsInput>
 }
 
+export type UserCreateNestedOneWithoutPointSystemInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPointSystemInput, Prisma.UserUncheckedCreateWithoutPointSystemInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPointSystemInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPointSystemNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPointSystemInput, Prisma.UserUncheckedCreateWithoutPointSystemInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPointSystemInput
+  upsert?: Prisma.UserUpsertWithoutPointSystemInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPointSystemInput, Prisma.UserUpdateWithoutPointSystemInput>, Prisma.UserUncheckedUpdateWithoutPointSystemInput>
+}
+
+export type UserCreateNestedOneWithoutPlanInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlanInput, Prisma.UserUncheckedCreateWithoutPlanInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlanInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPlanNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlanInput, Prisma.UserUncheckedCreateWithoutPlanInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlanInput
+  upsert?: Prisma.UserUpsertWithoutPlanInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlanInput, Prisma.UserUpdateWithoutPlanInput>, Prisma.UserUncheckedUpdateWithoutPlanInput>
+}
+
 export type UserCreateWithoutBarberProfileInput = {
   id?: string
   name?: string | null
@@ -522,6 +564,8 @@ export type UserCreateWithoutBarberProfileInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBarberProfileInput = {
@@ -537,6 +581,8 @@ export type UserUncheckedCreateWithoutBarberProfileInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBarberProfileInput = {
@@ -568,6 +614,8 @@ export type UserUpdateWithoutBarberProfileInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBarberProfileInput = {
@@ -583,6 +631,8 @@ export type UserUncheckedUpdateWithoutBarberProfileInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -598,6 +648,8 @@ export type UserCreateWithoutAccountsInput = {
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -613,6 +665,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -644,6 +698,8 @@ export type UserUpdateWithoutAccountsInput = {
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -659,6 +715,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -674,6 +732,8 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -689,6 +749,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -720,6 +782,8 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -735,6 +799,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutBookingsInput = {
@@ -750,6 +816,8 @@ export type UserCreateWithoutBookingsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutBookingsInput = {
@@ -765,6 +833,8 @@ export type UserUncheckedCreateWithoutBookingsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutBookingsInput = {
@@ -796,6 +866,8 @@ export type UserUpdateWithoutBookingsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBookingsInput = {
@@ -811,6 +883,176 @@ export type UserUncheckedUpdateWithoutBookingsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPointSystemInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  role?: $Enums.Role
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPointSystemInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  role?: $Enums.Role
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPointSystemInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPointSystemInput, Prisma.UserUncheckedCreateWithoutPointSystemInput>
+}
+
+export type UserUpsertWithoutPointSystemInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPointSystemInput, Prisma.UserUncheckedUpdateWithoutPointSystemInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPointSystemInput, Prisma.UserUncheckedCreateWithoutPointSystemInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPointSystemInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPointSystemInput, Prisma.UserUncheckedUpdateWithoutPointSystemInput>
+}
+
+export type UserUpdateWithoutPointSystemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPointSystemInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPlanInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  role?: $Enums.Role
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPlanInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  phone?: string | null
+  createdAt?: Date | string
+  role?: $Enums.Role
+  updatedAt?: Date | string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPlanInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlanInput, Prisma.UserUncheckedCreateWithoutPlanInput>
+}
+
+export type UserUpsertWithoutPlanInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPlanInput, Prisma.UserUncheckedUpdateWithoutPlanInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlanInput, Prisma.UserUncheckedCreateWithoutPlanInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPlanInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPlanInput, Prisma.UserUncheckedUpdateWithoutPlanInput>
+}
+
+export type UserUpdateWithoutPlanInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPlanInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
 }
 
 
@@ -876,6 +1118,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   barberProfile?: boolean | Prisma.User$barberProfileArgs<ExtArgs>
   bookings?: boolean | Prisma.User$bookingsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  pointSystem?: boolean | Prisma.User$pointSystemArgs<ExtArgs>
+  plan?: boolean | Prisma.User$planArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -899,6 +1143,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   barberProfile?: boolean | Prisma.User$barberProfileArgs<ExtArgs>
   bookings?: boolean | Prisma.User$bookingsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
+  pointSystem?: boolean | Prisma.User$pointSystemArgs<ExtArgs>
+  plan?: boolean | Prisma.User$planArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -909,6 +1155,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     barberProfile: Prisma.$BarberProfilePayload<ExtArgs> | null
     bookings: Prisma.$BookingPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
+    pointSystem: Prisma.$PointSystemPayload<ExtArgs> | null
+    plan: Prisma.$PlanPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1264,6 +1512,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   barberProfile<T extends Prisma.User$barberProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$barberProfileArgs<ExtArgs>>): Prisma.Prisma__BarberProfileClient<runtime.Types.Result.GetResult<Prisma.$BarberProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   bookings<T extends Prisma.User$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pointSystem<T extends Prisma.User$pointSystemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pointSystemArgs<ExtArgs>>): Prisma.Prisma__PointSystemClient<runtime.Types.Result.GetResult<Prisma.$PointSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  plan<T extends Prisma.User$planArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$planArgs<ExtArgs>>): Prisma.Prisma__PlanClient<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1733,6 +1983,44 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
+}
+
+/**
+ * User.pointSystem
+ */
+export type User$pointSystemArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointSystem
+   */
+  select?: Prisma.PointSystemSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PointSystem
+   */
+  omit?: Prisma.PointSystemOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PointSystemInclude<ExtArgs> | null
+  where?: Prisma.PointSystemWhereInput
+}
+
+/**
+ * User.plan
+ */
+export type User$planArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Plan
+   */
+  select?: Prisma.PlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Plan
+   */
+  omit?: Prisma.PlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  where?: Prisma.PlanWhereInput
 }
 
 /**

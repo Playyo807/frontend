@@ -39,6 +39,7 @@ import {
   Trophy,
   BookOpen,
   UserCircle,
+  Ticket,
 } from "lucide-react";
 import { UserBookings } from "./page";
 import { Separator } from "@radix-ui/react-separator";
@@ -60,11 +61,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { createPointSystem, redeemPointsForCoupon } from "@/lib/pointActions";
 
 type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED";
 type TabType = "profile" | "bookings" | "points";
 
-export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
+export default function ClientPage({
+  bookings,
+  pointSystem,
+  availableCoupons,
+}: {
+  bookings: UserBookings[];
+  pointSystem: any;
+  availableCoupons: any[];
+}) {
   const searchParams = useSearchParams();
   const phoneUtil = new PhoneNumberUtil();
   const { data: session, update } = useSession();
@@ -387,7 +397,11 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
         <header className="bg-black w-full p-4 flex flex-row align-middle justify-between sticky top-0 z-40">
           <div className="flex flex-row align-middle items-center gap-2">
             <Link href="/client">
-              <Button variant="ghost" size="icon" className="hover:bg-slate-800">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-slate-800"
+              >
                 <ArrowLeft size={20} />
               </Button>
             </Link>
@@ -419,7 +433,6 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
           >
             Minha Conta
           </motion.h1>
-
           {/* Tab Navigation */}
           <div className="flex gap-2 mb-6 border-b border-slate-800">
             <button
@@ -456,7 +469,6 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
               <span className="hidden sm:inline">Pontos</span>
             </button>
           </div>
-
           {/* Profile Tab */}
           {activeTab === "profile" && (
             <motion.div
@@ -477,7 +489,9 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                   <User className="text-sky-500" size={24} />
                   <div>
                     <p className="text-sm text-gray-400">Nome</p>
-                    <p className="font-semibold text-lg">{session?.user?.name}</p>
+                    <p className="font-semibold text-lg">
+                      {session?.user?.name}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-slate-800 rounded-lg">
@@ -502,7 +516,6 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
               </div>
             </motion.div>
           )}
-
           {/* Bookings Tab */}
           {activeTab === "bookings" && (
             <motion.div
@@ -542,13 +555,19 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                     <DropdownMenuItem onClick={() => setStatusFilter("ALL")}>
                       Todos
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setStatusFilter("CONFIRMED")}>
+                    <DropdownMenuItem
+                      onClick={() => setStatusFilter("CONFIRMED")}
+                    >
                       Confirmados
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setStatusFilter("PENDING")}>
+                    <DropdownMenuItem
+                      onClick={() => setStatusFilter("PENDING")}
+                    >
                       Pendentes
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setStatusFilter("CANCELED")}>
+                    <DropdownMenuItem
+                      onClick={() => setStatusFilter("CANCELED")}
+                    >
                       Cancelados
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -558,7 +577,10 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
               {/* Bookings List */}
               {filteredBookings.length === 0 ? (
                 <div className="text-center py-12">
-                  <AlertCircle className="mx-auto text-gray-500 mb-4" size={48} />
+                  <AlertCircle
+                    className="mx-auto text-gray-500 mb-4"
+                    size={48}
+                  />
                   <p className="text-gray-400 text-lg">
                     Nenhum agendamento encontrado
                   </p>
@@ -590,7 +612,10 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                 </span>
                                 <span className="text-gray-400 text-sm">
                                   {formatTime12Hour(
-                                    addMinutes(booking.date, booking.barber.timeInterval),
+                                    addMinutes(
+                                      booking.date,
+                                      booking.barber.timeInterval,
+                                    ),
                                   )}
                                 </span>
                               </div>
@@ -668,6 +693,12 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                     currency: "BRL",
                                   })}
                                 </span>
+                                {booking.coupon && (
+                                  <span className="bg-linear-to-r from-purple-500/80 to-pink-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-purple-100 text-xs md:text-sm border border-purple-300/30">
+                                    <Ticket className="mr-1" size={14} />
+                                    {booking.coupon.discountPercent}% OFF
+                                  </span>
+                                )}
                               </div>
 
                               {/* User/Barber Info - Mobile */}
@@ -675,7 +706,8 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                 <div className="flex items-center gap-2">
                                   <img
                                     src={
-                                      session?.user?.image ?? "http://example.com"
+                                      session?.user?.image ??
+                                      "http://example.com"
                                     }
                                     referrerPolicy="no-referrer"
                                     className="rounded-full h-8 w-8"
@@ -685,7 +717,9 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                   </span>
                                 </div>
                                 <button
-                                  onClick={() => handleBarberClick(booking.barber)}
+                                  onClick={() =>
+                                    handleBarberClick(booking.barber)
+                                  }
                                   className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                                 >
                                   <img
@@ -707,7 +741,9 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                             <div className="hidden md:flex flex-col justify-center items-end p-4 gap-3 min-w-50">
                               <div className="flex items-center gap-2">
                                 <img
-                                  src={session?.user?.image ?? "http://example.com"}
+                                  src={
+                                    session?.user?.image ?? "http://example.com"
+                                  }
                                   referrerPolicy="no-referrer"
                                   className="rounded-full h-10 w-10"
                                 />
@@ -716,7 +752,9 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                 </span>
                               </div>
                               <button
-                                onClick={() => handleBarberClick(booking.barber)}
+                                onClick={() =>
+                                  handleBarberClick(booking.barber)
+                                }
                                 className="flex items-center gap-2 hover:opacity-80 transition-opacity"
                               >
                                 <img
@@ -737,7 +775,9 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                           <AccordionContent className="bg-slate-950 rounded-b-lg mx-2 md:mx-4 p-4 border-t border-slate-800">
                             <div className="space-y-4">
                               <div>
-                                <h3 className="font-semibold mb-2">Serviços:</h3>
+                                <h3 className="font-semibold mb-2">
+                                  Serviços:
+                                </h3>
                                 <ul className="space-y-2">
                                   {booking.services.map((service, idx) => (
                                     <li
@@ -746,7 +786,9 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                     >
                                       <span>{service.service.name}</span>
                                       <div className="flex gap-3 text-sm text-gray-400">
-                                        <span>{service.service.duration} min</span>
+                                        <span>
+                                          {service.service.duration} min
+                                        </span>
                                         <span>R$ {service.service.price}</span>
                                       </div>
                                     </li>
@@ -754,12 +796,81 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
                                 </ul>
                               </div>
 
+                              {booking.coupon && (
+                                <div className="bg-linear-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-lg p-4">
+                                  <div className="flex items-start gap-3">
+                                    <div className="bg-purple-500/20 rounded-full p-2">
+                                      <Ticket
+                                        className="text-purple-300"
+                                        size={20}
+                                      />
+                                    </div>
+                                    <div className="flex-1">
+                                      <h4 className="font-semibold text-purple-200 mb-1">
+                                        Cupom Aplicado
+                                      </h4>
+                                      <p className="text-sm text-gray-300">
+                                        Desconto de{" "}
+                                        <span className="font-bold text-purple-300">
+                                          {booking.coupon.discountPercent}%
+                                        </span>{" "}
+                                        aplicado neste agendamento
+                                      </p>
+                                      <p className="text-xs text-gray-400 mt-1">
+                                        Usado em{" "}
+                                        {new Date(
+                                          booking.coupon.usedAt ||
+                                            booking.createdAt,
+                                        ).toLocaleDateString("pt-BR")}
+                                      </p>
+                                    </div>
+                                    <div className="text-right">
+                                      <p className="text-xs text-gray-400">
+                                        Economia
+                                      </p>
+                                      <p className="text-lg font-bold text-emerald-400">
+                                        {/* Calculate the discount amount */}
+                                        {(() => {
+                                          const originalPrice =
+                                            booking.services.reduce(
+                                              (sum, s) => {
+                                                if (
+                                                  s.service.keyword !== "LZ" &&
+                                                  s.service.keyword !== "PLA"
+                                                ) {
+                                                  return sum + s.service.price;
+                                                }
+                                                return sum;
+                                              },
+                                              0,
+                                            );
+                                          const discount = Math.floor(
+                                            (originalPrice *
+                                              booking.coupon.discountPercent) /
+                                              100,
+                                          );
+                                          return discount.toLocaleString(
+                                            "pt-BR",
+                                            {
+                                              style: "currency",
+                                              currency: "BRL",
+                                            },
+                                          );
+                                        })()}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
                               {canCancel && (
                                 <div className="flex justify-end pt-2">
                                   <Button
                                     variant="destructive"
                                     size="sm"
-                                    onClick={() => handleCancelBooking(booking.id)}
+                                    onClick={() =>
+                                      handleCancelBooking(booking.id)
+                                    }
                                     disabled={isPending}
                                   >
                                     Cancelar Agendamento
@@ -776,50 +887,176 @@ export default function ClientPage({ bookings }: { bookings: UserBookings[] }) {
               )}
             </motion.div>
           )}
-
           {/* Points Tab */}
           {activeTab === "points" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="flex flex-col items-center justify-center py-16 space-y-6"
+              className="space-y-6"
             >
-              <div className="bg-slate-800/50 rounded-full p-8">
-                <Trophy size={80} className="text-amber-500" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-300">
-                Sistema de Pontos
-              </h2>
-              <p className="text-gray-400 text-center max-w-md">
-                Em breve! Ganhe pontos a cada visita e troque por descontos e
-                recompensas exclusivas.
-              </p>
-              <div className="bg-slate-800 rounded-lg p-6 max-w-md w-full">
-                <h3 className="font-semibold mb-4 text-center">
-                  Funcionalidades Futuras:
-                </h3>
-                <ul className="space-y-3 text-gray-300">
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 className="text-emerald-500" size={20} />
-                    <span>Acumule pontos por agendamento</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 className="text-emerald-500" size={20} />
-                    <span>Troque pontos por descontos</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 className="text-emerald-500" size={20} />
-                    <span>Benefícios exclusivos de fidelidade</span>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <CheckCircle2 className="text-emerald-500" size={20} />
-                    <span>Rankings e premiações mensais</span>
-                  </li>
-                </ul>
-              </div>
+              {!pointSystem ? (
+                <div className="flex flex-col items-center justify-center py-16 space-y-6">
+                  <div className="bg-slate-800/50 rounded-full p-8">
+                    <Trophy size={80} className="text-amber-500" />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-300">
+                    Sistema de Pontos
+                  </h2>
+                  <p className="text-gray-400 text-center max-w-md">
+                    Ative o sistema de pontos e ganhe recompensas a cada visita!
+                  </p>
+                  <Button
+                    onClick={async () => {
+                      try {
+                        await createPointSystem();
+                        toast.success("Sistema de pontos ativado!");
+                        window.location.reload();
+                      } catch (error) {
+                        toast.error("Erro ao ativar sistema de pontos");
+                      }
+                    }}
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                  >
+                    Ativar Sistema de Pontos
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* Points Progress */}
+                  <div className="bg-slate-800 rounded-lg p-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-xl font-bold">Seus Pontos</h3>
+                      <div className="bg-amber-500/20 rounded-full px-4 py-2">
+                        <span className="text-2xl font-bold text-amber-500">
+                          {pointSystem.currentPoints}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm text-gray-400">
+                        <span>Progresso para próximo cupom</span>
+                        <span>
+                          {pointSystem.currentPoints} /{" "}
+                          {pointSystem.pointsNeededForReward}
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-700 rounded-full h-3">
+                        <div
+                          className="bg-linear-to-r from-amber-500 to-emerald-500 h-3 rounded-full transition-all duration-500"
+                          style={{
+                            width: `${Math.min(
+                              (pointSystem.currentPoints /
+                                pointSystem.pointsNeededForReward) *
+                                100,
+                              100,
+                            )}%`,
+                          }}
+                        />
+                      </div>
+                      <p className="text-sm text-gray-400">
+                        Faltam{" "}
+                        {Math.max(
+                          0,
+                          pointSystem.pointsNeededForReward -
+                            pointSystem.currentPoints,
+                        )}{" "}
+                        pontos para ganhar um cupom de{" "}
+                        {pointSystem.discountPercentage}% de desconto!
+                      </p>
+                    </div>
+                  </div>
+                  {/* In the Points Tab - Add this after the progress bar */}
+                  {pointSystem.currentPoints >=
+                    pointSystem.pointsNeededForReward && (
+                    <Button
+                      onClick={async () => {
+                        startTransition(async () => {
+                          try {
+                            await redeemPointsForCoupon();
+                            toast.success("Cupom resgatado com sucesso!");
+                            window.location.reload();
+                          } catch (error) {
+                            toast.error(
+                              error instanceof Error
+                                ? error.message
+                                : "Erro ao resgatar cupom",
+                            );
+                          }
+                        });
+                      }}
+                      disabled={isPending}
+                      className="w-full bg-linear-to-r from-amber-500 to-emerald-500 hover:from-amber-600 hover:to-emerald-600"
+                    >
+                      <Trophy className="mr-2" size={20} />
+                      {isPending ? "Resgatando..." : "Resgatar Cupom Agora!"}
+                    </Button>
+                  )}
+                  {availableCoupons.length > 0 && (
+                    <div className="bg-slate-800 rounded-lg p-6">
+                      <h3 className="text-xl font-bold mb-4">
+                        Cupons Disponíveis
+                      </h3>
+                      <div className="grid gap-3">
+                        {availableCoupons.map((coupon) => (
+                          <div
+                            key={coupon.id}
+                            className="bg-linear-to-r from-emerald-600 to-emerald-700 rounded-lg p-4 flex items-center justify-between"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="bg-white/20 rounded-full p-2">
+                                <Trophy className="text-white" size={24} />
+                              </div>
+                              <div>
+                                <p className="font-bold text-white text-lg">
+                                  {coupon.discountPercent}% OFF
+                                </p>
+                                <p className="text-emerald-100 text-sm">
+                                  Use em seu próximo agendamento
+                                </p>
+                              </div>
+                            </div>
+                            <CheckCircle2 className="text-white" size={24} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div className="bg-slate-800 rounded-lg p-6">
+                    <h3 className="font-semibold mb-4">Como Funciona</h3>
+                    <ul className="space-y-3 text-gray-300">
+                      <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-500" size={20} />
+                        <span>
+                          Ganhe {pointSystem.pointsPerService} pontos por cada
+                          serviço
+                        </span>
+                      </li>
+                      <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-500" size={20} />
+                        <span>
+                          Acumule {pointSystem.pointsNeededForReward} pontos
+                          para ganhar um cupom
+                        </span>
+                      </li>
+                      <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-500" size={20} />
+                        <span>
+                          Cupons dão {pointSystem.discountPercentage}% de
+                          desconto
+                        </span>
+                      </li>
+                      <li className="flex items-center gap-3">
+                        <CheckCircle2 className="text-emerald-500" size={20} />
+                        <span>Use cupons em qualquer agendamento</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              )}
             </motion.div>
-          )}
+          )}{" "}
         </div>
       </main>
     </div>

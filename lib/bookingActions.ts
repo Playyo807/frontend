@@ -17,6 +17,7 @@ import {
   ExtraTimeDay,
   DisabledTime,
 } from "@/prisma/generated/prisma/client";
+import { addPointsForBooking } from "./pointActions";
 
 interface TimeSlot {
   start: Date;
@@ -51,6 +52,7 @@ export type BookingWithRelations = Prisma.BookingGetPayload<{
         user: true;
       };
     };
+    coupon: true;
   };
 }>;
 
@@ -326,6 +328,7 @@ export async function createBooking(
   serviceIds: string[],
   dateTime: string,
   timezone: string,
+  couponId?: string,
 ): Promise<{
   success: boolean;
   booking: BookingWithRelations;
@@ -361,6 +364,29 @@ export async function createBooking(
       throw new Error("Barber not found");
     }
 
+    let coupon = null;
+    if (couponId) {
+      coupon = await prisma.coupon.findUnique({
+        where: { id: couponId },
+        include: {
+          pointSystem: true,
+        },
+      });
+
+      if (!coupon || coupon.isUsed) {
+        throw new Error("Cupom inválido ou já utilizado");
+      }
+
+      if (coupon.pointSystem.userId !== user.id) {
+        throw new Error("Este cupom não pertence a você");
+      }
+
+      // Check if coupon is expired
+      if (coupon.expiresAt && coupon.expiresAt < new Date()) {
+        throw new Error("Cupom expirado");
+      }
+    }
+
     // Get services and calculate total price and duration
     const services = await prisma.service.findMany({
       where: {
@@ -372,14 +398,33 @@ export async function createBooking(
       throw new Error("One or more services not found");
     }
 
-    const totalPrice = services.reduce(
-      (sum, service) => sum + service.price,
-      0,
-    );
+    let totalPrice = services.reduce((sum, service) => sum + service.price, 0);
     const totalDuration = services.reduce(
       (sum, service) => sum + service.duration,
       0,
     );
+
+    if (coupon) {
+      // Check if services are eligible for discount (exclude LZ and PLA)
+      const eligibleServices = services.filter(
+        (s) => s.keyword !== "LZ" && s.keyword !== "PLA",
+      );
+
+      if (eligibleServices.length === 0) {
+        throw new Error(
+          "Nenhum serviço elegível para desconto neste agendamento",
+        );
+      }
+
+      const eligiblePrice = eligibleServices.reduce(
+        (sum, service) => sum + service.price,
+        0,
+      );
+      const discount = Math.floor(
+        (eligiblePrice * coupon.discountPercent) / 100,
+      );
+      totalPrice = totalPrice - discount;
+    }
 
     const bookingDate = new Date(dateTime);
     const now = new Date();
@@ -390,7 +435,7 @@ export async function createBooking(
     }
 
     // Check if slot is available
-    const bookingEnd = addMinutes(bookingDate, totalDuration);
+    const bookingEnd = addMinutes(bookingDate, totalDuration > 40 ? 40 : totalDuration);
 
     const conflictingBookings = await prisma.booking.findMany({
       where: {
@@ -448,11 +493,25 @@ export async function createBooking(
               user: true,
             },
           },
+          coupon: true,
         },
       });
 
       return newBooking;
     });
+
+    if (coupon) {
+      await prisma.coupon.update({
+        where: { id: couponId },
+        data: {
+          isUsed: true,
+          usedAt: new Date(),
+          bookingId: booking.id,
+        },
+      });
+    }
+
+    addPointsForBooking(booking.id);
 
     return {
       success: true,
@@ -498,6 +557,7 @@ export async function getUserBookings(): Promise<{
             user: true,
           },
         },
+        coupon: true,
       },
       orderBy: {
         date: "desc",
@@ -511,21 +571,17 @@ export async function getUserBookings(): Promise<{
   }
 }
 
-// Helper function to generate time slots
-// Add this debug version to check what's happening
-
-// Helper function to generate time slots (DEBUGGED VERSION)
 async function generateTimeSlots(
   date: Date,
   barberId: string,
   intervalMinutes: number,
 ): Promise<TimeSlot[]> {
   const slots: TimeSlot[] = [];
-  
+
   // Get extra time for this day
   const extraTimeDay = await getExtraTimeDay(date, barberId);
-  console.log('🔍 Extra Time Day:', extraTimeDay); // DEBUG
-  
+  console.log("🔍 Extra Time Day:", extraTimeDay); // DEBUG
+
   // Get disabled times
   const disabledTimes = await getDisabledTimes(barberId);
   const disabledDates = disabledTimes.map((d) => d.date);
@@ -543,13 +599,13 @@ async function generateTimeSlots(
     workEnd.setHours(21, 0, 0, 0);
   }
 
-  console.log('⏰ Work End BEFORE extra time:', workEnd); // DEBUG
+  console.log("⏰ Work End BEFORE extra time:", workEnd); // DEBUG
 
   if (extraTimeDay) {
     const extraMinutes = intervalMinutes * extraTimeDay.amount;
     workEnd.setMinutes(workEnd.getMinutes() + extraMinutes);
-    console.log('➕ Adding extra minutes:', extraMinutes); // DEBUG
-    console.log('⏰ Work End AFTER extra time:', workEnd); // DEBUG
+    console.log("➕ Adding extra minutes:", extraMinutes); // DEBUG
+    console.log("⏰ Work End AFTER extra time:", workEnd); // DEBUG
   }
 
   let currentSlot = new Date(workStart);
@@ -561,7 +617,7 @@ async function generateTimeSlots(
     interval1.setHours(11, 20, 0, 0);
     const interval2 = new Date(workStart);
     interval2.setHours(12, 30, 0, 0);
-    
+
     const currentSlotDisabled = disabledDates.some(
       (d) => d.getTime() === currentSlot.getTime(),
     );
@@ -571,7 +627,7 @@ async function generateTimeSlots(
     }
 
     if (currentSlotDisabled) {
-      console.log('🚫 Skipping disabled slot:', currentSlot);
+      console.log("🚫 Skipping disabled slot:", currentSlot);
       currentSlot = slotEnd;
       continue;
     }
@@ -596,8 +652,8 @@ async function generateTimeSlots(
     currentSlot = slotEnd;
   }
 
-  console.log('✅ Total slots generated:', slotCount); // DEBUG
-  console.log('📊 Last slot end time:', slots[slots.length - 1]?.end); // DEBUG
+  console.log("✅ Total slots generated:", slotCount); // DEBUG
+  console.log("📊 Last slot end time:", slots[slots.length - 1]?.end); // DEBUG
 
   return slots;
 }
@@ -607,17 +663,17 @@ export async function getExtraTimeDay(
   barberId: string,
 ): Promise<ExtraTimeDay | null> {
   const dayStart = startOfDay(date);
-  
+
   const extraTimeDay = await prisma.extraTimeDay.findFirst({
-    where: { 
+    where: {
       date: dayStart,
-      barberId 
+      barberId,
     },
   });
-  
-  console.log('🔎 Searching for extra time:', { date: dayStart, barberId }); // DEBUG
-  console.log('🔎 Found:', extraTimeDay); // DEBUG
-  
+
+  console.log("🔎 Searching for extra time:", { date: dayStart, barberId }); // DEBUG
+  console.log("🔎 Found:", extraTimeDay); // DEBUG
+
   return extraTimeDay;
 }
 
@@ -786,7 +842,7 @@ export async function getDisabledTimes(
 // Disable a specific time slot
 export async function disableTimeSlot(
   barberId: string,
-  dateTime: Date
+  dateTime: Date,
 ): Promise<{ success: boolean; disabledTime: DisabledTime }> {
   try {
     const session = await auth();
@@ -833,7 +889,7 @@ export async function disableTimeSlot(
 
 // Enable a specific time slot
 export async function enableTimeSlot(
-  disabledTimeId: string
+  disabledTimeId: string,
 ): Promise<{ success: boolean }> {
   try {
     const session = await auth();
@@ -856,7 +912,7 @@ export async function enableTimeSlot(
 // Get disabled times for a specific day
 export async function getDisabledTimesForDay(
   barberId: string,
-  dateStr: string
+  dateStr: string,
 ): Promise<DisabledTime[]> {
   try {
     const date = new Date(dateStr + "T00:00:00");
@@ -887,7 +943,7 @@ export async function getDisabledTimesForDay(
 export async function addExtraTime(
   barberId: string,
   date: Date,
-  amount: number
+  amount: number,
 ): Promise<{ success: boolean; extraTimeDay: ExtraTimeDay }> {
   try {
     const session = await auth();
@@ -950,7 +1006,7 @@ export async function addExtraTime(
 
 // Remove extra time from a day
 export async function removeExtraTime(
-  extraTimeId: string
+  extraTimeId: string,
 ): Promise<{ success: boolean }> {
   try {
     const session = await auth();
@@ -972,7 +1028,7 @@ export async function removeExtraTime(
 
 // Get all extra time days for a barber
 export async function getExtraTimeDays(
-  barberId: string
+  barberId: string,
 ): Promise<ExtraTimeDay[]> {
   try {
     const extraTimeDays = await prisma.extraTimeDay.findMany({
@@ -1006,9 +1062,7 @@ export async function getAllUsers(): Promise<any[]> {
     }
 
     const isAuthorized =
-      user.barberProfile ||
-      user.role === "ADMIN" ||
-      user.role === "SUPERADMIN";
+      user.barberProfile || user.role === "ADMIN" || user.role === "SUPERADMIN";
 
     if (!isAuthorized) {
       throw new Error("Not authorized");
@@ -1050,7 +1104,7 @@ export async function createBookingAsBarber(
   barberId: string,
   serviceIds: string[],
   dateTime: string,
-  timezone: string
+  timezone: string,
 ): Promise<{
   success: boolean;
   booking: BookingWithRelations;
@@ -1081,7 +1135,13 @@ export async function createBookingAsBarber(
     }
 
     // Validate input
-    if (!userId || !barberId || !serviceIds || serviceIds.length === 0 || !dateTime) {
+    if (
+      !userId ||
+      !barberId ||
+      !serviceIds ||
+      serviceIds.length === 0 ||
+      !dateTime
+    ) {
       throw new Error("Missing required fields");
     }
 
@@ -1115,8 +1175,14 @@ export async function createBookingAsBarber(
       throw new Error("One or more services not found");
     }
 
-    const totalPrice = services.reduce((sum, service) => sum + service.price, 0);
-    const totalDuration = services.reduce((sum, service) => sum + service.duration, 0);
+    const totalPrice = services.reduce(
+      (sum, service) => sum + service.price,
+      0,
+    );
+    const totalDuration = services.reduce(
+      (sum, service) => sum + service.duration,
+      0,
+    );
 
     const bookingDate = new Date(dateTime);
     const now = new Date();
@@ -1184,6 +1250,7 @@ export async function createBookingAsBarber(
             user: true,
           },
         },
+        coupon: true,
       },
     });
 
@@ -1198,9 +1265,7 @@ export async function createBookingAsBarber(
 }
 
 // Update existing cancelBooking function
-export async function cancelBooking(
-  bookingId: string
-): Promise<{
+export async function cancelBooking(bookingId: string): Promise<{
   success: boolean;
 }> {
   try {

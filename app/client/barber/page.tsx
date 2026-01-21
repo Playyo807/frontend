@@ -5,12 +5,14 @@ import { redirect } from "next/navigation";
 import { getBarberProfiles, getUsers } from "@/lib/serverFunctions";
 import ClientPage from "./ClientPage";
 import { decodeBookingData } from "@/lib/bookingParams";
+import { auth } from "@/auth";
 
 export default async function serverWrapper({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const session = await auth();
   const params = await searchParams;
   const selectedServices = decodeBookingData(params).selectedServices;
 
@@ -24,6 +26,11 @@ export default async function serverWrapper({
 
   // Extract just the service IDs from the tuples
   const selectedServiceIds = selectedServices.map(([id, _name]) => id);
+  const services = await prisma.service.findMany();
+  const wantedServices  = services.filter(s => selectedServiceIds.includes(s.id));
+  let servicePrices = wantedServices.map(s => {
+    return s.price;
+  })
 
   // Get barber-to-service relations for the selected services
   const barberServiceRelations = await prisma.barberProfileToService.findMany({
@@ -59,11 +66,41 @@ export default async function serverWrapper({
     return image;
   });
 
+  // Get user's available coupons
+  let availableCoupons: any[] = [];
+  if (session?.user?.email) {
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      include: {
+        pointSystem: {
+          include: {
+            coupons: {
+              where: {
+                isUsed: false,
+                OR: [
+                  { expiresAt: null },
+                  { expiresAt: { gt: new Date() } }
+                ]
+              },
+              orderBy: {
+                createdAt: "desc",
+              },
+            },
+          },
+        },
+      },
+    });
+
+    availableCoupons = user?.pointSystem?.coupons || [];
+  }
+
   return (
     <ClientPage
       barbers={barbersProfiles}
       barberImages={barbersImages}
+      servicesPrices={servicePrices}
       disabledBarbers={disabledBarbers}
+      availableCoupons={availableCoupons}
     />
   );
 }

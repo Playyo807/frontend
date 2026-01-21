@@ -9,6 +9,9 @@ import TimeSlotSelector from "@/components/custom/timeSlotSelector";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { createBooking } from "@/lib/bookingActions";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Ticket, AlertCircle, Banknote } from "lucide-react";
+import { Separator } from "@radix-ui/react-separator";
 
 interface TimeSlot {
   start: string;
@@ -18,30 +21,66 @@ interface TimeSlot {
   isBooked: boolean;
 }
 
+interface Coupon {
+  id: string;
+  discountPercent: number;
+  createdAt: Date;
+  expiresAt: Date | null;
+}
+
 export default function ClientPage({
   barbers,
   barberImages,
   disabledBarbers,
+  availableCoupons,
+  servicesPrices,
 }: {
   barbers: BarberProfile[];
   barberImages: string[];
   disabledBarbers: BarberProfile[];
+  availableCoupons: Coupon[];
+  servicesPrices: number[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedServices = decodeBookingData(searchParams)?.selectedServices;
 
-  const [selectedBarber, setSelectedBarber] = useState<BarberProfile | null>(null);
+  const [selectedBarber, setSelectedBarber] = useState<BarberProfile | null>(
+    null,
+  );
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
+  const [selectedCoupon, setSelectedCoupon] = useState<string | null>(null); // Add this
   const [isPending, startTransition] = useTransition();
+  const totalPrice = servicesPrices.reduce((sum, price) => {
+    return sum + price;
+  }, 0);
+
+  console.log(servicesPrices);
 
   if (!selectedServices) {
     alert(
-      "Um erro ocorreu durante a seleção dos serviços, por favor, escolha os serviços novamente"
+      "Um erro ocorreu durante a seleção dos serviços, por favor, escolha os serviços novamente",
     );
     router.push("/client");
   }
+
+  // Check if any service is eligible for discount (not LZ or PLA)
+  const hasEligibleServices = selectedServices?.some((service) => {
+    // You'll need to pass service keywords or check this properly
+    // For now, assuming you have access to full service data
+    return true; // Replace with actual check
+  });
+
+  // Calculate discount amount
+  const calculateDiscount = () => {
+    if (!selectedCoupon || !selectedServices) return 0;
+
+    const coupon = availableCoupons.find((c) => c.id === selectedCoupon);
+    if (!coupon) return 0;
+
+    return Math.floor((totalPrice * coupon.discountPercent) / 100);
+  };
 
   const handleBooking = () => {
     if (!selectedBarber || !selectedSlot || !selectedServices) {
@@ -55,7 +94,8 @@ export default function ClientPage({
           selectedBarber.id,
           selectedServices.map((s) => s[0]),
           selectedSlot.start,
-          Intl.DateTimeFormat().resolvedOptions().timeZone
+          Intl.DateTimeFormat().resolvedOptions().timeZone,
+          selectedCoupon || undefined, // Pass the coupon ID if selected
         );
 
         if (result.success) {
@@ -64,7 +104,9 @@ export default function ClientPage({
         }
       } catch (error) {
         console.error("Booking error:", error);
-        alert(error instanceof Error ? error.message : "Erro ao criar agendamento");
+        alert(
+          error instanceof Error ? error.message : "Erro ao criar agendamento",
+        );
       }
     });
   };
@@ -136,6 +178,7 @@ export default function ClientPage({
                 setSelectedBarber(null);
                 setSelectedDate(undefined);
                 setSelectedSlot(null);
+                setSelectedCoupon(null);
               }}
               className="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg"
             >
@@ -145,8 +188,8 @@ export default function ClientPage({
 
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <Calendar02 
-                barberId={selectedBarber.id} 
+              <Calendar02
+                barberId={selectedBarber.id}
                 onDateSelect={setSelectedDate}
               />
             </div>
@@ -160,8 +203,10 @@ export default function ClientPage({
               />
 
               {selectedSlot && (
-                <div className="mt-8 p-6 bg-slate-800 rounded-lg">
-                  <h3 className="text-xl font-bold mb-4">Resumo do Agendamento</h3>
+                <div className="mt-8 p-6 bg-slate-800 rounded-lg space-y-4">
+                  <h3 className="text-xl font-bold mb-4">
+                    Resumo do Agendamento
+                  </h3>
                   <div className="space-y-2 text-gray-300">
                     <p>
                       <strong>Barbeiro:</strong> {selectedBarber.displayName}
@@ -182,11 +227,90 @@ export default function ClientPage({
                     </p>
                     <ul className="list-disc list-inside ml-4">
                       {selectedServices?.map((service) => (
-                        <li key={service[0]}>
-                          {service[1]}
-                        </li>
+                        <li key={service[0]}>{service[1]}</li>
                       ))}
                     </ul>
+                  </div>
+
+                  {/* Coupon Selection */}
+                  {availableCoupons.length > 0 && (
+                    <div className="border-t border-slate-700 pt-4 mt-4">
+                      <h4 className="font-semibold mb-3 flex items-center gap-2">
+                        <Ticket className="text-emerald-500" size={20} />
+                        Cupons Disponíveis
+                      </h4>
+
+                      <div className="space-y-3">
+                        {availableCoupons.map((coupon) => (
+                          <div
+                            key={coupon.id}
+                            className={`border rounded-lg p-3 cursor-pointer transition-all ${
+                              selectedCoupon === coupon.id
+                                ? "border-emerald-500 bg-emerald-500/10"
+                                : "border-slate-600 hover:border-slate-500"
+                            }`}
+                            onClick={() => {
+                              setSelectedCoupon(
+                                selectedCoupon === coupon.id ? null : coupon.id,
+                              );
+                            }}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-3">
+                                <Checkbox
+                                  checked={selectedCoupon === coupon.id}
+                                  onCheckedChange={(checked: boolean) => {
+                                    setSelectedCoupon(
+                                      checked ? coupon.id : null,
+                                    );
+                                  }}
+                                />
+                                <div>
+                                  <p className="font-bold text-emerald-400">
+                                    {coupon.discountPercent}% de Desconto
+                                  </p>
+                                  <p className="text-xs text-gray-400">
+                                    Criado em{" "}
+                                    {format(
+                                      new Date(coupon.createdAt),
+                                      "dd/MM/yyyy",
+                                    )}
+                                  </p>
+                                </div>
+                              </div>
+                              {selectedCoupon === coupon.id && (
+                                <div className="text-emerald-400 font-semibold">
+                                  Aplicado!
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {selectedCoupon && (
+                        <div className="mt-3 p-3 bg-emerald-500/20 border border-emerald-500/50 rounded-lg">
+                          <p className="text-emerald-300 text-sm flex items-center gap-2">
+                            <AlertCircle size={16} />
+                            Cupom será usado neste agendamento
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="border-t border-slate-700 pt-4 mt-4">
+                    <h4 className="font-semibold mb-3 flex items-center gap-2">
+                      <Banknote className="text-emerald-500" size={20} />
+                      Total:{" "}
+                      {(totalPrice - calculateDiscount()).toLocaleString(
+                        "pt-BR",
+                        {
+                          style: "currency",
+                          currency: "BRL",
+                        },
+                      )}
+                    </h4>
                   </div>
 
                   <button

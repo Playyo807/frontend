@@ -5,6 +5,7 @@ import { auth } from "@/auth";
 import { getUserBookings } from "@/lib/bookingActions";
 import { Prisma, BookingStatus } from "@/prisma/generated/prisma/client";
 import { Suspense } from "react";
+import { getAvailableCoupons, getUserPointSystem } from "@/lib/pointActions";
 
 export type UserBookings = Prisma.BookingGetPayload<{
   include: {
@@ -18,6 +19,7 @@ export type UserBookings = Prisma.BookingGetPayload<{
         user: true;
       };
     };
+    coupon: true,
   };
 }>;
 
@@ -31,13 +33,20 @@ export default async function serverWrapper() {
   const session = await auth();
   const userBookings: UserBookings[] = (await getUserBookings()).bookings;
   userBookings.sort((a, b) =>
-  statusPriority[a.status] - statusPriority[b.status]
-);
+    statusPriority[a.status] - statusPriority[b.status]
+  );
 
+  // Fetch point system data
+  const { pointSystem, plan } = await getUserPointSystem();
+  const availableCoupons = await getAvailableCoupons();
 
   return (
     <Suspense>
-      <ClientPage bookings={userBookings} />
+      <ClientPage 
+        bookings={userBookings} 
+        pointSystem={pointSystem}
+        availableCoupons={availableCoupons}
+      />
     </Suspense>
   );
 }

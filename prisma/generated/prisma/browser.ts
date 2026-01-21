@@ -77,3 +77,23 @@ export type DisabledTime = Prisma.DisabledTimeModel
  * 
  */
 export type ExtraTimeDay = Prisma.ExtraTimeDayModel
+/**
+ * Model PointSystem
+ * 
+ */
+export type PointSystem = Prisma.PointSystemModel
+/**
+ * Model Coupon
+ * 
+ */
+export type Coupon = Prisma.CouponModel
+/**
+ * Model PointTransaction
+ * 
+ */
+export type PointTransaction = Prisma.PointTransactionModel
+/**
+ * Model Plan
+ * 
+ */
+export type Plan = Prisma.PlanModel

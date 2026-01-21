@@ -62,7 +62,11 @@ export const ModelName = {
   Booking: 'Booking',
   DisabledDay: 'DisabledDay',
   DisabledTime: 'DisabledTime',
-  ExtraTimeDay: 'ExtraTimeDay'
+  ExtraTimeDay: 'ExtraTimeDay',
+  PointSystem: 'PointSystem',
+  Coupon: 'Coupon',
+  PointTransaction: 'PointTransaction',
+  Plan: 'Plan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -219,6 +223,56 @@ export const ExtraTimeDayScalarFieldEnum = {
 export type ExtraTimeDayScalarFieldEnum = (typeof ExtraTimeDayScalarFieldEnum)[keyof typeof ExtraTimeDayScalarFieldEnum]
 
 
+export const PointSystemScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  currentPoints: 'currentPoints',
+  pointsPerService: 'pointsPerService',
+  pointsNeededForReward: 'pointsNeededForReward',
+  discountPercentage: 'discountPercentage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PointSystemScalarFieldEnum = (typeof PointSystemScalarFieldEnum)[keyof typeof PointSystemScalarFieldEnum]
+
+
+export const CouponScalarFieldEnum = {
+  id: 'id',
+  pointSystemId: 'pointSystemId',
+  discountPercent: 'discountPercent',
+  isUsed: 'isUsed',
+  usedAt: 'usedAt',
+  bookingId: 'bookingId',
+  createdAt: 'createdAt',
+  expiresAt: 'expiresAt'
+} as const
+
+export type CouponScalarFieldEnum = (typeof CouponScalarFieldEnum)[keyof typeof CouponScalarFieldEnum]
+
+
+export const PointTransactionScalarFieldEnum = {
+  id: 'id',
+  pointSystemId: 'pointSystemId',
+  points: 'points',
+  type: 'type',
+  description: 'description',
+  bookingId: 'bookingId',
+  createdAt: 'createdAt'
+} as const
+
+export type PointTransactionScalarFieldEnum = (typeof PointTransactionScalarFieldEnum)[keyof typeof PointTransactionScalarFieldEnum]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -348,4 +402,39 @@ export const ExtraTimeDayOrderByRelevanceFieldEnum = {
 } as const
 
 export type ExtraTimeDayOrderByRelevanceFieldEnum = (typeof ExtraTimeDayOrderByRelevanceFieldEnum)[keyof typeof ExtraTimeDayOrderByRelevanceFieldEnum]
+
+
+export const PointSystemOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type PointSystemOrderByRelevanceFieldEnum = (typeof PointSystemOrderByRelevanceFieldEnum)[keyof typeof PointSystemOrderByRelevanceFieldEnum]
+
+
+export const CouponOrderByRelevanceFieldEnum = {
+  id: 'id',
+  pointSystemId: 'pointSystemId',
+  bookingId: 'bookingId'
+} as const
+
+export type CouponOrderByRelevanceFieldEnum = (typeof CouponOrderByRelevanceFieldEnum)[keyof typeof CouponOrderByRelevanceFieldEnum]
+
+
+export const PointTransactionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  pointSystemId: 'pointSystemId',
+  description: 'description',
+  bookingId: 'bookingId'
+} as const
+
+export type PointTransactionOrderByRelevanceFieldEnum = (typeof PointTransactionOrderByRelevanceFieldEnum)[keyof typeof PointTransactionOrderByRelevanceFieldEnum]
+
+
+export const PlanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type PlanOrderByRelevanceFieldEnum = (typeof PlanOrderByRelevanceFieldEnum)[keyof typeof PlanOrderByRelevanceFieldEnum]
 
