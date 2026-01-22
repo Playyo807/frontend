@@ -72,6 +72,20 @@ export default function ClientPage({
     return true; // Replace with actual check
   });
 
+  function handleDiscount(
+    price: number,
+  ): number {
+    let length = selectedServices.length == 0 ? 1 : selectedServices.length;
+    selectedServices.map((s) => {
+      if (s[1] == "LZ") {
+        length = length - 1;
+      }
+    });
+    if (length < 1) length = 1;
+    const discountRate = (length - 1) * 5;
+    return price - discountRate;
+  }
+
   // Calculate discount amount
   const calculateDiscount = () => {
     if (!selectedCoupon || !selectedServices) return 0;
@@ -303,7 +317,7 @@ export default function ClientPage({
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
                       <Banknote className="text-emerald-500" size={20} />
                       Total:{" "}
-                      {(totalPrice - calculateDiscount()).toLocaleString(
+                      {(handleDiscount(totalPrice) - calculateDiscount()).toLocaleString(
                         "pt-BR",
                         {
                           style: "currency",

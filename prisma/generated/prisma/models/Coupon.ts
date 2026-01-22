@@ -242,6 +242,7 @@ export type CouponWhereInput = {
   expiresAt?: Prisma.DateTimeNullableFilter<"Coupon"> | Date | string | null
   pointSystem?: Prisma.XOR<Prisma.PointSystemScalarRelationFilter, Prisma.PointSystemWhereInput>
   booking?: Prisma.XOR<Prisma.BookingNullableScalarRelationFilter, Prisma.BookingWhereInput> | null
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type CouponOrderByWithRelationInput = {
@@ -255,6 +256,7 @@ export type CouponOrderByWithRelationInput = {
   expiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   pointSystem?: Prisma.PointSystemOrderByWithRelationInput
   booking?: Prisma.BookingOrderByWithRelationInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
   _relevance?: Prisma.CouponOrderByRelevanceInput
 }
 
@@ -272,6 +274,7 @@ export type CouponWhereUniqueInput = Prisma.AtLeast<{
   expiresAt?: Prisma.DateTimeNullableFilter<"Coupon"> | Date | string | null
   pointSystem?: Prisma.XOR<Prisma.PointSystemScalarRelationFilter, Prisma.PointSystemWhereInput>
   booking?: Prisma.XOR<Prisma.BookingNullableScalarRelationFilter, Prisma.BookingWhereInput> | null
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "bookingId">
 
 export type CouponOrderByWithAggregationInput = {
@@ -313,6 +316,7 @@ export type CouponCreateInput = {
   expiresAt?: Date | string | null
   pointSystem: Prisma.PointSystemCreateNestedOneWithoutCouponsInput
   booking?: Prisma.BookingCreateNestedOneWithoutCouponInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCouponInput
 }
 
 export type CouponUncheckedCreateInput = {
@@ -324,6 +328,7 @@ export type CouponUncheckedCreateInput = {
   bookingId?: string | null
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCouponInput
 }
 
 export type CouponUpdateInput = {
@@ -335,6 +340,7 @@ export type CouponUpdateInput = {
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   pointSystem?: Prisma.PointSystemUpdateOneRequiredWithoutCouponsNestedInput
   booking?: Prisma.BookingUpdateOneWithoutCouponNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCouponNestedInput
 }
 
 export type CouponUncheckedUpdateInput = {
@@ -346,6 +352,7 @@ export type CouponUncheckedUpdateInput = {
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCouponNestedInput
 }
 
 export type CouponCreateManyInput = {
@@ -519,6 +526,22 @@ export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type CouponCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.CouponCreateWithoutNotificationsInput, Prisma.CouponUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.CouponCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.CouponWhereUniqueInput
+}
+
+export type CouponUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.CouponCreateWithoutNotificationsInput, Prisma.CouponUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.CouponCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.CouponUpsertWithoutNotificationsInput
+  disconnect?: Prisma.CouponWhereInput | boolean
+  delete?: Prisma.CouponWhereInput | boolean
+  connect?: Prisma.CouponWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CouponUpdateToOneWithWhereWithoutNotificationsInput, Prisma.CouponUpdateWithoutNotificationsInput>, Prisma.CouponUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type CouponCreateWithoutBookingInput = {
   id?: string
   discountPercent: number
@@ -527,6 +550,7 @@ export type CouponCreateWithoutBookingInput = {
   createdAt?: Date | string
   expiresAt?: Date | string | null
   pointSystem: Prisma.PointSystemCreateNestedOneWithoutCouponsInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCouponInput
 }
 
 export type CouponUncheckedCreateWithoutBookingInput = {
@@ -537,6 +561,7 @@ export type CouponUncheckedCreateWithoutBookingInput = {
   usedAt?: Date | string | null
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCouponInput
 }
 
 export type CouponCreateOrConnectWithoutBookingInput = {
@@ -563,6 +588,7 @@ export type CouponUpdateWithoutBookingInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   pointSystem?: Prisma.PointSystemUpdateOneRequiredWithoutCouponsNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCouponNestedInput
 }
 
 export type CouponUncheckedUpdateWithoutBookingInput = {
@@ -573,6 +599,7 @@ export type CouponUncheckedUpdateWithoutBookingInput = {
   usedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCouponNestedInput
 }
 
 export type CouponCreateWithoutPointSystemInput = {
@@ -583,6 +610,7 @@ export type CouponCreateWithoutPointSystemInput = {
   createdAt?: Date | string
   expiresAt?: Date | string | null
   booking?: Prisma.BookingCreateNestedOneWithoutCouponInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutCouponInput
 }
 
 export type CouponUncheckedCreateWithoutPointSystemInput = {
@@ -593,6 +621,7 @@ export type CouponUncheckedCreateWithoutPointSystemInput = {
   bookingId?: string | null
   createdAt?: Date | string
   expiresAt?: Date | string | null
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutCouponInput
 }
 
 export type CouponCreateOrConnectWithoutPointSystemInput = {
@@ -635,6 +664,66 @@ export type CouponScalarWhereInput = {
   expiresAt?: Prisma.DateTimeNullableFilter<"Coupon"> | Date | string | null
 }
 
+export type CouponCreateWithoutNotificationsInput = {
+  id?: string
+  discountPercent: number
+  isUsed?: boolean
+  usedAt?: Date | string | null
+  createdAt?: Date | string
+  expiresAt?: Date | string | null
+  pointSystem: Prisma.PointSystemCreateNestedOneWithoutCouponsInput
+  booking?: Prisma.BookingCreateNestedOneWithoutCouponInput
+}
+
+export type CouponUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  pointSystemId: string
+  discountPercent: number
+  isUsed?: boolean
+  usedAt?: Date | string | null
+  bookingId?: string | null
+  createdAt?: Date | string
+  expiresAt?: Date | string | null
+}
+
+export type CouponCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.CouponWhereUniqueInput
+  create: Prisma.XOR<Prisma.CouponCreateWithoutNotificationsInput, Prisma.CouponUncheckedCreateWithoutNotificationsInput>
+}
+
+export type CouponUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.CouponUpdateWithoutNotificationsInput, Prisma.CouponUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.CouponCreateWithoutNotificationsInput, Prisma.CouponUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.CouponWhereInput
+}
+
+export type CouponUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.CouponWhereInput
+  data: Prisma.XOR<Prisma.CouponUpdateWithoutNotificationsInput, Prisma.CouponUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type CouponUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  discountPercent?: Prisma.IntFieldUpdateOperationsInput | number
+  isUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  usedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pointSystem?: Prisma.PointSystemUpdateOneRequiredWithoutCouponsNestedInput
+  booking?: Prisma.BookingUpdateOneWithoutCouponNestedInput
+}
+
+export type CouponUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pointSystemId?: Prisma.StringFieldUpdateOperationsInput | string
+  discountPercent?: Prisma.IntFieldUpdateOperationsInput | number
+  isUsed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  usedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
 export type CouponCreateManyPointSystemInput = {
   id?: string
   discountPercent: number
@@ -653,6 +742,7 @@ export type CouponUpdateWithoutPointSystemInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   booking?: Prisma.BookingUpdateOneWithoutCouponNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutCouponNestedInput
 }
 
 export type CouponUncheckedUpdateWithoutPointSystemInput = {
@@ -663,6 +753,7 @@ export type CouponUncheckedUpdateWithoutPointSystemInput = {
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   expiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutCouponNestedInput
 }
 
 export type CouponUncheckedUpdateManyWithoutPointSystemInput = {
@@ -676,6 +767,35 @@ export type CouponUncheckedUpdateManyWithoutPointSystemInput = {
 }
 
 
+/**
+ * Count Type CouponCountOutputType
+ */
+
+export type CouponCountOutputType = {
+  notifications: number
+}
+
+export type CouponCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  notifications?: boolean | CouponCountOutputTypeCountNotificationsArgs
+}
+
+/**
+ * CouponCountOutputType without action
+ */
+export type CouponCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CouponCountOutputType
+   */
+  select?: Prisma.CouponCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CouponCountOutputType without action
+ */
+export type CouponCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type CouponSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -688,6 +808,8 @@ export type CouponSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   expiresAt?: boolean
   pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
   booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
+  notifications?: boolean | Prisma.Coupon$notificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.CouponCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["coupon"]>
 
 
@@ -707,6 +829,8 @@ export type CouponOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
 export type CouponInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
   booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
+  notifications?: boolean | Prisma.Coupon$notificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.CouponCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $CouponPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -714,6 +838,7 @@ export type $CouponPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
   objects: {
     pointSystem: Prisma.$PointSystemPayload<ExtArgs>
     booking: Prisma.$BookingPayload<ExtArgs> | null
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1066,6 +1191,7 @@ export interface Prisma__CouponClient<T, Null = never, ExtArgs extends runtime.T
   readonly [Symbol.toStringTag]: "PrismaPromise"
   pointSystem<T extends Prisma.PointSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PointSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__PointSystemClient<runtime.Types.Result.GetResult<Prisma.$PointSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   booking<T extends Prisma.Coupon$bookingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Coupon$bookingArgs<ExtArgs>>): Prisma.Prisma__BookingClient<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  notifications<T extends Prisma.Coupon$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Coupon$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1462,6 +1588,30 @@ export type Coupon$bookingArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.BookingInclude<ExtArgs> | null
   where?: Prisma.BookingWhereInput
+}
+
+/**
+ * Coupon.notifications
+ */
+export type Coupon$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

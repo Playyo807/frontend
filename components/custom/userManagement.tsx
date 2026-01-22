@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Search, Mail, Phone, Calendar, User } from "lucide-react";
+import { Search, Mail, Phone, Calendar, User, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface UserData {
   id: string;
@@ -27,9 +28,10 @@ interface UserData {
 
 interface UsersManagementProps {
   users: UserData[];
+  barberId: string;
 }
 
-export default function UsersManagement({ users }: UsersManagementProps) {
+export default function UsersManagement({ users, barberId }: UsersManagementProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>(users);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
@@ -250,6 +252,9 @@ export default function UsersManagement({ users }: UsersManagementProps) {
                       {selectedUser._count.bookings}
                     </p>
                   </div>
+                  <Link href={`/admin/barber/users/${selectedUser.id}`}>
+                    <ChevronRight size={20} />
+                  </Link>
                 </div>
               </div>
             </div>

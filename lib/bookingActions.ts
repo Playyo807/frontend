@@ -1098,7 +1098,6 @@ export async function getAllUsers(): Promise<any[]> {
   }
 }
 
-// Create booking as barber (for a specific user)
 export async function createBookingAsBarber(
   userId: string,
   barberId: string,

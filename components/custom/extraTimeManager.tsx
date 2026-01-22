@@ -96,7 +96,7 @@ export default function ExtraTimeManager({ barberId }: ExtraTimeManagerProps) {
               selected={selectedDate}
               onSelect={setSelectedDate}
               disabled={(date) => date < startOfDay(new Date())}
-              className="rounded-lg border shadow-sm mx-auto [--cell-size:--spacing(12)] md:[--cell-size:--spacing(13)]"
+              className="rounded-lg border shadow-sm mx-auto md:[--cell-size:--spacing(12)]"
             />
           </div>
 

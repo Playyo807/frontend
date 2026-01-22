@@ -62,8 +62,15 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { createPointSystem, redeemPointsForCoupon } from "@/lib/pointActions";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED";
+type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED" | "PAST";
 type TabType = "profile" | "bookings" | "points";
 
 export default function ClientPage({
@@ -218,8 +225,11 @@ export default function ClientPage({
 
   // Filter bookings
   const filteredBookings = bookings.filter((booking) => {
+    const isPast = booking.date < new Date();
     const matchesStatus =
-      statusFilter === "ALL" || booking.status === statusFilter;
+      statusFilter === "ALL" ||
+      (booking.status === statusFilter && !isPast) ||
+      (statusFilter === "PAST" && isPast);
     const matchesSearch =
       searchQuery === "" ||
       booking.barber.displayName
@@ -537,41 +547,23 @@ export default function ClientPage({
                     className="pl-10 bg-slate-800 border-slate-700"
                   />
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" className="gap-2">
-                      <Filter size={16} />
-                      <span className="hidden sm:inline">Filtrar:</span>
-                      {statusFilter === "ALL"
-                        ? "Todos"
-                        : statusFilter === "CONFIRMED"
-                          ? "Confirmados"
-                          : statusFilter === "PENDING"
-                            ? "Pendentes"
-                            : "Cancelados"}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem onClick={() => setStatusFilter("ALL")}>
-                      Todos
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setStatusFilter("CONFIRMED")}
-                    >
-                      Confirmados
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setStatusFilter("PENDING")}
-                    >
-                      Pendentes
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => setStatusFilter("CANCELED")}
-                    >
-                      Cancelados
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Select
+                  value={statusFilter}
+                  onValueChange={(v: BookingStatus) => {
+                    setStatusFilter(v);
+                  }}
+                >
+                  <SelectTrigger>
+                    <Filter /> <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">Todos</SelectItem>
+                    <SelectItem value="CONFIRMED">Confirmado</SelectItem>
+                    <SelectItem value="PENDING">Pendente</SelectItem>
+                    <SelectItem value="CANCELED">Cancelado</SelectItem>
+                    <SelectItem value="PAST">Passou</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               {/* Bookings List */}
@@ -1029,8 +1021,8 @@ export default function ClientPage({
                       <li className="flex items-center gap-3">
                         <CheckCircle2 className="text-emerald-500" size={20} />
                         <span>
-                          Ganhe {pointSystem.pointsPerService} pontos por cada
-                          serviço
+                          Ganhe pontos de acordo com o valor total do(s)
+                          serviço(s)
                         </span>
                       </li>
                       <li className="flex items-center gap-3">
@@ -1049,7 +1041,10 @@ export default function ClientPage({
                       </li>
                       <li className="flex items-center gap-3">
                         <CheckCircle2 className="text-emerald-500" size={20} />
-                        <span>Use cupons em qualquer agendamento</span>
+                        <span className="flex flex-col justify-baseline items-start">
+                          <span>Use cupons em qualquer agendamento* </span>
+                          <span className="text-xs text-gray-400">Exceto no serviço de luzes e platinado</span>
+                        </span>
                       </li>
                     </ul>
                   </div>

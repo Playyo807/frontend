@@ -8,10 +8,12 @@ import {
   User,
 } from "@/prisma/generated/prisma/client";
 
-export async function getUsers(role?: Role): Promise<User[]> {
+export async function getUsers(role?: boolean): Promise<User[]> {
   if (role) {
     return await prisma.user.findMany({
-      where: { role },
+      where: { role: {
+        in: ["BARBER", "ADMIN"]
+      } },
     });
   }
 

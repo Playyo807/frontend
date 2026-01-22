@@ -399,6 +399,7 @@ export const ModelName = {
   PointSystem: 'PointSystem',
   Coupon: 'Coupon',
   PointTransaction: 'PointTransaction',
+  Notification: 'Notification',
   Plan: 'Plan'
 } as const
 
@@ -415,7 +416,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "barberProfile" | "account" | "session" | "verificationToken" | "service" | "barberProfileToService" | "bookingService" | "booking" | "disabledDay" | "disabledTime" | "extraTimeDay" | "pointSystem" | "coupon" | "pointTransaction" | "plan"
+    modelProps: "user" | "barberProfile" | "account" | "session" | "verificationToken" | "service" | "barberProfileToService" | "bookingService" | "booking" | "disabledDay" | "disabledTime" | "extraTimeDay" | "pointSystem" | "coupon" | "pointTransaction" | "notification" | "plan"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1409,6 +1410,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Notification: {
+      payload: Prisma.$NotificationPayload<ExtArgs>
+      fields: Prisma.NotificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.NotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.NotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        findFirst: {
+          args: Prisma.NotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.NotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        findMany: {
+          args: Prisma.NotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>[]
+        }
+        create: {
+          args: Prisma.NotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        createMany: {
+          args: Prisma.NotificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.NotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        update: {
+          args: Prisma.NotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.NotificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.NotificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.NotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$NotificationPayload>
+        }
+        aggregate: {
+          args: Prisma.NotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateNotification>
+        }
+        groupBy: {
+          args: Prisma.NotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.NotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.NotificationCountAggregateOutputType> | number
+        }
+      }
+    }
     Plan: {
       payload: Prisma.$PlanPayload<ExtArgs>
       fields: Prisma.PlanFieldRefs
@@ -1687,10 +1754,31 @@ export const PointTransactionScalarFieldEnum = {
   type: 'type',
   description: 'description',
   bookingId: 'bookingId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  status: 'status',
+  confirmedAt: 'confirmedAt',
+  confirmedBy: 'confirmedBy'
 } as const
 
 export type PointTransactionScalarFieldEnum = (typeof PointTransactionScalarFieldEnum)[keyof typeof PointTransactionScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  read: 'read',
+  barberId: 'barberId',
+  userId: 'userId',
+  bookingId: 'bookingId',
+  couponId: 'couponId',
+  transactionId: 'transactionId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const PlanScalarFieldEnum = {
@@ -1854,10 +1942,26 @@ export const PointTransactionOrderByRelevanceFieldEnum = {
   id: 'id',
   pointSystemId: 'pointSystemId',
   description: 'description',
-  bookingId: 'bookingId'
+  bookingId: 'bookingId',
+  confirmedBy: 'confirmedBy'
 } as const
 
 export type PointTransactionOrderByRelevanceFieldEnum = (typeof PointTransactionOrderByRelevanceFieldEnum)[keyof typeof PointTransactionOrderByRelevanceFieldEnum]
+
+
+export const NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  barberId: 'barberId',
+  userId: 'userId',
+  bookingId: 'bookingId',
+  couponId: 'couponId',
+  transactionId: 'transactionId',
+  metadata: 'metadata'
+} as const
+
+export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
 
 
 export const PlanOrderByRelevanceFieldEnum = {
@@ -1920,6 +2024,20 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
  * Reference to a field of type 'TransactionType'
  */
 export type EnumTransactionTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionType'>
+    
+
+
+/**
+ * Reference to a field of type 'TransactionStatus'
+ */
+export type EnumTransactionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TransactionStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'NotificationType'
+ */
+export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType'>
     
 
 
@@ -2039,6 +2157,7 @@ export type GlobalOmitConfig = {
   pointSystem?: Prisma.PointSystemOmit
   coupon?: Prisma.CouponOmit
   pointTransaction?: Prisma.PointTransactionOmit
+  notification?: Prisma.NotificationOmit
   plan?: Prisma.PlanOmit
 }
 

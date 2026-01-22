@@ -22,7 +22,7 @@ export default async function serverWrapper({
 
   // Get all barber profiles
   const barbersProfiles: BarberProfile[] = await getBarberProfiles();
-  const barbersUsers: User[] = await getUsers("BARBER");
+  const barbersUsers: User[] = await getUsers(true);
 
   // Extract just the service IDs from the tuples
   const selectedServiceIds = selectedServices.map(([id, _name]) => id);

@@ -9,6 +9,30 @@
 * 🟢 You can import this file directly.
 */
 
+export const NotificationType = {
+  COUPON_REDEEMED: 'COUPON_REDEEMED',
+  POINTS_PENDING: 'POINTS_PENDING',
+  POINTS_CONFIRMED: 'POINTS_CONFIRMED',
+  POINTS_REJECTED: 'POINTS_REJECTED',
+  POINTS_ADJUSTED: 'POINTS_ADJUSTED',
+  BOOKING_CREATED: 'BOOKING_CREATED',
+  BOOKING_EDITED: 'BOOKING_EDITED',
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const TransactionType = {
+  EARNED: 'EARNED',
+  REDEEMED: 'REDEEMED',
+  EXPIRED: 'EXPIRED',
+  ADJUSTED: 'ADJUSTED'
+} as const
+
+export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
 export const Role = {
   USER: 'USER',
   BARBER: 'BARBER',
@@ -28,11 +52,10 @@ export const BookingStatus = {
 export type BookingStatus = (typeof BookingStatus)[keyof typeof BookingStatus]
 
 
-export const TransactionType = {
-  EARNED: 'EARNED',
-  REDEEMED: 'REDEEMED',
-  EXPIRED: 'EXPIRED',
-  ADJUSTED: 'ADJUSTED'
+export const TransactionStatus = {
+  PENDING: 'PENDING',
+  CONFIRMED: 'CONFIRMED',
+  REJECTED: 'REJECTED'
 } as const
 
-export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]

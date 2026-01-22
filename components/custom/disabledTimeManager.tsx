@@ -136,7 +136,7 @@ export default function DisabledTimeManager({
             <Calendar
               mode="single"
               selected={selectedDate}
-              className="rounded-lg border shadow-sm mx-auto [--cell-size:--spacing(12)] md:[--cell-size:--spacing(13)]"
+              className="rounded-lg border shadow-sm mx-auto md:[--cell-size:--spacing(12)]"
               onSelect={setSelectedDate}
               disabled={(date) => date < startOfDay(new Date())}
             />

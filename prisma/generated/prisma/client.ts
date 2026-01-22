@@ -115,6 +115,11 @@ export type Coupon = Prisma.CouponModel
  */
 export type PointTransaction = Prisma.PointTransactionModel
 /**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
  * Model Plan
  * 
  */

@@ -42,6 +42,9 @@ export type PointTransactionMinAggregateOutputType = {
   description: string | null
   bookingId: string | null
   createdAt: Date | null
+  status: $Enums.TransactionStatus | null
+  confirmedAt: Date | null
+  confirmedBy: string | null
 }
 
 export type PointTransactionMaxAggregateOutputType = {
@@ -52,6 +55,9 @@ export type PointTransactionMaxAggregateOutputType = {
   description: string | null
   bookingId: string | null
   createdAt: Date | null
+  status: $Enums.TransactionStatus | null
+  confirmedAt: Date | null
+  confirmedBy: string | null
 }
 
 export type PointTransactionCountAggregateOutputType = {
@@ -62,6 +68,9 @@ export type PointTransactionCountAggregateOutputType = {
   description: number
   bookingId: number
   createdAt: number
+  status: number
+  confirmedAt: number
+  confirmedBy: number
   _all: number
 }
 
@@ -82,6 +91,9 @@ export type PointTransactionMinAggregateInputType = {
   description?: true
   bookingId?: true
   createdAt?: true
+  status?: true
+  confirmedAt?: true
+  confirmedBy?: true
 }
 
 export type PointTransactionMaxAggregateInputType = {
@@ -92,6 +104,9 @@ export type PointTransactionMaxAggregateInputType = {
   description?: true
   bookingId?: true
   createdAt?: true
+  status?: true
+  confirmedAt?: true
+  confirmedBy?: true
 }
 
 export type PointTransactionCountAggregateInputType = {
@@ -102,6 +117,9 @@ export type PointTransactionCountAggregateInputType = {
   description?: true
   bookingId?: true
   createdAt?: true
+  status?: true
+  confirmedAt?: true
+  confirmedBy?: true
   _all?: true
 }
 
@@ -199,6 +217,9 @@ export type PointTransactionGroupByOutputType = {
   description: string | null
   bookingId: string | null
   createdAt: Date
+  status: $Enums.TransactionStatus
+  confirmedAt: Date | null
+  confirmedBy: string | null
   _count: PointTransactionCountAggregateOutputType | null
   _avg: PointTransactionAvgAggregateOutputType | null
   _sum: PointTransactionSumAggregateOutputType | null
@@ -232,7 +253,11 @@ export type PointTransactionWhereInput = {
   description?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   bookingId?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PointTransaction"> | Date | string
+  status?: Prisma.EnumTransactionStatusFilter<"PointTransaction"> | $Enums.TransactionStatus
+  confirmedAt?: Prisma.DateTimeNullableFilter<"PointTransaction"> | Date | string | null
+  confirmedBy?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   pointSystem?: Prisma.XOR<Prisma.PointSystemScalarRelationFilter, Prisma.PointSystemWhereInput>
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type PointTransactionOrderByWithRelationInput = {
@@ -243,7 +268,11 @@ export type PointTransactionOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   bookingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  confirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  confirmedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   pointSystem?: Prisma.PointSystemOrderByWithRelationInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
   _relevance?: Prisma.PointTransactionOrderByRelevanceInput
 }
 
@@ -258,7 +287,11 @@ export type PointTransactionWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   bookingId?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PointTransaction"> | Date | string
+  status?: Prisma.EnumTransactionStatusFilter<"PointTransaction"> | $Enums.TransactionStatus
+  confirmedAt?: Prisma.DateTimeNullableFilter<"PointTransaction"> | Date | string | null
+  confirmedBy?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   pointSystem?: Prisma.XOR<Prisma.PointSystemScalarRelationFilter, Prisma.PointSystemWhereInput>
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id">
 
 export type PointTransactionOrderByWithAggregationInput = {
@@ -269,6 +302,9 @@ export type PointTransactionOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   bookingId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  confirmedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  confirmedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.PointTransactionCountOrderByAggregateInput
   _avg?: Prisma.PointTransactionAvgOrderByAggregateInput
   _max?: Prisma.PointTransactionMaxOrderByAggregateInput
@@ -287,6 +323,9 @@ export type PointTransactionScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"PointTransaction"> | string | null
   bookingId?: Prisma.StringNullableWithAggregatesFilter<"PointTransaction"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PointTransaction"> | Date | string
+  status?: Prisma.EnumTransactionStatusWithAggregatesFilter<"PointTransaction"> | $Enums.TransactionStatus
+  confirmedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PointTransaction"> | Date | string | null
+  confirmedBy?: Prisma.StringNullableWithAggregatesFilter<"PointTransaction"> | string | null
 }
 
 export type PointTransactionCreateInput = {
@@ -296,7 +335,11 @@ export type PointTransactionCreateInput = {
   description?: string | null
   bookingId?: string | null
   createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
   pointSystem: Prisma.PointSystemCreateNestedOneWithoutPointTransactionsInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTransactionInput
 }
 
 export type PointTransactionUncheckedCreateInput = {
@@ -307,6 +350,10 @@ export type PointTransactionUncheckedCreateInput = {
   description?: string | null
   bookingId?: string | null
   createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type PointTransactionUpdateInput = {
@@ -316,7 +363,11 @@ export type PointTransactionUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   pointSystem?: Prisma.PointSystemUpdateOneRequiredWithoutPointTransactionsNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTransactionNestedInput
 }
 
 export type PointTransactionUncheckedUpdateInput = {
@@ -327,6 +378,10 @@ export type PointTransactionUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type PointTransactionCreateManyInput = {
@@ -337,6 +392,9 @@ export type PointTransactionCreateManyInput = {
   description?: string | null
   bookingId?: string | null
   createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
 }
 
 export type PointTransactionUpdateManyMutationInput = {
@@ -346,6 +404,9 @@ export type PointTransactionUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PointTransactionUncheckedUpdateManyInput = {
@@ -356,6 +417,9 @@ export type PointTransactionUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PointTransactionListRelationFilter = {
@@ -382,6 +446,9 @@ export type PointTransactionCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  confirmedAt?: Prisma.SortOrder
+  confirmedBy?: Prisma.SortOrder
 }
 
 export type PointTransactionAvgOrderByAggregateInput = {
@@ -396,6 +463,9 @@ export type PointTransactionMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  confirmedAt?: Prisma.SortOrder
+  confirmedBy?: Prisma.SortOrder
 }
 
 export type PointTransactionMinOrderByAggregateInput = {
@@ -406,10 +476,18 @@ export type PointTransactionMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  confirmedAt?: Prisma.SortOrder
+  confirmedBy?: Prisma.SortOrder
 }
 
 export type PointTransactionSumOrderByAggregateInput = {
   points?: Prisma.SortOrder
+}
+
+export type PointTransactionNullableScalarRelationFilter = {
+  is?: Prisma.PointTransactionWhereInput | null
+  isNot?: Prisma.PointTransactionWhereInput | null
 }
 
 export type PointTransactionCreateNestedManyWithoutPointSystemInput = {
@@ -458,6 +536,26 @@ export type EnumTransactionTypeFieldUpdateOperationsInput = {
   set?: $Enums.TransactionType
 }
 
+export type EnumTransactionStatusFieldUpdateOperationsInput = {
+  set?: $Enums.TransactionStatus
+}
+
+export type PointTransactionCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.PointTransactionCreateWithoutNotificationsInput, Prisma.PointTransactionUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.PointTransactionCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.PointTransactionWhereUniqueInput
+}
+
+export type PointTransactionUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.PointTransactionCreateWithoutNotificationsInput, Prisma.PointTransactionUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.PointTransactionCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.PointTransactionUpsertWithoutNotificationsInput
+  disconnect?: Prisma.PointTransactionWhereInput | boolean
+  delete?: Prisma.PointTransactionWhereInput | boolean
+  connect?: Prisma.PointTransactionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PointTransactionUpdateToOneWithWhereWithoutNotificationsInput, Prisma.PointTransactionUpdateWithoutNotificationsInput>, Prisma.PointTransactionUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type PointTransactionCreateWithoutPointSystemInput = {
   id?: string
   points: number
@@ -465,6 +563,10 @@ export type PointTransactionCreateWithoutPointSystemInput = {
   description?: string | null
   bookingId?: string | null
   createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTransactionInput
 }
 
 export type PointTransactionUncheckedCreateWithoutPointSystemInput = {
@@ -474,6 +576,10 @@ export type PointTransactionUncheckedCreateWithoutPointSystemInput = {
   description?: string | null
   bookingId?: string | null
   createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTransactionInput
 }
 
 export type PointTransactionCreateOrConnectWithoutPointSystemInput = {
@@ -513,6 +619,77 @@ export type PointTransactionScalarWhereInput = {
   description?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   bookingId?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PointTransaction"> | Date | string
+  status?: Prisma.EnumTransactionStatusFilter<"PointTransaction"> | $Enums.TransactionStatus
+  confirmedAt?: Prisma.DateTimeNullableFilter<"PointTransaction"> | Date | string | null
+  confirmedBy?: Prisma.StringNullableFilter<"PointTransaction"> | string | null
+}
+
+export type PointTransactionCreateWithoutNotificationsInput = {
+  id?: string
+  points: number
+  type: $Enums.TransactionType
+  description?: string | null
+  bookingId?: string | null
+  createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
+  pointSystem: Prisma.PointSystemCreateNestedOneWithoutPointTransactionsInput
+}
+
+export type PointTransactionUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  pointSystemId: string
+  points: number
+  type: $Enums.TransactionType
+  description?: string | null
+  bookingId?: string | null
+  createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
+}
+
+export type PointTransactionCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.PointTransactionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PointTransactionCreateWithoutNotificationsInput, Prisma.PointTransactionUncheckedCreateWithoutNotificationsInput>
+}
+
+export type PointTransactionUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.PointTransactionUpdateWithoutNotificationsInput, Prisma.PointTransactionUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.PointTransactionCreateWithoutNotificationsInput, Prisma.PointTransactionUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.PointTransactionWhereInput
+}
+
+export type PointTransactionUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.PointTransactionWhereInput
+  data: Prisma.XOR<Prisma.PointTransactionUpdateWithoutNotificationsInput, Prisma.PointTransactionUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type PointTransactionUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pointSystem?: Prisma.PointSystemUpdateOneRequiredWithoutPointTransactionsNestedInput
+}
+
+export type PointTransactionUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pointSystemId?: Prisma.StringFieldUpdateOperationsInput | string
+  points?: Prisma.IntFieldUpdateOperationsInput | number
+  type?: Prisma.EnumTransactionTypeFieldUpdateOperationsInput | $Enums.TransactionType
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type PointTransactionCreateManyPointSystemInput = {
@@ -522,6 +699,9 @@ export type PointTransactionCreateManyPointSystemInput = {
   description?: string | null
   bookingId?: string | null
   createdAt?: Date | string
+  status?: $Enums.TransactionStatus
+  confirmedAt?: Date | string | null
+  confirmedBy?: string | null
 }
 
 export type PointTransactionUpdateWithoutPointSystemInput = {
@@ -531,6 +711,10 @@ export type PointTransactionUpdateWithoutPointSystemInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifications?: Prisma.NotificationUpdateManyWithoutTransactionNestedInput
 }
 
 export type PointTransactionUncheckedUpdateWithoutPointSystemInput = {
@@ -540,6 +724,10 @@ export type PointTransactionUncheckedUpdateWithoutPointSystemInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTransactionNestedInput
 }
 
 export type PointTransactionUncheckedUpdateManyWithoutPointSystemInput = {
@@ -549,8 +737,40 @@ export type PointTransactionUncheckedUpdateManyWithoutPointSystemInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   bookingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.EnumTransactionStatusFieldUpdateOperationsInput | $Enums.TransactionStatus
+  confirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  confirmedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
+
+/**
+ * Count Type PointTransactionCountOutputType
+ */
+
+export type PointTransactionCountOutputType = {
+  notifications: number
+}
+
+export type PointTransactionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  notifications?: boolean | PointTransactionCountOutputTypeCountNotificationsArgs
+}
+
+/**
+ * PointTransactionCountOutputType without action
+ */
+export type PointTransactionCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointTransactionCountOutputType
+   */
+  select?: Prisma.PointTransactionCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PointTransactionCountOutputType without action
+ */
+export type PointTransactionCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
 
 
 export type PointTransactionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -561,7 +781,12 @@ export type PointTransactionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   description?: boolean
   bookingId?: boolean
   createdAt?: boolean
+  status?: boolean
+  confirmedAt?: boolean
+  confirmedBy?: boolean
   pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+  notifications?: boolean | Prisma.PointTransaction$notificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.PointTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pointTransaction"]>
 
 
@@ -574,17 +799,23 @@ export type PointTransactionSelectScalar = {
   description?: boolean
   bookingId?: boolean
   createdAt?: boolean
+  status?: boolean
+  confirmedAt?: boolean
+  confirmedBy?: boolean
 }
 
-export type PointTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pointSystemId" | "points" | "type" | "description" | "bookingId" | "createdAt", ExtArgs["result"]["pointTransaction"]>
+export type PointTransactionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "pointSystemId" | "points" | "type" | "description" | "bookingId" | "createdAt" | "status" | "confirmedAt" | "confirmedBy", ExtArgs["result"]["pointTransaction"]>
 export type PointTransactionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+  notifications?: boolean | Prisma.PointTransaction$notificationsArgs<ExtArgs>
+  _count?: boolean | Prisma.PointTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $PointTransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PointTransaction"
   objects: {
     pointSystem: Prisma.$PointSystemPayload<ExtArgs>
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -594,6 +825,9 @@ export type $PointTransactionPayload<ExtArgs extends runtime.Types.Extensions.In
     description: string | null
     bookingId: string | null
     createdAt: Date
+    status: $Enums.TransactionStatus
+    confirmedAt: Date | null
+    confirmedBy: string | null
   }, ExtArgs["result"]["pointTransaction"]>
   composites: {}
 }
@@ -935,6 +1169,7 @@ readonly fields: PointTransactionFieldRefs;
 export interface Prisma__PointTransactionClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   pointSystem<T extends Prisma.PointSystemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PointSystemDefaultArgs<ExtArgs>>): Prisma.Prisma__PointSystemClient<runtime.Types.Result.GetResult<Prisma.$PointSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  notifications<T extends Prisma.PointTransaction$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PointTransaction$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -971,6 +1206,9 @@ export interface PointTransactionFieldRefs {
   readonly description: Prisma.FieldRef<"PointTransaction", 'String'>
   readonly bookingId: Prisma.FieldRef<"PointTransaction", 'String'>
   readonly createdAt: Prisma.FieldRef<"PointTransaction", 'DateTime'>
+  readonly status: Prisma.FieldRef<"PointTransaction", 'TransactionStatus'>
+  readonly confirmedAt: Prisma.FieldRef<"PointTransaction", 'DateTime'>
+  readonly confirmedBy: Prisma.FieldRef<"PointTransaction", 'String'>
 }
     
 
@@ -1311,6 +1549,30 @@ export type PointTransactionDeleteManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many PointTransactions to delete.
    */
   limit?: number
+}
+
+/**
+ * PointTransaction.notifications
+ */
+export type PointTransaction$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

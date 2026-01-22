@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?        @unique
+  email         String?         @unique
   emailVerified DateTime?
   image         String?
   phone         String?
-  createdAt     DateTime       @default(now())
-  role          Role           @default(USER)
-  updatedAt     DateTime       @default(now()) @updatedAt
+  createdAt     DateTime        @default(now())
+  role          Role            @default(USER)
+  updatedAt     DateTime        @default(now()) @updatedAt
   accounts      Account[]
   barberProfile BarberProfile?
   bookings      Booking[]
   sessions      Session[]
-  pointSystem   PointSystem?   // Add this
-  plan          Plan?          // Add this
+  pointSystem   PointSystem?
+  plan          Plan?
+  notifications Notification[]
 }
 
 model BarberProfile {
@@ -109,18 +110,19 @@ model BookingService {
 }
 
 model Booking {
-  id            String           @id @default(cuid())
+  id            String            @id @default(cuid())
   date          DateTime
   status        BookingStatus
   userId        String
   barberId      String
   totalPrice    Int
   totalDuration Int
-  createdAt     DateTime         @default(now())
+  createdAt     DateTime          @default(now())
   barber        BarberProfile    @relation(fields: [barberId], references: [id])
   user          User             @relation(fields: [userId], references: [id])
   services      BookingService[]
   coupon        Coupon?
+  notifications Notification[]
 
   @@index([barberId], map: "Booking_barberId_fkey")
   @@index([userId], map: "Booking_userId_fkey")
@@ -164,21 +166,6 @@ model ExtraTimeDay {
   @@index([barberId])
 }
 
-enum Role {
-  USER
-  BARBER
-  ADMIN
-  SUPERADMIN
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  CANCELED
-}
-
-// Add to schema.prisma
-
 model PointSystem {
   id                    String              @id @default(cuid())
   userId                String              @unique
@@ -195,33 +182,74 @@ model PointSystem {
 }
 
 model Coupon {
-  id              String       @id @default(cuid())
+  id              String          @id @default(cuid())
   pointSystemId   String
   discountPercent Int
-  isUsed          Boolean      @default(false)
+  isUsed          Boolean         @default(false)
   usedAt          DateTime?
-  bookingId       String?      @unique
-  createdAt       DateTime     @default(now())
+  bookingId       String?         @unique
+  createdAt       DateTime        @default(now())
   expiresAt       DateTime?
 
-  pointSystem     PointSystem @relation(fields: [pointSystemId], references: [id], onDelete: Cascade)
-  booking         Booking?    @relation(fields: [bookingId], references: [id])
+  pointSystem     PointSystem    @relation(fields: [pointSystemId], references: [id], onDelete: Cascade)
+  booking         Booking?       @relation(fields: [bookingId], references: [id])
+  notifications   Notification[]
 
   @@index([pointSystemId])
 }
 
 model PointTransaction {
-  id            String           @id @default(cuid())
+  id            String             @id @default(cuid())
   pointSystemId String
   points        Int
   type          TransactionType
   description   String?
   bookingId     String?
-  createdAt     DateTime         @default(now())
+  createdAt     DateTime           @default(now())
 
-  pointSystem   PointSystem     @relation(fields: [pointSystemId], references: [id], onDelete: Cascade)
+  pointSystem   PointSystem       @relation(fields: [pointSystemId], references: [id], onDelete: Cascade)
+  status        TransactionStatus  @default(PENDING)
+  confirmedAt   DateTime?
+  confirmedBy   String?
+  notifications Notification[]
 
   @@index([pointSystemId])
+}
+
+model Notification {
+  id            String             @id @default(cuid())
+  type          NotificationType
+  title         String
+  message       String
+  read          Boolean            @default(false)
+  barberId      String
+  userId        String?
+  bookingId     String?
+  couponId      String?
+  transactionId String?
+  metadata      String?            @db.Text // JSON string for additional data
+  createdAt     DateTime           @default(now())
+
+  user          User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking       Booking?          @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  coupon        Coupon?           @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  transaction   PointTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([barberId])
+  @@index([userId])
+  @@index([bookingId])
+  @@index([read])
+}
+
+enum NotificationType {
+  COUPON_REDEEMED
+  POINTS_PENDING
+  POINTS_CONFIRMED
+  POINTS_REJECTED
+  POINTS_ADJUSTED
+  BOOKING_CREATED
+  BOOKING_EDITED
+  BOOKING_CANCELLED
 }
 
 model Plan {
@@ -237,4 +265,22 @@ enum TransactionType {
   REDEEMED
   EXPIRED
   ADJUSTED
+}
+enum Role {
+  USER
+  BARBER
+  ADMIN
+  SUPERADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
 }

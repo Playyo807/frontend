@@ -66,6 +66,7 @@ export const ModelName = {
   PointSystem: 'PointSystem',
   Coupon: 'Coupon',
   PointTransaction: 'PointTransaction',
+  Notification: 'Notification',
   Plan: 'Plan'
 } as const
 
@@ -258,10 +259,31 @@ export const PointTransactionScalarFieldEnum = {
   type: 'type',
   description: 'description',
   bookingId: 'bookingId',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  status: 'status',
+  confirmedAt: 'confirmedAt',
+  confirmedBy: 'confirmedBy'
 } as const
 
 export type PointTransactionScalarFieldEnum = (typeof PointTransactionScalarFieldEnum)[keyof typeof PointTransactionScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  read: 'read',
+  barberId: 'barberId',
+  userId: 'userId',
+  bookingId: 'bookingId',
+  couponId: 'couponId',
+  transactionId: 'transactionId',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
 export const PlanScalarFieldEnum = {
@@ -425,10 +447,26 @@ export const PointTransactionOrderByRelevanceFieldEnum = {
   id: 'id',
   pointSystemId: 'pointSystemId',
   description: 'description',
-  bookingId: 'bookingId'
+  bookingId: 'bookingId',
+  confirmedBy: 'confirmedBy'
 } as const
 
 export type PointTransactionOrderByRelevanceFieldEnum = (typeof PointTransactionOrderByRelevanceFieldEnum)[keyof typeof PointTransactionOrderByRelevanceFieldEnum]
+
+
+export const NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  barberId: 'barberId',
+  userId: 'userId',
+  bookingId: 'bookingId',
+  couponId: 'couponId',
+  transactionId: 'transactionId',
+  metadata: 'metadata'
+} as const
+
+export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
 
 
 export const PlanOrderByRelevanceFieldEnum = {

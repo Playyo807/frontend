@@ -8,13 +8,17 @@ import {
   Settings,
   CalendarPlus,
   CalendarX,
+  ClipboardPen,
 } from "lucide-react";
 import DisabledDaysManager from "@/components/custom/disabledDaysManager";
 import DisabledTimeManager from "@/components/custom/disabledTimeManager";
 import ExtraTimeManager from "@/components/custom/extraTimeManager";
 import UsersManagement from "@/components/custom/userManagement";
 import BarberCreateBooking from "@/components/custom/barberCreateBooking";
+import NotificationCenter from "@/components/custom/notificationCenter";
 import type { Service } from "@/prisma/generated/prisma/client";
+import ServiceManagement from "@/components/custom/serviceManagement";
+import NotificationCenterPopover from "@/components/custom/notificationCenterPopover";
 
 interface User {
   id: string;
@@ -49,15 +53,19 @@ export default function BarberDashboard({
           <h1 className="text-3xl font-bold mb-4 md:mb-0">
             Painel do Barbeiro
           </h1>
-          <BarberCreateBooking
-            barberId={barberId}
-            users={users}
-            services={services}
-          />
+          <div className="flex items-center gap-3">
+            <NotificationCenter barberId={barberId} />
+            <NotificationCenterPopover barberId={barberId}/>
+            <BarberCreateBooking
+              barberId={barberId}
+              users={users}
+              services={services}
+            />
+          </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 bg-slate-800">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 h-fit">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 bg-slate-800 h-fit">
             <TabsTrigger value="users" className="flex items-center gap-2">
               <Users size={18} />
               <span className="hidden md:inline">Clientes</span>
@@ -74,6 +82,10 @@ export default function BarberDashboard({
               <CalendarPlus size={18} />
               <span className="hidden md:inline">Tempo Extra</span>
             </TabsTrigger>
+            <TabsTrigger value="services" className="flex items-center gap-2">
+              <ClipboardPen size={18}/>
+              <span className="hidden md:inline">Serviços</span>
+            </TabsTrigger>
             <TabsTrigger value="settings" className="flex items-center gap-2">
               <Settings size={18} />
               <span className="hidden md:inline">Configurações</span>
@@ -81,7 +93,7 @@ export default function BarberDashboard({
           </TabsList>
 
           <TabsContent value="users" className="space-y-4">
-            <UsersManagement users={users} />
+            <UsersManagement users={users} barberId={barberId} />
           </TabsContent>
 
           <TabsContent value="disabled-days" className="space-y-4">
@@ -94,6 +106,10 @@ export default function BarberDashboard({
 
           <TabsContent value="extra-time" className="space-y-4">
             <ExtraTimeManager barberId={barberId} />
+          </TabsContent>
+
+          <TabsContent value="services" className="space-y-4">
+            <ServiceManagement services={services} barberId={barberId}/>
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-4">

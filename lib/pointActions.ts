@@ -3,6 +3,32 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
+import { getBarberProfiles } from "./serverFunctions";
+import { createNotification } from "./notificationActions";
+
+function handleDiscount(
+    price: number,
+    services: ({
+      service: {
+        name: string;
+        id: string;
+        price: number;
+        duration: number;
+        keyword: string;
+        imagePath: string;
+      };
+    } & { bookingId: string; serviceId: string })[],
+  ): number {
+    let length = services.length == 0 ? 1 : services.length;
+    services.map((s) => {
+      if (s.service.keyword == "LZ") {
+        length = length - 1;
+      }
+    });
+    if (length < 1) length = 1;
+    const discountRate = (length - 1) * 5;
+    return price - discountRate;
+  }
 
 export async function getUserPointSystem() {
   const session = await auth();
@@ -112,22 +138,18 @@ export async function addPointsForBooking(bookingId: string) {
     (s) => s.service.keyword !== "LZ" && s.service.keyword !== "PLA"
   );
 
-  const pointsToAdd =
-    eligibleServices.length * booking.user.pointSystem.pointsPerService;
+  let pointsToAdd = 0;
+  let totalPrice = 0
+
+  eligibleServices.map(s => {
+    totalPrice += s.service.price;
+  })
+
+  pointsToAdd = handleDiscount(totalPrice, eligibleServices)
 
   if (pointsToAdd === 0) {
     return { success: true, pointsAdded: 0 };
   }
-
-  // Update points
-  const updatedPointSystem = await prisma.pointSystem.update({
-    where: { id: booking.user.pointSystem.id },
-    data: {
-      currentPoints: {
-        increment: pointsToAdd,
-      },
-    },
-  });
 
   // Create transaction record
   await prisma.pointTransaction.create({
@@ -135,48 +157,13 @@ export async function addPointsForBooking(bookingId: string) {
       pointSystemId: booking.user.pointSystem.id,
       points: pointsToAdd,
       type: "EARNED",
+      status: "PENDING",
       description: `Pontos ganhos pelo agendamento`,
       bookingId: booking.id,
     },
   });
 
-  // Check if user earned a coupon
-  if (
-    updatedPointSystem.currentPoints >= updatedPointSystem.pointsNeededForReward
-  ) {
-    await prisma.pointSystem.update({
-      where: { id: updatedPointSystem.id },
-      data: {
-        currentPoints: {
-          decrement: updatedPointSystem.pointsNeededForReward,
-        },
-      },
-    });
-
-    await prisma.coupon.create({
-      data: {
-        pointSystemId: updatedPointSystem.id,
-        discountPercent: updatedPointSystem.discountPercentage,
-      },
-    });
-
-    await prisma.pointTransaction.create({
-      data: {
-        pointSystemId: updatedPointSystem.id,
-        points: -updatedPointSystem.pointsNeededForReward,
-        type: "REDEEMED",
-        description: `Cupom de ${updatedPointSystem.discountPercentage}% criado`,
-      },
-    });
-
-    return {
-      success: true,
-      pointsAdded: pointsToAdd,
-      couponEarned: true,
-    };
-  }
-
-  return { success: true, pointsAdded: pointsToAdd, couponEarned: false };
+  return { success: true };
 }
 
 export async function getAvailableCoupons() {
@@ -205,8 +192,6 @@ export async function getAvailableCoupons() {
 
   return user?.pointSystem?.coupons || [];
 }
-
-// lib/pointActions.ts
 
 export async function redeemPointsForCoupon() {
   const session = await auth();
@@ -258,12 +243,19 @@ export async function redeemPointsForCoupon() {
         pointSystemId: user.pointSystem!.id,
         points: -user.pointSystem!.pointsNeededForReward,
         type: "REDEEMED",
+        status: 'CONFIRMED',
         description: `Cupom de ${user.pointSystem!.discountPercentage}% resgatado`,
       },
     });
 
     return { pointSystem: updatedPointSystem, coupon };
   });
+
+  const barbers = await getBarberProfiles();
+
+  barbers.map(async (b) => {
+    await createNotification(b.id, 'COUPON_REDEEMED', 'Coupon Resgatado!', `${session.user?.name} resgatou um coupon de ${user.pointSystem?.discountPercentage}% de desconto!`)
+  })
 
   revalidatePath("/client/dashboard");
   return { 
