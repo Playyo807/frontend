@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 import { addMinutes, isBefore, startOfDay, endOfDay } from "date-fns";
 import { createNotification } from "./notificationActions";
 
-// Get user bookings for barber view
 export async function getUserBookingsForBarber(
   userId: string,
   barberId: string

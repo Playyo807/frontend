@@ -1,67 +1,40 @@
-// lib/booking-actions.ts
 "use server";
 
 import prisma from "@/lib/prisma";
-import {
-  startOfDay,
-  endOfDay,
-  addMinutes,
-  isBefore,
-  isAfter,
-  isWeekend,
-} from "date-fns";
+import { startOfDay, endOfDay, addMinutes, isBefore, isAfter } from "date-fns";
 import { auth } from "@/auth"; // Auth.js v5
 import {
-  Prisma,
   DisabledDay,
   ExtraTimeDay,
   DisabledTime,
 } from "@/prisma/generated/prisma/client";
 import { addPointsForBooking } from "./pointActions";
+import { getBarberBookingsForDayType_ } from "./types";
+import * as types from "@/lib/types"
 
-interface TimeSlot {
-  start: Date;
-  end: Date;
-  isAvailable: boolean;
+
+function handleDiscount(
+  price: number,
+  services: { id: string; keyword: string }[],
+  length_: number,
+): number {
+  let length = length_ == 0 ? 1 : length_;
+  services.map((s) => {
+    if (s.id == "LZ") {
+      length = length - 1;
+    }
+  });
+  if (length < 1) length = 1;
+  const discountRate = (length - 1) * 5;
+  return price - discountRate;
 }
-
-interface DayAvailability {
-  date: string;
-  status: "available" | "partial" | "full" | "past";
-  availableSlots: number;
-  totalSlots: number;
-}
-
-interface TimeSlotResponse {
-  start: string;
-  end: string;
-  isAvailable: boolean;
-  isPast: boolean;
-  isBooked: boolean;
-}
-
-export type BookingWithRelations = Prisma.BookingGetPayload<{
-  include: {
-    services: {
-      include: {
-        service: true;
-      };
-    };
-    barber: {
-      include: {
-        user: true;
-      };
-    };
-    coupon: true;
-  };
-}>;
 
 // Get monthly availability for a barber
 export async function getBarberAvailability(
   barberId: string,
   month: string, // Format: YYYY-MM
   timezone: string = "America/Sao_Paulo",
-): Promise<{ availability: DayAvailability[] }> {
+): Promise<{ availability: types.DayAvailability[] }> {
   try {
     // Get barber profile
     const barber = await prisma.barberProfile.findUnique({
@@ -116,7 +89,7 @@ export async function getBarberAvailability(
     );
 
     // Generate availability for each day
-    const availability: DayAvailability[] = [];
+    const availability: types.DayAvailability[] = [];
     const current = new Date(firstDay);
     const now = new Date();
 
@@ -230,7 +203,7 @@ export async function getBarberSlots(
   barberId: string,
   dateStr: string, // Format: YYYY-MM-DD
   timezone: string = "America/Sao_Paulo",
-): Promise<{ slots: TimeSlotResponse[] }> {
+): Promise<{ slots: types.TimeSlotResponse[] }> {
   try {
     const date = new Date(dateStr + "T12:00:00");
     const dayOfWeek = date.getDay();
@@ -292,7 +265,7 @@ export async function getBarberSlots(
     const now = new Date();
 
     // Mark slots as available/unavailable
-    const slotsWithAvailability: TimeSlotResponse[] = slots.map((slot) => {
+    const slotsWithAvailability: types.TimeSlotResponse[] = slots.map((slot) => {
       const isPast = isBefore(slot.start, now);
 
       const isBooked = bookings.some((booking) => {
@@ -328,10 +301,11 @@ export async function createBooking(
   serviceIds: string[],
   dateTime: string,
   timezone: string,
+  usePlan: boolean,
   couponId?: string,
 ): Promise<{
   success: boolean;
-  booking: BookingWithRelations;
+  booking: types.BookingWithRelations;
 }> {
   try {
     const session = await auth();
@@ -404,7 +378,73 @@ export async function createBooking(
       0,
     );
 
-    if (coupon) {
+    const activePlan = await prisma.clientPlan.findFirst({
+      where: {
+        userId: user.id,
+        barberId: barberId,
+        expires: { gte: new Date() },
+        useAmount: { gt: 0 },
+      },
+      include: {
+        plan: {
+          include: {
+            planToService: {
+              include: { service: true },
+            },
+          },
+        },
+      },
+    });
+
+    let planPrice = totalPrice;
+    let serviceLength = serviceIds.length;
+    const servicesById = await prisma.service.findMany({
+      where: {
+        id: {
+          in: serviceIds,
+        },
+      },
+      select: {
+        id: true,
+        keyword: true,
+      },
+    });
+
+    if (activePlan) {
+      const planServiceIds = activePlan.plan.planToService.map(
+        (ps) => ps.service.id,
+      );
+      const allServicesInPlan = serviceIds.every((id) =>
+        planServiceIds.includes(id),
+      );
+      const someServicesInPlan = serviceIds.some((id) =>
+        planServiceIds.includes(id),
+      );
+
+      if (allServicesInPlan) {
+        planPrice = 0; // Services are covered by the plan
+        serviceLength = 0;
+      } else if (someServicesInPlan) {
+        planPrice = totalPrice;
+        planServiceIds.map((id) => {
+          services.map((s) => {
+            if (s.id === id) {
+              planPrice -= s.price;
+              serviceLength -= 1;
+            }
+          });
+        });
+      }
+    }
+
+    totalPrice = handleDiscount(totalPrice, servicesById, serviceIds.length);
+    planPrice = handleDiscount(planPrice, servicesById, serviceLength);
+
+    if ((couponId || coupon) && (usePlan || activePlan)) {
+      throw new Error("Não é possível usar cupom e plano ao mesmo tempo");
+    }
+
+    if (coupon && couponId && !usePlan && !activePlan) {
       // Check if services are eligible for discount (exclude LZ and PLA)
       const eligibleServices = services.filter(
         (s) => s.keyword !== "LZ" && s.keyword !== "PLA",
@@ -435,7 +475,10 @@ export async function createBooking(
     }
 
     // Check if slot is available
-    const bookingEnd = addMinutes(bookingDate, totalDuration > 40 ? 40 : totalDuration);
+    const bookingEnd = addMinutes(
+      bookingDate,
+      totalDuration > 40 ? 40 : totalDuration,
+    );
 
     const conflictingBookings = await prisma.booking.findMany({
       where: {
@@ -466,6 +509,7 @@ export async function createBooking(
       throw new Error("This time slot is no longer available");
     }
 
+    const finalPrice = usePlan ? planPrice : totalPrice;
     // Create booking with transaction
     const booking = await prisma.$transaction(async (tx) => {
       const newBooking = await tx.booking.create({
@@ -474,7 +518,8 @@ export async function createBooking(
           status: "CONFIRMED",
           userId: user.id,
           barberId,
-          totalPrice,
+          totalPrice: finalPrice,
+          planId: usePlan ? activePlan?.id : null,
           totalDuration,
           services: {
             create: serviceIds.map((serviceId) => ({
@@ -494,24 +539,35 @@ export async function createBooking(
             },
           },
           coupon: true,
+          plan: {
+            include: {
+              plan: true,
+            },
+          },
         },
       });
+      if (!usePlan && coupon && !activePlan) {
+        await tx.coupon.update({
+          where: { id: couponId },
+          data: {
+            isUsed: true,
+            usedAt: new Date(),
+            bookingId: booking.id,
+          },
+        });
+      }
+
+      if (usePlan && activePlan) {
+        await tx.clientPlan.update({
+          where: { id: activePlan.id },
+          data: { useAmount: activePlan.useAmount - 1 },
+        });
+      }
 
       return newBooking;
     });
 
-    if (coupon) {
-      await prisma.coupon.update({
-        where: { id: couponId },
-        data: {
-          isUsed: true,
-          usedAt: new Date(),
-          bookingId: booking.id,
-        },
-      });
-    }
-
-    addPointsForBooking(booking.id);
+    addPointsForBooking(booking.id, activePlan !== null);
 
     return {
       success: true,
@@ -525,7 +581,7 @@ export async function createBooking(
 
 // Get user's bookings
 export async function getUserBookings(): Promise<{
-  bookings: BookingWithRelations[];
+  bookings: types.BookingWithRelations[];
 }> {
   try {
     const session = await auth();
@@ -558,6 +614,11 @@ export async function getUserBookings(): Promise<{
           },
         },
         coupon: true,
+        plan: {
+          include: {
+            plan: true,
+          },
+        },
       },
       orderBy: {
         date: "desc",
@@ -575,8 +636,8 @@ async function generateTimeSlots(
   date: Date,
   barberId: string,
   intervalMinutes: number,
-): Promise<TimeSlot[]> {
-  const slots: TimeSlot[] = [];
+): Promise<types.TimeSlotBA[]> {
+  const slots: types.TimeSlotBA[] = [];
 
   // Get extra time for this day
   const extraTimeDay = await getExtraTimeDay(date, barberId);
@@ -1106,7 +1167,7 @@ export async function createBookingAsBarber(
   timezone: string,
 ): Promise<{
   success: boolean;
-  booking: BookingWithRelations;
+  booking: types.BookingWithRelations;
 }> {
   try {
     const session = await auth();
@@ -1250,6 +1311,11 @@ export async function createBookingAsBarber(
           },
         },
         coupon: true,
+        plan: {
+          include: {
+            plan: true,
+          },
+        },
       },
     });
 
@@ -1323,4 +1389,48 @@ export async function cancelBooking(bookingId: string): Promise<{
     console.error("Error canceling booking:", error);
     throw error;
   }
+}
+
+export async function getBarberBookingsForDay(
+  barberId: string,
+  date: Date,
+): Promise<getBarberBookingsForDayType_[]> {
+  const startOfDay_ = startOfDay(new Date(date));
+
+  const endOfDay_ = endOfDay(new Date(date));
+
+  return await prisma.booking.findMany({
+    where: {
+      barberId,
+      date: {
+        gte: startOfDay_,
+        lte: endOfDay_,
+      },
+      status: {
+        in: ["PENDING", "CONFIRMED"],
+      },
+    },
+    include: {
+      user: true,
+      services: {
+        include: {
+          service: true,
+        },
+      },
+      barber: {
+        include: {
+          user: true,
+        },
+      },
+      coupon: true,
+      plan: {
+        include: {
+          plan: true,
+        },
+      },
+    },
+    orderBy: {
+      date: "asc",
+    },
+  });
 }

@@ -37,15 +37,15 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { bookings_ } from "./page";
 import { Service } from "@/prisma/generated/prisma/client";
+import * as types from "@/lib/types"
 
 export default function UserDetailClient({
   user,
   barberId,
   services,
 }: {
-  user: bookings_;
+  user: types.bookings_;
   barberId: string;
   services: Service[];
 }) {
@@ -55,7 +55,7 @@ export default function UserDetailClient({
   const [pointsAmount, setPointsAmount] = useState<string>("");
   const [pointsReason, setPointsReason] = useState<string>("");
   const [filter, setFilter] = useState<string>("ALL");
-  const [bookings, setBookings] = useState<any>();
+  const [bookings, setBookings] = useState<types.bookings_['bookings']>();
 
   useEffect(() => {
     setBookings(

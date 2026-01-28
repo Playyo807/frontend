@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar, Edit, Clock, Banknote, Ticket } from "lucide-react";
+import { Edit, Clock, Banknote, Ticket, Package } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
@@ -27,21 +27,14 @@ import { editBooking } from "@/lib/bookingEditActions";
 import Calendar02 from "@/components/custom/calendar";
 import TimeSlotSelector from "@/components/custom/timeSlotSelector";
 import { Checkbox } from "@/components/ui/checkbox";
-
-interface TimeSlot {
-  start: string;
-  end: string;
-  isAvailable: boolean;
-  isPast: boolean;
-  isBooked: boolean;
-}
+import * as types from "@/lib/types"
 
 export default function BookingEditDialog({
   booking,
   barberId,
   services,
 }: {
-  booking: any;
+  booking: types.bookings_['bookings'][0];
   barberId: string;
   services: any[];
 }) {
@@ -55,7 +48,7 @@ export default function BookingEditDialog({
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     new Date(booking.date)
   );
-  const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<types.TimeSlot | null>(null);
   const [selectedStatus, setSelectedStatus] = useState(booking.status);
 
   const isPastBooking = new Date(booking.date) < new Date();
@@ -187,6 +180,12 @@ export default function BookingEditDialog({
                     {booking.coupon.discountPercent}% OFF
                   </span>
                 )}
+                {booking.plan && (
+                  <span className={`bg-linear-to-r ${booking.plan.plan.keyword === "BRO" ? "from-amber-500 to-cyan-600" : booking.plan.plan.keyword === "PLA" ? "from-gray-600 to-gray-800" : booking.plan.plan.keyword == "OUR" ? "from-amber-500 to-amber-900" : booking.plan.plan.keyword === "DIA" ? "from-black to-blue-600" : "from-sky-950 to-blue-700"} px-2 py-1 rounded text-xs flex items-center gap-1`}>
+                    <Package size={12} />
+                    Plano
+                  </span>
+                )}
               </div>
               <div className="text-sm text-gray-400">
                 {booking.services.map((s: any) => s.service.name).join(", ")}
@@ -198,7 +197,7 @@ export default function BookingEditDialog({
                 </span>
                 <span className="flex items-center gap-1">
                   <Banknote size={14} />
-                  {handleDiscount(booking.totalPrice).toLocaleString("pt-BR", {
+                  {booking.totalPrice.toLocaleString("pt-BR", {
                     style: "currency",
                     currency: "BRL",
                   })}
@@ -224,7 +223,9 @@ export default function BookingEditDialog({
           {/* Status */}
           <div>
             <Label>Status</Label>
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <Select value={selectedStatus} onValueChange={(e) => {
+              setSelectedStatus(e.valueOf() as "CANCELED" | "PENDING" | "CONFIRMED")
+            }}>
               <SelectTrigger className="mt-2">
                 <SelectValue />
               </SelectTrigger>

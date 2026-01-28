@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "motion/react";
-import { BarberProfile } from "@/prisma/generated/prisma/client";
+import { BarberProfile, Service } from "@/prisma/generated/prisma/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { decodeBookingData } from "@/lib/bookingParams";
 import { useState, useTransition } from "react";
@@ -11,7 +11,7 @@ import { ptBR } from "date-fns/locale";
 import { createBooking } from "@/lib/bookingActions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Ticket, AlertCircle, Banknote } from "lucide-react";
-import { Separator } from "@radix-ui/react-separator";
+import PlanSelector from "@/components/custom/planSelector";
 
 interface TimeSlot {
   start: string;
@@ -28,18 +28,33 @@ interface Coupon {
   expiresAt: Date | null;
 }
 
+interface activePlan {
+  id: string;
+  useAmount: number;
+  plan: {
+    name: string;
+    planToService: Array<{
+      service: { id: string; name: string };
+    }>;
+  };
+}
+
 export default function ClientPage({
   barbers,
   barberImages,
   disabledBarbers,
+  activePlan,
   availableCoupons,
   servicesPrices,
+  services,
 }: {
   barbers: BarberProfile[];
   barberImages: string[];
   disabledBarbers: BarberProfile[];
+  activePlan: activePlan | null;
   availableCoupons: Coupon[];
   servicesPrices: number[];
+  services: Service[];
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -55,8 +70,7 @@ export default function ClientPage({
   const totalPrice = servicesPrices.reduce((sum, price) => {
     return sum + price;
   }, 0);
-
-  console.log(servicesPrices);
+  const [usePlan, setUsePlan] = useState(false);
 
   if (!selectedServices) {
     alert(
@@ -65,17 +79,35 @@ export default function ClientPage({
     router.push("/client");
   }
 
-  // Check if any service is eligible for discount (not LZ or PLA)
-  const hasEligibleServices = selectedServices?.some((service) => {
-    // You'll need to pass service keywords or check this properly
-    // For now, assuming you have access to full service data
-    return true; // Replace with actual check
-  });
+  // // Check if any service is eligible for discount (not LZ or PLA)
+  // const hasEligibleServices = selectedServices?.some((service) => {
+  //   // You'll need to pass service keywords or check this properly
+  //   // For now, assuming you have access to full service data
+  //   return true; // Replace with actual check
+  // });
 
-  function handleDiscount(
-    price: number,
-  ): number {
+  function handleDiscount(price: number): number {
     let length = selectedServices.length == 0 ? 1 : selectedServices.length;
+    let planDiscount = 0;
+
+    if (usePlan && activePlan) {
+      const planServiceIds = activePlan.plan.planToService.map(
+        (ps) => ps.service.id,
+      );
+      const selectedServicesIds = selectedServices.map(s => s[0]);
+      planServiceIds.map((id) => {
+        services.map((s) => {
+          if (s.id === id && selectedServicesIds.includes(s.id)) {
+            planDiscount += s.price;
+            length -= 1;
+
+            if (length <= 0) {
+              length = 1;
+            }
+          }
+        });
+      });
+    }
     selectedServices.map((s) => {
       if (s[1] == "LZ") {
         length = length - 1;
@@ -83,7 +115,7 @@ export default function ClientPage({
     });
     if (length < 1) length = 1;
     const discountRate = (length - 1) * 5;
-    return price - discountRate;
+    return price - discountRate - planDiscount;
   }
 
   // Calculate discount amount
@@ -93,7 +125,9 @@ export default function ClientPage({
     const coupon = availableCoupons.find((c) => c.id === selectedCoupon);
     if (!coupon) return 0;
 
-    return Math.floor((totalPrice * coupon.discountPercent) / 100);
+    return Math.floor(
+      (handleDiscount(totalPrice) * coupon.discountPercent) / 100,
+    );
   };
 
   const handleBooking = () => {
@@ -109,6 +143,7 @@ export default function ClientPage({
           selectedServices.map((s) => s[0]),
           selectedSlot.start,
           Intl.DateTimeFormat().resolvedOptions().timeZone,
+          usePlan,
           selectedCoupon || undefined, // Pass the coupon ID if selected
         );
 
@@ -204,20 +239,32 @@ export default function ClientPage({
             <div>
               <Calendar02
                 barberId={selectedBarber.id}
-                onDateSelect={setSelectedDate}
+                onDateSelect={(e) => {
+                  setSelectedDate(e);
+                  setTimeout(() => {
+                    window.location.href = "#timeSelection";
+                  }, 600)
+                }}
               />
             </div>
 
             <div>
-              <TimeSlotSelector
-                barberId={selectedBarber.id}
-                selectedDate={selectedDate}
-                onSlotSelect={setSelectedSlot}
-                selectedSlot={selectedSlot}
-              />
+              <div id="timeSelection">
+                <TimeSlotSelector
+                  barberId={selectedBarber.id}
+                  selectedDate={selectedDate}
+                  onSlotSelect={(e) => {
+                    setSelectedSlot(e);
+                    setTimeout(() => {
+                      window.location.href = "#slotConfirmation";
+                    }, 1000)
+                  }}
+                  selectedSlot={selectedSlot}
+                />
+              </div>
 
               {selectedSlot && (
-                <div className="mt-8 p-6 bg-slate-800 rounded-lg space-y-4">
+                <div id="slotConfirmation" className="mt-8 p-6 bg-slate-800 rounded-lg space-y-4">
                   <h3 className="text-xl font-bold mb-4">
                     Resumo do Agendamento
                   </h3>
@@ -247,7 +294,7 @@ export default function ClientPage({
                   </div>
 
                   {/* Coupon Selection */}
-                  {availableCoupons.length > 0 && (
+                  {availableCoupons.length > 0 && !activePlan && (
                     <div className="border-t border-slate-700 pt-4 mt-4">
                       <h4 className="font-semibold mb-3 flex items-center gap-2">
                         <Ticket className="text-emerald-500" size={20} />
@@ -312,18 +359,25 @@ export default function ClientPage({
                       )}
                     </div>
                   )}
+                  {activePlan && activePlan.useAmount !== 0 && (
+                    <PlanSelector
+                      usePlan={usePlan}
+                      activePlan={activePlan}
+                      onUsePlanChange={setUsePlan}
+                      selectedServices={selectedServices.map((s) => s[0])}
+                    />
+                  )}
 
                   <div className="border-t border-slate-700 pt-4 mt-4">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
                       <Banknote className="text-emerald-500" size={20} />
                       Total:{" "}
-                      {(handleDiscount(totalPrice) - calculateDiscount()).toLocaleString(
-                        "pt-BR",
-                        {
-                          style: "currency",
-                          currency: "BRL",
-                        },
-                      )}
+                      {(
+                        handleDiscount(totalPrice) - calculateDiscount()
+                      ).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
                     </h4>
                   </div>
 

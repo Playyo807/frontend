@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
-  phone         String?
-  createdAt     DateTime        @default(now())
-  role          Role            @default(USER)
-  updatedAt     DateTime        @default(now()) @updatedAt
-  accounts      Account[]
-  barberProfile BarberProfile?
-  bookings      Booking[]
-  sessions      Session[]
-  pointSystem   PointSystem?
-  plan          Plan?
-  notifications Notification[]
+  id                String              @id @default(cuid())
+  name              String?
+  email             String?             @unique
+  emailVerified     DateTime?
+  image             String?
+  phone             String?
+  createdAt         DateTime            @default(now())
+  role              Role                @default(USER)
+  updatedAt         DateTime            @default(now()) @updatedAt
+  accounts          Account[]
+  barberProfile     BarberProfile?
+  bookings          Booking[]
+  sessions          Session[]
+  pointSystem       PointSystem?
+  plan              ClientPlan?
+  notifications     Notification[]
+  pushSubscriptions PushSubscription[]
 }
 
 model BarberProfile {
@@ -37,6 +38,8 @@ model BarberProfile {
   bookings      Booking[]
   services      BarberProfileToService[]
   disabledDays  DisabledDay[]
+  clientPlans   ClientPlan[]
+  plans         Plan[]
   extraTimeDays ExtraTimeDay[]
   disabledTimes DisabledTime[]
 }
@@ -79,14 +82,15 @@ model VerificationToken {
 }
 
 model Service {
-  id        String                    @id @default(cuid())
-  name      String
-  price     Int
-  duration  Int
-  keyword   String                    @unique
-  imagePath String
-  bookings  BookingService[]
-  barbers   BarberProfileToService[]
+  id            String                    @id @default(cuid())
+  name          String
+  price         Int
+  duration      Int
+  keyword       String                    @unique
+  imagePath     String
+  bookings      BookingService[]
+  barbers       BarberProfileToService[]
+  planToService PlanToService[]
 }
 
 model BarberProfileToService {
@@ -114,18 +118,19 @@ model Booking {
   date          DateTime
   status        BookingStatus
   userId        String
+  planId        String?
   barberId      String
   totalPrice    Int
   totalDuration Int
   createdAt     DateTime          @default(now())
   barber        BarberProfile    @relation(fields: [barberId], references: [id])
   user          User             @relation(fields: [userId], references: [id])
+  plan          ClientPlan?      @relation(fields: [planId], references: [id])
   services      BookingService[]
   coupon        Coupon?
   notifications Notification[]
 
-  @@index([barberId], map: "Booking_barberId_fkey")
-  @@index([userId], map: "Booking_userId_fkey")
+  @@index([barberId, userId, status])
 }
 
 
@@ -227,7 +232,7 @@ model Notification {
   bookingId     String?
   couponId      String?
   transactionId String?
-  metadata      String?            @db.Text // JSON string for additional data
+  metadata      String?            @db.Text
   createdAt     DateTime           @default(now())
 
   user          User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -252,13 +257,68 @@ enum NotificationType {
   BOOKING_CANCELLED
 }
 
+model ClientPlan {
+  id        String         @id @default(cuid())
+  userId    String         @unique
+  barberId  String
+  planId    String
+  useAmount Int
+  starts    DateTime       @default(now())
+  expires   DateTime
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  barber    BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+  plan      Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
+  booking   Booking[]
+
+  @@unique([userId, barberId])
+  @@index([userId, planId, expires])
+}
+
 model Plan {
+  id            String           @id @default(cuid())
+  barberId      String           @default("cmkfsgh1j0000c0ycy8k4sy05")
+  name          String
+  price         Int
+  keyword       String           @default("BRZ")
+  description   String?
+  planToService PlanToService[]
+  clientPlans   ClientPlan[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  barber        BarberProfile   @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@index([barberId])
+}
+
+model PlanToService {
+  planId    String
+  serviceId String
+
+  plan      Plan    @relation(fields: [planId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@id([planId, serviceId])
+}
+
+model PushSubscription {
   id        String    @id @default(cuid())
-  userId    String    @unique
+  userId    String
+  endpoint  String    @db.VarChar(768)
+  p256dh    String    @db.Text
+  auth      String    @db.Text
+  userAgent String?
   createdAt DateTime  @default(now())
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([endpoint])
+  @@index([userId])
 }
+
 
 enum TransactionType {
   EARNED

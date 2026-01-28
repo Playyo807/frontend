@@ -230,6 +230,7 @@ export type ServiceWhereInput = {
   imagePath?: Prisma.StringFilter<"Service"> | string
   bookings?: Prisma.BookingServiceListRelationFilter
   barbers?: Prisma.BarberProfileToServiceListRelationFilter
+  planToService?: Prisma.PlanToServiceListRelationFilter
 }
 
 export type ServiceOrderByWithRelationInput = {
@@ -241,6 +242,7 @@ export type ServiceOrderByWithRelationInput = {
   imagePath?: Prisma.SortOrder
   bookings?: Prisma.BookingServiceOrderByRelationAggregateInput
   barbers?: Prisma.BarberProfileToServiceOrderByRelationAggregateInput
+  planToService?: Prisma.PlanToServiceOrderByRelationAggregateInput
   _relevance?: Prisma.ServiceOrderByRelevanceInput
 }
 
@@ -256,6 +258,7 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   imagePath?: Prisma.StringFilter<"Service"> | string
   bookings?: Prisma.BookingServiceListRelationFilter
   barbers?: Prisma.BarberProfileToServiceListRelationFilter
+  planToService?: Prisma.PlanToServiceListRelationFilter
 }, "id" | "keyword">
 
 export type ServiceOrderByWithAggregationInput = {
@@ -293,6 +296,7 @@ export type ServiceCreateInput = {
   imagePath: string
   bookings?: Prisma.BookingServiceCreateNestedManyWithoutServiceInput
   barbers?: Prisma.BarberProfileToServiceCreateNestedManyWithoutServiceInput
+  planToService?: Prisma.PlanToServiceCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUncheckedCreateInput = {
@@ -304,6 +308,7 @@ export type ServiceUncheckedCreateInput = {
   imagePath: string
   bookings?: Prisma.BookingServiceUncheckedCreateNestedManyWithoutServiceInput
   barbers?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutServiceInput
+  planToService?: Prisma.PlanToServiceUncheckedCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUpdateInput = {
@@ -315,6 +320,7 @@ export type ServiceUpdateInput = {
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   bookings?: Prisma.BookingServiceUpdateManyWithoutServiceNestedInput
   barbers?: Prisma.BarberProfileToServiceUpdateManyWithoutServiceNestedInput
+  planToService?: Prisma.PlanToServiceUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateInput = {
@@ -326,6 +332,7 @@ export type ServiceUncheckedUpdateInput = {
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   bookings?: Prisma.BookingServiceUncheckedUpdateManyWithoutServiceNestedInput
   barbers?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutServiceNestedInput
+  planToService?: Prisma.PlanToServiceUncheckedUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceCreateManyInput = {
@@ -431,6 +438,20 @@ export type ServiceUpdateOneRequiredWithoutBookingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutBookingsInput, Prisma.ServiceUpdateWithoutBookingsInput>, Prisma.ServiceUncheckedUpdateWithoutBookingsInput>
 }
 
+export type ServiceCreateNestedOneWithoutPlanToServiceInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutPlanToServiceInput, Prisma.ServiceUncheckedCreateWithoutPlanToServiceInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutPlanToServiceInput
+  connect?: Prisma.ServiceWhereUniqueInput
+}
+
+export type ServiceUpdateOneRequiredWithoutPlanToServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.ServiceCreateWithoutPlanToServiceInput, Prisma.ServiceUncheckedCreateWithoutPlanToServiceInput>
+  connectOrCreate?: Prisma.ServiceCreateOrConnectWithoutPlanToServiceInput
+  upsert?: Prisma.ServiceUpsertWithoutPlanToServiceInput
+  connect?: Prisma.ServiceWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ServiceUpdateToOneWithWhereWithoutPlanToServiceInput, Prisma.ServiceUpdateWithoutPlanToServiceInput>, Prisma.ServiceUncheckedUpdateWithoutPlanToServiceInput>
+}
+
 export type ServiceCreateWithoutBarbersInput = {
   id?: string
   name: string
@@ -439,6 +460,7 @@ export type ServiceCreateWithoutBarbersInput = {
   keyword: string
   imagePath: string
   bookings?: Prisma.BookingServiceCreateNestedManyWithoutServiceInput
+  planToService?: Prisma.PlanToServiceCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutBarbersInput = {
@@ -449,6 +471,7 @@ export type ServiceUncheckedCreateWithoutBarbersInput = {
   keyword: string
   imagePath: string
   bookings?: Prisma.BookingServiceUncheckedCreateNestedManyWithoutServiceInput
+  planToService?: Prisma.PlanToServiceUncheckedCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutBarbersInput = {
@@ -475,6 +498,7 @@ export type ServiceUpdateWithoutBarbersInput = {
   keyword?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   bookings?: Prisma.BookingServiceUpdateManyWithoutServiceNestedInput
+  planToService?: Prisma.PlanToServiceUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutBarbersInput = {
@@ -485,6 +509,7 @@ export type ServiceUncheckedUpdateWithoutBarbersInput = {
   keyword?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   bookings?: Prisma.BookingServiceUncheckedUpdateManyWithoutServiceNestedInput
+  planToService?: Prisma.PlanToServiceUncheckedUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceCreateWithoutBookingsInput = {
@@ -495,6 +520,7 @@ export type ServiceCreateWithoutBookingsInput = {
   keyword: string
   imagePath: string
   barbers?: Prisma.BarberProfileToServiceCreateNestedManyWithoutServiceInput
+  planToService?: Prisma.PlanToServiceCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceUncheckedCreateWithoutBookingsInput = {
@@ -505,6 +531,7 @@ export type ServiceUncheckedCreateWithoutBookingsInput = {
   keyword: string
   imagePath: string
   barbers?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutServiceInput
+  planToService?: Prisma.PlanToServiceUncheckedCreateNestedManyWithoutServiceInput
 }
 
 export type ServiceCreateOrConnectWithoutBookingsInput = {
@@ -531,6 +558,7 @@ export type ServiceUpdateWithoutBookingsInput = {
   keyword?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
   barbers?: Prisma.BarberProfileToServiceUpdateManyWithoutServiceNestedInput
+  planToService?: Prisma.PlanToServiceUpdateManyWithoutServiceNestedInput
 }
 
 export type ServiceUncheckedUpdateWithoutBookingsInput = {
@@ -540,6 +568,67 @@ export type ServiceUncheckedUpdateWithoutBookingsInput = {
   duration?: Prisma.IntFieldUpdateOperationsInput | number
   keyword?: Prisma.StringFieldUpdateOperationsInput | string
   imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  barbers?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutServiceNestedInput
+  planToService?: Prisma.PlanToServiceUncheckedUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceCreateWithoutPlanToServiceInput = {
+  id?: string
+  name: string
+  price: number
+  duration: number
+  keyword: string
+  imagePath: string
+  bookings?: Prisma.BookingServiceCreateNestedManyWithoutServiceInput
+  barbers?: Prisma.BarberProfileToServiceCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceUncheckedCreateWithoutPlanToServiceInput = {
+  id?: string
+  name: string
+  price: number
+  duration: number
+  keyword: string
+  imagePath: string
+  bookings?: Prisma.BookingServiceUncheckedCreateNestedManyWithoutServiceInput
+  barbers?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutServiceInput
+}
+
+export type ServiceCreateOrConnectWithoutPlanToServiceInput = {
+  where: Prisma.ServiceWhereUniqueInput
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutPlanToServiceInput, Prisma.ServiceUncheckedCreateWithoutPlanToServiceInput>
+}
+
+export type ServiceUpsertWithoutPlanToServiceInput = {
+  update: Prisma.XOR<Prisma.ServiceUpdateWithoutPlanToServiceInput, Prisma.ServiceUncheckedUpdateWithoutPlanToServiceInput>
+  create: Prisma.XOR<Prisma.ServiceCreateWithoutPlanToServiceInput, Prisma.ServiceUncheckedCreateWithoutPlanToServiceInput>
+  where?: Prisma.ServiceWhereInput
+}
+
+export type ServiceUpdateToOneWithWhereWithoutPlanToServiceInput = {
+  where?: Prisma.ServiceWhereInput
+  data: Prisma.XOR<Prisma.ServiceUpdateWithoutPlanToServiceInput, Prisma.ServiceUncheckedUpdateWithoutPlanToServiceInput>
+}
+
+export type ServiceUpdateWithoutPlanToServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  bookings?: Prisma.BookingServiceUpdateManyWithoutServiceNestedInput
+  barbers?: Prisma.BarberProfileToServiceUpdateManyWithoutServiceNestedInput
+}
+
+export type ServiceUncheckedUpdateWithoutPlanToServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  duration?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  imagePath?: Prisma.StringFieldUpdateOperationsInput | string
+  bookings?: Prisma.BookingServiceUncheckedUpdateManyWithoutServiceNestedInput
   barbers?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutServiceNestedInput
 }
 
@@ -551,11 +640,13 @@ export type ServiceUncheckedUpdateWithoutBookingsInput = {
 export type ServiceCountOutputType = {
   bookings: number
   barbers: number
+  planToService: number
 }
 
 export type ServiceCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bookings?: boolean | ServiceCountOutputTypeCountBookingsArgs
   barbers?: boolean | ServiceCountOutputTypeCountBarbersArgs
+  planToService?: boolean | ServiceCountOutputTypeCountPlanToServiceArgs
 }
 
 /**
@@ -582,6 +673,13 @@ export type ServiceCountOutputTypeCountBarbersArgs<ExtArgs extends runtime.Types
   where?: Prisma.BarberProfileToServiceWhereInput
 }
 
+/**
+ * ServiceCountOutputType without action
+ */
+export type ServiceCountOutputTypeCountPlanToServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanToServiceWhereInput
+}
+
 
 export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -592,6 +690,7 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   imagePath?: boolean
   bookings?: boolean | Prisma.Service$bookingsArgs<ExtArgs>
   barbers?: boolean | Prisma.Service$barbersArgs<ExtArgs>
+  planToService?: boolean | Prisma.Service$planToServiceArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["service"]>
 
@@ -610,6 +709,7 @@ export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bookings?: boolean | Prisma.Service$bookingsArgs<ExtArgs>
   barbers?: boolean | Prisma.Service$barbersArgs<ExtArgs>
+  planToService?: boolean | Prisma.Service$planToServiceArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -618,6 +718,7 @@ export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     bookings: Prisma.$BookingServicePayload<ExtArgs>[]
     barbers: Prisma.$BarberProfileToServicePayload<ExtArgs>[]
+    planToService: Prisma.$PlanToServicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -968,6 +1069,7 @@ export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   bookings<T extends Prisma.Service$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   barbers<T extends Prisma.Service$barbersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$barbersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BarberProfileToServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  planToService<T extends Prisma.Service$planToServiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$planToServiceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanToServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1391,6 +1493,30 @@ export type Service$barbersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.BarberProfileToServiceScalarFieldEnum | Prisma.BarberProfileToServiceScalarFieldEnum[]
+}
+
+/**
+ * Service.planToService
+ */
+export type Service$planToServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanToService
+   */
+  select?: Prisma.PlanToServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanToService
+   */
+  omit?: Prisma.PlanToServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanToServiceInclude<ExtArgs> | null
+  where?: Prisma.PlanToServiceWhereInput
+  orderBy?: Prisma.PlanToServiceOrderByWithRelationInput | Prisma.PlanToServiceOrderByWithRelationInput[]
+  cursor?: Prisma.PlanToServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanToServiceScalarFieldEnum | Prisma.PlanToServiceScalarFieldEnum[]
 }
 
 /**

@@ -20,46 +20,94 @@ export type PlanModel = runtime.Types.Result.DefaultSelection<Prisma.$PlanPayloa
 
 export type AggregatePlan = {
   _count: PlanCountAggregateOutputType | null
+  _avg: PlanAvgAggregateOutputType | null
+  _sum: PlanSumAggregateOutputType | null
   _min: PlanMinAggregateOutputType | null
   _max: PlanMaxAggregateOutputType | null
 }
 
+export type PlanAvgAggregateOutputType = {
+  price: number | null
+}
+
+export type PlanSumAggregateOutputType = {
+  price: number | null
+}
+
 export type PlanMinAggregateOutputType = {
   id: string | null
-  userId: string | null
+  barberId: string | null
+  name: string | null
+  price: number | null
+  keyword: string | null
+  description: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type PlanMaxAggregateOutputType = {
   id: string | null
-  userId: string | null
+  barberId: string | null
+  name: string | null
+  price: number | null
+  keyword: string | null
+  description: string | null
   createdAt: Date | null
+  updatedAt: Date | null
 }
 
 export type PlanCountAggregateOutputType = {
   id: number
-  userId: number
+  barberId: number
+  name: number
+  price: number
+  keyword: number
+  description: number
   createdAt: number
+  updatedAt: number
   _all: number
 }
 
 
+export type PlanAvgAggregateInputType = {
+  price?: true
+}
+
+export type PlanSumAggregateInputType = {
+  price?: true
+}
+
 export type PlanMinAggregateInputType = {
   id?: true
-  userId?: true
+  barberId?: true
+  name?: true
+  price?: true
+  keyword?: true
+  description?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type PlanMaxAggregateInputType = {
   id?: true
-  userId?: true
+  barberId?: true
+  name?: true
+  price?: true
+  keyword?: true
+  description?: true
   createdAt?: true
+  updatedAt?: true
 }
 
 export type PlanCountAggregateInputType = {
   id?: true
-  userId?: true
+  barberId?: true
+  name?: true
+  price?: true
+  keyword?: true
+  description?: true
   createdAt?: true
+  updatedAt?: true
   _all?: true
 }
 
@@ -101,6 +149,18 @@ export type PlanAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: PlanAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: PlanSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: PlanMinAggregateInputType
@@ -131,15 +191,24 @@ export type PlanGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: PlanCountAggregateInputType | true
+  _avg?: PlanAvgAggregateInputType
+  _sum?: PlanSumAggregateInputType
   _min?: PlanMinAggregateInputType
   _max?: PlanMaxAggregateInputType
 }
 
 export type PlanGroupByOutputType = {
   id: string
-  userId: string
+  barberId: string
+  name: string
+  price: number
+  keyword: string
+  description: string | null
   createdAt: Date
+  updatedAt: Date
   _count: PlanCountAggregateOutputType | null
+  _avg: PlanAvgAggregateOutputType | null
+  _sum: PlanSumAggregateOutputType | null
   _min: PlanMinAggregateOutputType | null
   _max: PlanMaxAggregateOutputType | null
 }
@@ -164,36 +233,64 @@ export type PlanWhereInput = {
   OR?: Prisma.PlanWhereInput[]
   NOT?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
   id?: Prisma.StringFilter<"Plan"> | string
-  userId?: Prisma.StringFilter<"Plan"> | string
+  barberId?: Prisma.StringFilter<"Plan"> | string
+  name?: Prisma.StringFilter<"Plan"> | string
+  price?: Prisma.IntFilter<"Plan"> | number
+  keyword?: Prisma.StringFilter<"Plan"> | string
+  description?: Prisma.StringNullableFilter<"Plan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  planToService?: Prisma.PlanToServiceListRelationFilter
+  clientPlans?: Prisma.ClientPlanListRelationFilter
+  barber?: Prisma.XOR<Prisma.BarberProfileScalarRelationFilter, Prisma.BarberProfileWhereInput>
 }
 
 export type PlanOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  barberId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  keyword?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  updatedAt?: Prisma.SortOrder
+  planToService?: Prisma.PlanToServiceOrderByRelationAggregateInput
+  clientPlans?: Prisma.ClientPlanOrderByRelationAggregateInput
+  barber?: Prisma.BarberProfileOrderByWithRelationInput
   _relevance?: Prisma.PlanOrderByRelevanceInput
 }
 
 export type PlanWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId?: string
   AND?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
   OR?: Prisma.PlanWhereInput[]
   NOT?: Prisma.PlanWhereInput | Prisma.PlanWhereInput[]
+  barberId?: Prisma.StringFilter<"Plan"> | string
+  name?: Prisma.StringFilter<"Plan"> | string
+  price?: Prisma.IntFilter<"Plan"> | number
+  keyword?: Prisma.StringFilter<"Plan"> | string
+  description?: Prisma.StringNullableFilter<"Plan"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId">
+  updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  planToService?: Prisma.PlanToServiceListRelationFilter
+  clientPlans?: Prisma.ClientPlanListRelationFilter
+  barber?: Prisma.XOR<Prisma.BarberProfileScalarRelationFilter, Prisma.BarberProfileWhereInput>
+}, "id">
 
 export type PlanOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  barberId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  keyword?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
   _count?: Prisma.PlanCountOrderByAggregateInput
+  _avg?: Prisma.PlanAvgOrderByAggregateInput
   _max?: Prisma.PlanMaxOrderByAggregateInput
   _min?: Prisma.PlanMinOrderByAggregateInput
+  _sum?: Prisma.PlanSumOrderByAggregateInput
 }
 
 export type PlanScalarWhereWithAggregatesInput = {
@@ -201,54 +298,112 @@ export type PlanScalarWhereWithAggregatesInput = {
   OR?: Prisma.PlanScalarWhereWithAggregatesInput[]
   NOT?: Prisma.PlanScalarWhereWithAggregatesInput | Prisma.PlanScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Plan"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"Plan"> | string
+  barberId?: Prisma.StringWithAggregatesFilter<"Plan"> | string
+  name?: Prisma.StringWithAggregatesFilter<"Plan"> | string
+  price?: Prisma.IntWithAggregatesFilter<"Plan"> | number
+  keyword?: Prisma.StringWithAggregatesFilter<"Plan"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Plan"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Plan"> | Date | string
 }
 
 export type PlanCreateInput = {
   id?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
   createdAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutPlanInput
+  updatedAt?: Date | string
+  planToService?: Prisma.PlanToServiceCreateNestedManyWithoutPlanInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutPlanInput
+  barber?: Prisma.BarberProfileCreateNestedOneWithoutPlansInput
 }
 
 export type PlanUncheckedCreateInput = {
   id?: string
-  userId: string
+  barberId?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  planToService?: Prisma.PlanToServiceUncheckedCreateNestedManyWithoutPlanInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutPlanInput
 }
 
 export type PlanUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutPlanNestedInput
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planToService?: Prisma.PlanToServiceUpdateManyWithoutPlanNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutPlanNestedInput
+  barber?: Prisma.BarberProfileUpdateOneRequiredWithoutPlansNestedInput
 }
 
 export type PlanUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  barberId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planToService?: Prisma.PlanToServiceUncheckedUpdateManyWithoutPlanNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutPlanNestedInput
 }
 
 export type PlanCreateManyInput = {
   id?: string
-  userId: string
+  barberId?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
 }
 
 export type PlanUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PlanUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  barberId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type PlanNullableScalarRelationFilter = {
-  is?: Prisma.PlanWhereInput | null
-  isNot?: Prisma.PlanWhereInput | null
+export type PlanListRelationFilter = {
+  every?: Prisma.PlanWhereInput
+  some?: Prisma.PlanWhereInput
+  none?: Prisma.PlanWhereInput
+}
+
+export type PlanOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type PlanScalarRelationFilter = {
+  is?: Prisma.PlanWhereInput
+  isNot?: Prisma.PlanWhereInput
 }
 
 export type PlanOrderByRelevanceInput = {
@@ -259,121 +414,443 @@ export type PlanOrderByRelevanceInput = {
 
 export type PlanCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  barberId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  keyword?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
+}
+
+export type PlanAvgOrderByAggregateInput = {
+  price?: Prisma.SortOrder
 }
 
 export type PlanMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  barberId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  keyword?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
 export type PlanMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
+  barberId?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  price?: Prisma.SortOrder
+  keyword?: Prisma.SortOrder
+  description?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  updatedAt?: Prisma.SortOrder
 }
 
-export type PlanCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.PlanCreateWithoutUserInput, Prisma.PlanUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutUserInput
+export type PlanSumOrderByAggregateInput = {
+  price?: Prisma.SortOrder
+}
+
+export type PlanCreateNestedManyWithoutBarberInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutBarberInput, Prisma.PlanUncheckedCreateWithoutBarberInput> | Prisma.PlanCreateWithoutBarberInput[] | Prisma.PlanUncheckedCreateWithoutBarberInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutBarberInput | Prisma.PlanCreateOrConnectWithoutBarberInput[]
+  createMany?: Prisma.PlanCreateManyBarberInputEnvelope
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+}
+
+export type PlanUncheckedCreateNestedManyWithoutBarberInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutBarberInput, Prisma.PlanUncheckedCreateWithoutBarberInput> | Prisma.PlanCreateWithoutBarberInput[] | Prisma.PlanUncheckedCreateWithoutBarberInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutBarberInput | Prisma.PlanCreateOrConnectWithoutBarberInput[]
+  createMany?: Prisma.PlanCreateManyBarberInputEnvelope
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+}
+
+export type PlanUpdateManyWithoutBarberNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutBarberInput, Prisma.PlanUncheckedCreateWithoutBarberInput> | Prisma.PlanCreateWithoutBarberInput[] | Prisma.PlanUncheckedCreateWithoutBarberInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutBarberInput | Prisma.PlanCreateOrConnectWithoutBarberInput[]
+  upsert?: Prisma.PlanUpsertWithWhereUniqueWithoutBarberInput | Prisma.PlanUpsertWithWhereUniqueWithoutBarberInput[]
+  createMany?: Prisma.PlanCreateManyBarberInputEnvelope
+  set?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  disconnect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  delete?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  update?: Prisma.PlanUpdateWithWhereUniqueWithoutBarberInput | Prisma.PlanUpdateWithWhereUniqueWithoutBarberInput[]
+  updateMany?: Prisma.PlanUpdateManyWithWhereWithoutBarberInput | Prisma.PlanUpdateManyWithWhereWithoutBarberInput[]
+  deleteMany?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+}
+
+export type PlanUncheckedUpdateManyWithoutBarberNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutBarberInput, Prisma.PlanUncheckedCreateWithoutBarberInput> | Prisma.PlanCreateWithoutBarberInput[] | Prisma.PlanUncheckedCreateWithoutBarberInput[]
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutBarberInput | Prisma.PlanCreateOrConnectWithoutBarberInput[]
+  upsert?: Prisma.PlanUpsertWithWhereUniqueWithoutBarberInput | Prisma.PlanUpsertWithWhereUniqueWithoutBarberInput[]
+  createMany?: Prisma.PlanCreateManyBarberInputEnvelope
+  set?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  disconnect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  delete?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  connect?: Prisma.PlanWhereUniqueInput | Prisma.PlanWhereUniqueInput[]
+  update?: Prisma.PlanUpdateWithWhereUniqueWithoutBarberInput | Prisma.PlanUpdateWithWhereUniqueWithoutBarberInput[]
+  updateMany?: Prisma.PlanUpdateManyWithWhereWithoutBarberInput | Prisma.PlanUpdateManyWithWhereWithoutBarberInput[]
+  deleteMany?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+}
+
+export type PlanCreateNestedOneWithoutClientPlansInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutClientPlansInput, Prisma.PlanUncheckedCreateWithoutClientPlansInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutClientPlansInput
   connect?: Prisma.PlanWhereUniqueInput
 }
 
-export type PlanUncheckedCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.PlanCreateWithoutUserInput, Prisma.PlanUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutUserInput
+export type PlanUpdateOneRequiredWithoutClientPlansNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutClientPlansInput, Prisma.PlanUncheckedCreateWithoutClientPlansInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutClientPlansInput
+  upsert?: Prisma.PlanUpsertWithoutClientPlansInput
+  connect?: Prisma.PlanWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutClientPlansInput, Prisma.PlanUpdateWithoutClientPlansInput>, Prisma.PlanUncheckedUpdateWithoutClientPlansInput>
+}
+
+export type PlanCreateNestedOneWithoutPlanToServiceInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutPlanToServiceInput, Prisma.PlanUncheckedCreateWithoutPlanToServiceInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutPlanToServiceInput
   connect?: Prisma.PlanWhereUniqueInput
 }
 
-export type PlanUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.PlanCreateWithoutUserInput, Prisma.PlanUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutUserInput
-  upsert?: Prisma.PlanUpsertWithoutUserInput
-  disconnect?: Prisma.PlanWhereInput | boolean
-  delete?: Prisma.PlanWhereInput | boolean
+export type PlanUpdateOneRequiredWithoutPlanToServiceNestedInput = {
+  create?: Prisma.XOR<Prisma.PlanCreateWithoutPlanToServiceInput, Prisma.PlanUncheckedCreateWithoutPlanToServiceInput>
+  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutPlanToServiceInput
+  upsert?: Prisma.PlanUpsertWithoutPlanToServiceInput
   connect?: Prisma.PlanWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutUserInput, Prisma.PlanUpdateWithoutUserInput>, Prisma.PlanUncheckedUpdateWithoutUserInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutPlanToServiceInput, Prisma.PlanUpdateWithoutPlanToServiceInput>, Prisma.PlanUncheckedUpdateWithoutPlanToServiceInput>
 }
 
-export type PlanUncheckedUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.PlanCreateWithoutUserInput, Prisma.PlanUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.PlanCreateOrConnectWithoutUserInput
-  upsert?: Prisma.PlanUpsertWithoutUserInput
-  disconnect?: Prisma.PlanWhereInput | boolean
-  delete?: Prisma.PlanWhereInput | boolean
-  connect?: Prisma.PlanWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.PlanUpdateToOneWithWhereWithoutUserInput, Prisma.PlanUpdateWithoutUserInput>, Prisma.PlanUncheckedUpdateWithoutUserInput>
-}
-
-export type PlanCreateWithoutUserInput = {
+export type PlanCreateWithoutBarberInput = {
   id?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  planToService?: Prisma.PlanToServiceCreateNestedManyWithoutPlanInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutPlanInput
 }
 
-export type PlanUncheckedCreateWithoutUserInput = {
+export type PlanUncheckedCreateWithoutBarberInput = {
   id?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
   createdAt?: Date | string
+  updatedAt?: Date | string
+  planToService?: Prisma.PlanToServiceUncheckedCreateNestedManyWithoutPlanInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutPlanInput
 }
 
-export type PlanCreateOrConnectWithoutUserInput = {
+export type PlanCreateOrConnectWithoutBarberInput = {
   where: Prisma.PlanWhereUniqueInput
-  create: Prisma.XOR<Prisma.PlanCreateWithoutUserInput, Prisma.PlanUncheckedCreateWithoutUserInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutBarberInput, Prisma.PlanUncheckedCreateWithoutBarberInput>
 }
 
-export type PlanUpsertWithoutUserInput = {
-  update: Prisma.XOR<Prisma.PlanUpdateWithoutUserInput, Prisma.PlanUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.PlanCreateWithoutUserInput, Prisma.PlanUncheckedCreateWithoutUserInput>
+export type PlanCreateManyBarberInputEnvelope = {
+  data: Prisma.PlanCreateManyBarberInput | Prisma.PlanCreateManyBarberInput[]
+  skipDuplicates?: boolean
+}
+
+export type PlanUpsertWithWhereUniqueWithoutBarberInput = {
+  where: Prisma.PlanWhereUniqueInput
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutBarberInput, Prisma.PlanUncheckedUpdateWithoutBarberInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutBarberInput, Prisma.PlanUncheckedCreateWithoutBarberInput>
+}
+
+export type PlanUpdateWithWhereUniqueWithoutBarberInput = {
+  where: Prisma.PlanWhereUniqueInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutBarberInput, Prisma.PlanUncheckedUpdateWithoutBarberInput>
+}
+
+export type PlanUpdateManyWithWhereWithoutBarberInput = {
+  where: Prisma.PlanScalarWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateManyMutationInput, Prisma.PlanUncheckedUpdateManyWithoutBarberInput>
+}
+
+export type PlanScalarWhereInput = {
+  AND?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+  OR?: Prisma.PlanScalarWhereInput[]
+  NOT?: Prisma.PlanScalarWhereInput | Prisma.PlanScalarWhereInput[]
+  id?: Prisma.StringFilter<"Plan"> | string
+  barberId?: Prisma.StringFilter<"Plan"> | string
+  name?: Prisma.StringFilter<"Plan"> | string
+  price?: Prisma.IntFilter<"Plan"> | number
+  keyword?: Prisma.StringFilter<"Plan"> | string
+  description?: Prisma.StringNullableFilter<"Plan"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"Plan"> | Date | string
+}
+
+export type PlanCreateWithoutClientPlansInput = {
+  id?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  planToService?: Prisma.PlanToServiceCreateNestedManyWithoutPlanInput
+  barber?: Prisma.BarberProfileCreateNestedOneWithoutPlansInput
+}
+
+export type PlanUncheckedCreateWithoutClientPlansInput = {
+  id?: string
+  barberId?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  planToService?: Prisma.PlanToServiceUncheckedCreateNestedManyWithoutPlanInput
+}
+
+export type PlanCreateOrConnectWithoutClientPlansInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutClientPlansInput, Prisma.PlanUncheckedCreateWithoutClientPlansInput>
+}
+
+export type PlanUpsertWithoutClientPlansInput = {
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutClientPlansInput, Prisma.PlanUncheckedUpdateWithoutClientPlansInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutClientPlansInput, Prisma.PlanUncheckedCreateWithoutClientPlansInput>
   where?: Prisma.PlanWhereInput
 }
 
-export type PlanUpdateToOneWithWhereWithoutUserInput = {
+export type PlanUpdateToOneWithWhereWithoutClientPlansInput = {
   where?: Prisma.PlanWhereInput
-  data: Prisma.XOR<Prisma.PlanUpdateWithoutUserInput, Prisma.PlanUncheckedUpdateWithoutUserInput>
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutClientPlansInput, Prisma.PlanUncheckedUpdateWithoutClientPlansInput>
 }
 
-export type PlanUpdateWithoutUserInput = {
+export type PlanUpdateWithoutClientPlansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planToService?: Prisma.PlanToServiceUpdateManyWithoutPlanNestedInput
+  barber?: Prisma.BarberProfileUpdateOneRequiredWithoutPlansNestedInput
 }
 
-export type PlanUncheckedUpdateWithoutUserInput = {
+export type PlanUncheckedUpdateWithoutClientPlansInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  barberId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planToService?: Prisma.PlanToServiceUncheckedUpdateManyWithoutPlanNestedInput
 }
 
+export type PlanCreateWithoutPlanToServiceInput = {
+  id?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutPlanInput
+  barber?: Prisma.BarberProfileCreateNestedOneWithoutPlansInput
+}
+
+export type PlanUncheckedCreateWithoutPlanToServiceInput = {
+  id?: string
+  barberId?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutPlanInput
+}
+
+export type PlanCreateOrConnectWithoutPlanToServiceInput = {
+  where: Prisma.PlanWhereUniqueInput
+  create: Prisma.XOR<Prisma.PlanCreateWithoutPlanToServiceInput, Prisma.PlanUncheckedCreateWithoutPlanToServiceInput>
+}
+
+export type PlanUpsertWithoutPlanToServiceInput = {
+  update: Prisma.XOR<Prisma.PlanUpdateWithoutPlanToServiceInput, Prisma.PlanUncheckedUpdateWithoutPlanToServiceInput>
+  create: Prisma.XOR<Prisma.PlanCreateWithoutPlanToServiceInput, Prisma.PlanUncheckedCreateWithoutPlanToServiceInput>
+  where?: Prisma.PlanWhereInput
+}
+
+export type PlanUpdateToOneWithWhereWithoutPlanToServiceInput = {
+  where?: Prisma.PlanWhereInput
+  data: Prisma.XOR<Prisma.PlanUpdateWithoutPlanToServiceInput, Prisma.PlanUncheckedUpdateWithoutPlanToServiceInput>
+}
+
+export type PlanUpdateWithoutPlanToServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutPlanNestedInput
+  barber?: Prisma.BarberProfileUpdateOneRequiredWithoutPlansNestedInput
+}
+
+export type PlanUncheckedUpdateWithoutPlanToServiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  barberId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanCreateManyBarberInput = {
+  id?: string
+  name: string
+  price: number
+  keyword?: string
+  description?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PlanUpdateWithoutBarberInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planToService?: Prisma.PlanToServiceUpdateManyWithoutPlanNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateWithoutBarberInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  planToService?: Prisma.PlanToServiceUncheckedUpdateManyWithoutPlanNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutPlanNestedInput
+}
+
+export type PlanUncheckedUpdateManyWithoutBarberInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.IntFieldUpdateOperationsInput | number
+  keyword?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type PlanCountOutputType
+ */
+
+export type PlanCountOutputType = {
+  planToService: number
+  clientPlans: number
+}
+
+export type PlanCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  planToService?: boolean | PlanCountOutputTypeCountPlanToServiceArgs
+  clientPlans?: boolean | PlanCountOutputTypeCountClientPlansArgs
+}
+
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanCountOutputType
+   */
+  select?: Prisma.PlanCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeCountPlanToServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanToServiceWhereInput
+}
+
+/**
+ * PlanCountOutputType without action
+ */
+export type PlanCountOutputTypeCountClientPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientPlanWhereInput
+}
 
 
 export type PlanSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
+  barberId?: boolean
+  name?: boolean
+  price?: boolean
+  keyword?: boolean
+  description?: boolean
   createdAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  updatedAt?: boolean
+  planToService?: boolean | Prisma.Plan$planToServiceArgs<ExtArgs>
+  clientPlans?: boolean | Prisma.Plan$clientPlansArgs<ExtArgs>
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["plan"]>
 
 
 
 export type PlanSelectScalar = {
   id?: boolean
-  userId?: boolean
+  barberId?: boolean
+  name?: boolean
+  price?: boolean
+  keyword?: boolean
+  description?: boolean
   createdAt?: boolean
+  updatedAt?: boolean
 }
 
-export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "createdAt", ExtArgs["result"]["plan"]>
+export type PlanOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "barberId" | "name" | "price" | "keyword" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["plan"]>
 export type PlanInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  planToService?: boolean | Prisma.Plan$planToServiceArgs<ExtArgs>
+  clientPlans?: boolean | Prisma.Plan$clientPlansArgs<ExtArgs>
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  _count?: boolean | Prisma.PlanCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $PlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Plan"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
+    planToService: Prisma.$PlanToServicePayload<ExtArgs>[]
+    clientPlans: Prisma.$ClientPlanPayload<ExtArgs>[]
+    barber: Prisma.$BarberProfilePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
+    barberId: string
+    name: string
+    price: number
+    keyword: string
+    description: string | null
     createdAt: Date
+    updatedAt: Date
   }, ExtArgs["result"]["plan"]>
   composites: {}
 }
@@ -714,7 +1191,9 @@ readonly fields: PlanFieldRefs;
  */
 export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  planToService<T extends Prisma.Plan$planToServiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$planToServiceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanToServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientPlans<T extends Prisma.Plan$clientPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Plan$clientPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  barber<T extends Prisma.BarberProfileDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfileDefaultArgs<ExtArgs>>): Prisma.Prisma__BarberProfileClient<runtime.Types.Result.GetResult<Prisma.$BarberProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -745,8 +1224,13 @@ export interface Prisma__PlanClient<T, Null = never, ExtArgs extends runtime.Typ
  */
 export interface PlanFieldRefs {
   readonly id: Prisma.FieldRef<"Plan", 'String'>
-  readonly userId: Prisma.FieldRef<"Plan", 'String'>
+  readonly barberId: Prisma.FieldRef<"Plan", 'String'>
+  readonly name: Prisma.FieldRef<"Plan", 'String'>
+  readonly price: Prisma.FieldRef<"Plan", 'Int'>
+  readonly keyword: Prisma.FieldRef<"Plan", 'String'>
+  readonly description: Prisma.FieldRef<"Plan", 'String'>
   readonly createdAt: Prisma.FieldRef<"Plan", 'DateTime'>
+  readonly updatedAt: Prisma.FieldRef<"Plan", 'DateTime'>
 }
     
 
@@ -1087,6 +1571,54 @@ export type PlanDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Limit how many Plans to delete.
    */
   limit?: number
+}
+
+/**
+ * Plan.planToService
+ */
+export type Plan$planToServiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanToService
+   */
+  select?: Prisma.PlanToServiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanToService
+   */
+  omit?: Prisma.PlanToServiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanToServiceInclude<ExtArgs> | null
+  where?: Prisma.PlanToServiceWhereInput
+  orderBy?: Prisma.PlanToServiceOrderByWithRelationInput | Prisma.PlanToServiceOrderByWithRelationInput[]
+  cursor?: Prisma.PlanToServiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanToServiceScalarFieldEnum | Prisma.PlanToServiceScalarFieldEnum[]
+}
+
+/**
+ * Plan.clientPlans
+ */
+export type Plan$clientPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientPlan
+   */
+  select?: Prisma.ClientPlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientPlan
+   */
+  omit?: Prisma.ClientPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientPlanInclude<ExtArgs> | null
+  where?: Prisma.ClientPlanWhereInput
+  orderBy?: Prisma.ClientPlanOrderByWithRelationInput | Prisma.ClientPlanOrderByWithRelationInput[]
+  cursor?: Prisma.ClientPlanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientPlanScalarFieldEnum | Prisma.ClientPlanScalarFieldEnum[]
 }
 
 /**

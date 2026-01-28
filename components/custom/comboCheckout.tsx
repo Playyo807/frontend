@@ -1,3 +1,4 @@
+import { Service } from "@/prisma/generated/prisma/client";
 import { motion } from "framer-motion";
 import { Banknote, BanknoteArrowDown } from "lucide-react";
 
@@ -8,7 +9,7 @@ export function ComboCheckout({
 }: {
   selectedServices: [string, string][];
   sumOfPrices: () => string;
-  serviceData: ServiceProps[];
+  serviceData: Service[];
 }) {
   function handleDiscount(price: number): number {
     let length = selectedServices.length == 0 ? 1 : selectedServices.length;
@@ -28,7 +29,7 @@ export function ComboCheckout({
 
   return (
     <motion.div
-      className="fixed z-80 top-1 left-1/2 transform -translate-x-1/2 w-[20em] lg:w-max grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 justify-center bg-black text-white p-4 rounded-md shadow-lg shadow-black/50 bg-linear-90 from-gray-900 via-black to-gray-900 border border-white/10 -gap-8"
+      className="fixed z-80 top-1 left-1/2 transform -translate-x-1/2 min-w-[95vw] md:min-w-fit grid grid-cols-2 justify-center bg-black text-white p-4 rounded-md shadow-lg shadow-black/50 bg-linear-90 from-gray-900 via-black to-gray-900 border border-white/10 gap-2"
       initial={{ opacity: 0, y: 20 }}
       animate={{
         opacity: 1,
@@ -37,8 +38,8 @@ export function ComboCheckout({
       exit={{ opacity: 0, y: 20 }}
       transition={{ type: "spring", bounce: 0.6, delay: 0.2 }}
     >
-      <div className="w-[12em] lg:w-[17em]">
-        <p className="h-12">
+      <div>
+        <p>
           Preços dos Selecionados:{" "}
           <span className="font-bold text-emerald-400">{sumOfPrices()}</span>
         </p>
@@ -49,7 +50,7 @@ export function ComboCheckout({
           </span>
         </p>
       </div>
-      <div className="justify-start grid grid-cols-2">
+      <div className="justify-start">
         <div>
           <p className="text-sm">
             Subtotal:{" "}

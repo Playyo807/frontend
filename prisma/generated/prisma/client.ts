@@ -120,7 +120,17 @@ export type PointTransaction = Prisma.PointTransactionModel
  */
 export type Notification = Prisma.NotificationModel
 /**
+ * Model ClientPlan
+ * 
+ */
+export type ClientPlan = Prisma.ClientPlanModel
+/**
  * Model Plan
  * 
  */
 export type Plan = Prisma.PlanModel
+/**
+ * Model PlanToService
+ * 
+ */
+export type PlanToService = Prisma.PlanToServiceModel

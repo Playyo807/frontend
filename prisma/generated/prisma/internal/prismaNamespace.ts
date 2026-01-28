@@ -400,7 +400,9 @@ export const ModelName = {
   Coupon: 'Coupon',
   PointTransaction: 'PointTransaction',
   Notification: 'Notification',
-  Plan: 'Plan'
+  ClientPlan: 'ClientPlan',
+  Plan: 'Plan',
+  PlanToService: 'PlanToService'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -416,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "barberProfile" | "account" | "session" | "verificationToken" | "service" | "barberProfileToService" | "bookingService" | "booking" | "disabledDay" | "disabledTime" | "extraTimeDay" | "pointSystem" | "coupon" | "pointTransaction" | "notification" | "plan"
+    modelProps: "user" | "barberProfile" | "account" | "session" | "verificationToken" | "service" | "barberProfileToService" | "bookingService" | "booking" | "disabledDay" | "disabledTime" | "extraTimeDay" | "pointSystem" | "coupon" | "pointTransaction" | "notification" | "clientPlan" | "plan" | "planToService"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1476,6 +1478,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ClientPlan: {
+      payload: Prisma.$ClientPlanPayload<ExtArgs>
+      fields: Prisma.ClientPlanFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ClientPlanFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ClientPlanFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>
+        }
+        findFirst: {
+          args: Prisma.ClientPlanFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ClientPlanFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>
+        }
+        findMany: {
+          args: Prisma.ClientPlanFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>[]
+        }
+        create: {
+          args: Prisma.ClientPlanCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>
+        }
+        createMany: {
+          args: Prisma.ClientPlanCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.ClientPlanDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>
+        }
+        update: {
+          args: Prisma.ClientPlanUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>
+        }
+        deleteMany: {
+          args: Prisma.ClientPlanDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ClientPlanUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.ClientPlanUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ClientPlanPayload>
+        }
+        aggregate: {
+          args: Prisma.ClientPlanAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateClientPlan>
+        }
+        groupBy: {
+          args: Prisma.ClientPlanGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientPlanGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ClientPlanCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ClientPlanCountAggregateOutputType> | number
+        }
+      }
+    }
     Plan: {
       payload: Prisma.$PlanPayload<ExtArgs>
       fields: Prisma.PlanFieldRefs
@@ -1539,6 +1607,72 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.PlanCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.PlanCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlanToService: {
+      payload: Prisma.$PlanToServicePayload<ExtArgs>
+      fields: Prisma.PlanToServiceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlanToServiceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlanToServiceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>
+        }
+        findFirst: {
+          args: Prisma.PlanToServiceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlanToServiceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>
+        }
+        findMany: {
+          args: Prisma.PlanToServiceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>[]
+        }
+        create: {
+          args: Prisma.PlanToServiceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>
+        }
+        createMany: {
+          args: Prisma.PlanToServiceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        delete: {
+          args: Prisma.PlanToServiceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>
+        }
+        update: {
+          args: Prisma.PlanToServiceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>
+        }
+        deleteMany: {
+          args: Prisma.PlanToServiceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlanToServiceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        upsert: {
+          args: Prisma.PlanToServiceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlanToServicePayload>
+        }
+        aggregate: {
+          args: Prisma.PlanToServiceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlanToService>
+        }
+        groupBy: {
+          args: Prisma.PlanToServiceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanToServiceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlanToServiceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlanToServiceCountAggregateOutputType> | number
         }
       }
     }
@@ -1678,6 +1812,7 @@ export const BookingScalarFieldEnum = {
   date: 'date',
   status: 'status',
   userId: 'userId',
+  planId: 'planId',
   barberId: 'barberId',
   totalPrice: 'totalPrice',
   totalDuration: 'totalDuration',
@@ -1781,13 +1916,41 @@ export const NotificationScalarFieldEnum = {
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
-export const PlanScalarFieldEnum = {
+export const ClientPlanScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  createdAt: 'createdAt'
+  barberId: 'barberId',
+  planId: 'planId',
+  useAmount: 'useAmount',
+  starts: 'starts',
+  expires: 'expires',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ClientPlanScalarFieldEnum = (typeof ClientPlanScalarFieldEnum)[keyof typeof ClientPlanScalarFieldEnum]
+
+
+export const PlanScalarFieldEnum = {
+  id: 'id',
+  barberId: 'barberId',
+  name: 'name',
+  price: 'price',
+  keyword: 'keyword',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 } as const
 
 export type PlanScalarFieldEnum = (typeof PlanScalarFieldEnum)[keyof typeof PlanScalarFieldEnum]
+
+
+export const PlanToServiceScalarFieldEnum = {
+  planId: 'planId',
+  serviceId: 'serviceId'
+} as const
+
+export type PlanToServiceScalarFieldEnum = (typeof PlanToServiceScalarFieldEnum)[keyof typeof PlanToServiceScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1890,6 +2053,7 @@ export type BookingServiceOrderByRelevanceFieldEnum = (typeof BookingServiceOrde
 export const BookingOrderByRelevanceFieldEnum = {
   id: 'id',
   userId: 'userId',
+  planId: 'planId',
   barberId: 'barberId'
 } as const
 
@@ -1964,12 +2128,33 @@ export const NotificationOrderByRelevanceFieldEnum = {
 export type NotificationOrderByRelevanceFieldEnum = (typeof NotificationOrderByRelevanceFieldEnum)[keyof typeof NotificationOrderByRelevanceFieldEnum]
 
 
+export const ClientPlanOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  barberId: 'barberId',
+  planId: 'planId'
+} as const
+
+export type ClientPlanOrderByRelevanceFieldEnum = (typeof ClientPlanOrderByRelevanceFieldEnum)[keyof typeof ClientPlanOrderByRelevanceFieldEnum]
+
+
 export const PlanOrderByRelevanceFieldEnum = {
   id: 'id',
-  userId: 'userId'
+  barberId: 'barberId',
+  name: 'name',
+  keyword: 'keyword',
+  description: 'description'
 } as const
 
 export type PlanOrderByRelevanceFieldEnum = (typeof PlanOrderByRelevanceFieldEnum)[keyof typeof PlanOrderByRelevanceFieldEnum]
+
+
+export const PlanToServiceOrderByRelevanceFieldEnum = {
+  planId: 'planId',
+  serviceId: 'serviceId'
+} as const
+
+export type PlanToServiceOrderByRelevanceFieldEnum = (typeof PlanToServiceOrderByRelevanceFieldEnum)[keyof typeof PlanToServiceOrderByRelevanceFieldEnum]
 
 
 
@@ -2158,7 +2343,9 @@ export type GlobalOmitConfig = {
   coupon?: Prisma.CouponOmit
   pointTransaction?: Prisma.PointTransactionOmit
   notification?: Prisma.NotificationOmit
+  clientPlan?: Prisma.ClientPlanOmit
   plan?: Prisma.PlanOmit
+  planToService?: Prisma.PlanToServiceOmit
 }
 
 /* Types for Logging */

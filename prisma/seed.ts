@@ -1,11 +1,14 @@
 import prisma from "@/lib/prisma";
 
 async function main() {
-  await prisma.disabledTime.create({
-    data: {
-      barberId: "cmkfsgh1j0000c0ycy8k4sy05",
-      date: "2026-01-23T11:40:00.000Z"
-    }
+  const services = await prisma.service.findMany();
+  await prisma.barberProfileToService.createMany({
+    data: services.map(s => {
+      return {
+        barberProfileId: "cmkx0lrwa0000efyc3q2f1oam",
+        serviceId: s.id
+      }
+    })
   })
 }
 

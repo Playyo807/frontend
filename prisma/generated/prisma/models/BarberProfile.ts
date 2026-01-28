@@ -228,6 +228,8 @@ export type BarberProfileWhereInput = {
   bookings?: Prisma.BookingListRelationFilter
   services?: Prisma.BarberProfileToServiceListRelationFilter
   disabledDays?: Prisma.DisabledDayListRelationFilter
+  clientPlans?: Prisma.ClientPlanListRelationFilter
+  plans?: Prisma.PlanListRelationFilter
   extraTimeDays?: Prisma.ExtraTimeDayListRelationFilter
   disabledTimes?: Prisma.DisabledTimeListRelationFilter
 }
@@ -243,6 +245,8 @@ export type BarberProfileOrderByWithRelationInput = {
   bookings?: Prisma.BookingOrderByRelationAggregateInput
   services?: Prisma.BarberProfileToServiceOrderByRelationAggregateInput
   disabledDays?: Prisma.DisabledDayOrderByRelationAggregateInput
+  clientPlans?: Prisma.ClientPlanOrderByRelationAggregateInput
+  plans?: Prisma.PlanOrderByRelationAggregateInput
   extraTimeDays?: Prisma.ExtraTimeDayOrderByRelationAggregateInput
   disabledTimes?: Prisma.DisabledTimeOrderByRelationAggregateInput
   _relevance?: Prisma.BarberProfileOrderByRelevanceInput
@@ -262,6 +266,8 @@ export type BarberProfileWhereUniqueInput = Prisma.AtLeast<{
   bookings?: Prisma.BookingListRelationFilter
   services?: Prisma.BarberProfileToServiceListRelationFilter
   disabledDays?: Prisma.DisabledDayListRelationFilter
+  clientPlans?: Prisma.ClientPlanListRelationFilter
+  plans?: Prisma.PlanListRelationFilter
   extraTimeDays?: Prisma.ExtraTimeDayListRelationFilter
   disabledTimes?: Prisma.DisabledTimeListRelationFilter
 }, "id" | "userId">
@@ -302,6 +308,8 @@ export type BarberProfileCreateInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
 }
@@ -316,6 +324,8 @@ export type BarberProfileUncheckedCreateInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
 }
@@ -330,6 +340,8 @@ export type BarberProfileUpdateInput = {
   bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
 }
@@ -344,6 +356,8 @@ export type BarberProfileUncheckedUpdateInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
@@ -535,6 +549,34 @@ export type BarberProfileUpdateOneRequiredWithoutExtraTimeDaysNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BarberProfileUpdateToOneWithWhereWithoutExtraTimeDaysInput, Prisma.BarberProfileUpdateWithoutExtraTimeDaysInput>, Prisma.BarberProfileUncheckedUpdateWithoutExtraTimeDaysInput>
 }
 
+export type BarberProfileCreateNestedOneWithoutClientPlansInput = {
+  create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutClientPlansInput, Prisma.BarberProfileUncheckedCreateWithoutClientPlansInput>
+  connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutClientPlansInput
+  connect?: Prisma.BarberProfileWhereUniqueInput
+}
+
+export type BarberProfileUpdateOneRequiredWithoutClientPlansNestedInput = {
+  create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutClientPlansInput, Prisma.BarberProfileUncheckedCreateWithoutClientPlansInput>
+  connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutClientPlansInput
+  upsert?: Prisma.BarberProfileUpsertWithoutClientPlansInput
+  connect?: Prisma.BarberProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BarberProfileUpdateToOneWithWhereWithoutClientPlansInput, Prisma.BarberProfileUpdateWithoutClientPlansInput>, Prisma.BarberProfileUncheckedUpdateWithoutClientPlansInput>
+}
+
+export type BarberProfileCreateNestedOneWithoutPlansInput = {
+  create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutPlansInput, Prisma.BarberProfileUncheckedCreateWithoutPlansInput>
+  connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutPlansInput
+  connect?: Prisma.BarberProfileWhereUniqueInput
+}
+
+export type BarberProfileUpdateOneRequiredWithoutPlansNestedInput = {
+  create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutPlansInput, Prisma.BarberProfileUncheckedCreateWithoutPlansInput>
+  connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutPlansInput
+  upsert?: Prisma.BarberProfileUpsertWithoutPlansInput
+  connect?: Prisma.BarberProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BarberProfileUpdateToOneWithWhereWithoutPlansInput, Prisma.BarberProfileUpdateWithoutPlansInput>, Prisma.BarberProfileUncheckedUpdateWithoutPlansInput>
+}
+
 export type BarberProfileCreateWithoutUserInput = {
   id?: string
   displayName: string
@@ -544,6 +586,8 @@ export type BarberProfileCreateWithoutUserInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
 }
@@ -557,6 +601,8 @@ export type BarberProfileUncheckedCreateWithoutUserInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
 }
@@ -586,6 +632,8 @@ export type BarberProfileUpdateWithoutUserInput = {
   bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
 }
@@ -599,6 +647,8 @@ export type BarberProfileUncheckedUpdateWithoutUserInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
@@ -612,6 +662,8 @@ export type BarberProfileCreateWithoutServicesInput = {
   user: Prisma.UserCreateNestedOneWithoutBarberProfileInput
   bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
   disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
 }
@@ -625,6 +677,8 @@ export type BarberProfileUncheckedCreateWithoutServicesInput = {
   createdAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
   disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
 }
@@ -654,6 +708,8 @@ export type BarberProfileUpdateWithoutServicesInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutBarberProfileNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
   disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
 }
@@ -667,6 +723,8 @@ export type BarberProfileUncheckedUpdateWithoutServicesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
@@ -680,6 +738,8 @@ export type BarberProfileCreateWithoutBookingsInput = {
   user: Prisma.UserCreateNestedOneWithoutBarberProfileInput
   services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
 }
@@ -693,6 +753,8 @@ export type BarberProfileUncheckedCreateWithoutBookingsInput = {
   createdAt?: Date | string
   services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
 }
@@ -722,6 +784,8 @@ export type BarberProfileUpdateWithoutBookingsInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutBarberProfileNestedInput
   services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
 }
@@ -735,6 +799,8 @@ export type BarberProfileUncheckedUpdateWithoutBookingsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
@@ -748,6 +814,8 @@ export type BarberProfileCreateWithoutDisabledDaysInput = {
   user: Prisma.UserCreateNestedOneWithoutBarberProfileInput
   bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
 }
@@ -761,6 +829,8 @@ export type BarberProfileUncheckedCreateWithoutDisabledDaysInput = {
   createdAt?: Date | string
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
 }
@@ -790,6 +860,8 @@ export type BarberProfileUpdateWithoutDisabledDaysInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutBarberProfileNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
 }
@@ -803,6 +875,8 @@ export type BarberProfileUncheckedUpdateWithoutDisabledDaysInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
@@ -817,6 +891,8 @@ export type BarberProfileCreateWithoutDisabledTimesInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
 }
 
@@ -830,6 +906,8 @@ export type BarberProfileUncheckedCreateWithoutDisabledTimesInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
 }
 
@@ -859,6 +937,8 @@ export type BarberProfileUpdateWithoutDisabledTimesInput = {
   bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
 }
 
@@ -872,6 +952,8 @@ export type BarberProfileUncheckedUpdateWithoutDisabledTimesInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
 }
 
@@ -885,6 +967,8 @@ export type BarberProfileCreateWithoutExtraTimeDaysInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
 }
 
@@ -898,6 +982,8 @@ export type BarberProfileUncheckedCreateWithoutExtraTimeDaysInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
   services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
   disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
 }
 
@@ -927,6 +1013,8 @@ export type BarberProfileUpdateWithoutExtraTimeDaysInput = {
   bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
 }
 
@@ -940,6 +1028,160 @@ export type BarberProfileUncheckedUpdateWithoutExtraTimeDaysInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
   services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
+  disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+}
+
+export type BarberProfileCreateWithoutClientPlansInput = {
+  id?: string
+  displayName: string
+  bio?: string | null
+  timeInterval?: number
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBarberProfileInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
+  services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
+  disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
+  extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
+  disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+}
+
+export type BarberProfileUncheckedCreateWithoutClientPlansInput = {
+  id?: string
+  userId: string
+  displayName: string
+  bio?: string | null
+  timeInterval?: number
+  createdAt?: Date | string
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
+  services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
+  disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
+  extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
+  disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+}
+
+export type BarberProfileCreateOrConnectWithoutClientPlansInput = {
+  where: Prisma.BarberProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.BarberProfileCreateWithoutClientPlansInput, Prisma.BarberProfileUncheckedCreateWithoutClientPlansInput>
+}
+
+export type BarberProfileUpsertWithoutClientPlansInput = {
+  update: Prisma.XOR<Prisma.BarberProfileUpdateWithoutClientPlansInput, Prisma.BarberProfileUncheckedUpdateWithoutClientPlansInput>
+  create: Prisma.XOR<Prisma.BarberProfileCreateWithoutClientPlansInput, Prisma.BarberProfileUncheckedCreateWithoutClientPlansInput>
+  where?: Prisma.BarberProfileWhereInput
+}
+
+export type BarberProfileUpdateToOneWithWhereWithoutClientPlansInput = {
+  where?: Prisma.BarberProfileWhereInput
+  data: Prisma.XOR<Prisma.BarberProfileUpdateWithoutClientPlansInput, Prisma.BarberProfileUncheckedUpdateWithoutClientPlansInput>
+}
+
+export type BarberProfileUpdateWithoutClientPlansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeInterval?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBarberProfileNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
+  services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
+  disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
+  extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
+  disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+}
+
+export type BarberProfileUncheckedUpdateWithoutClientPlansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeInterval?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
+  services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
+  disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
+  extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
+  disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+}
+
+export type BarberProfileCreateWithoutPlansInput = {
+  id?: string
+  displayName: string
+  bio?: string | null
+  timeInterval?: number
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBarberProfileInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
+  services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
+  disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
+  disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+}
+
+export type BarberProfileUncheckedCreateWithoutPlansInput = {
+  id?: string
+  userId: string
+  displayName: string
+  bio?: string | null
+  timeInterval?: number
+  createdAt?: Date | string
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
+  services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
+  disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
+  disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+}
+
+export type BarberProfileCreateOrConnectWithoutPlansInput = {
+  where: Prisma.BarberProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.BarberProfileCreateWithoutPlansInput, Prisma.BarberProfileUncheckedCreateWithoutPlansInput>
+}
+
+export type BarberProfileUpsertWithoutPlansInput = {
+  update: Prisma.XOR<Prisma.BarberProfileUpdateWithoutPlansInput, Prisma.BarberProfileUncheckedUpdateWithoutPlansInput>
+  create: Prisma.XOR<Prisma.BarberProfileCreateWithoutPlansInput, Prisma.BarberProfileUncheckedCreateWithoutPlansInput>
+  where?: Prisma.BarberProfileWhereInput
+}
+
+export type BarberProfileUpdateToOneWithWhereWithoutPlansInput = {
+  where?: Prisma.BarberProfileWhereInput
+  data: Prisma.XOR<Prisma.BarberProfileUpdateWithoutPlansInput, Prisma.BarberProfileUncheckedUpdateWithoutPlansInput>
+}
+
+export type BarberProfileUpdateWithoutPlansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeInterval?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBarberProfileNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
+  services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
+  disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
+  disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+}
+
+export type BarberProfileUncheckedUpdateWithoutPlansInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeInterval?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
+  services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
+  disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
 
@@ -952,6 +1194,8 @@ export type BarberProfileCountOutputType = {
   bookings: number
   services: number
   disabledDays: number
+  clientPlans: number
+  plans: number
   extraTimeDays: number
   disabledTimes: number
 }
@@ -960,6 +1204,8 @@ export type BarberProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Ext
   bookings?: boolean | BarberProfileCountOutputTypeCountBookingsArgs
   services?: boolean | BarberProfileCountOutputTypeCountServicesArgs
   disabledDays?: boolean | BarberProfileCountOutputTypeCountDisabledDaysArgs
+  clientPlans?: boolean | BarberProfileCountOutputTypeCountClientPlansArgs
+  plans?: boolean | BarberProfileCountOutputTypeCountPlansArgs
   extraTimeDays?: boolean | BarberProfileCountOutputTypeCountExtraTimeDaysArgs
   disabledTimes?: boolean | BarberProfileCountOutputTypeCountDisabledTimesArgs
 }
@@ -998,6 +1244,20 @@ export type BarberProfileCountOutputTypeCountDisabledDaysArgs<ExtArgs extends ru
 /**
  * BarberProfileCountOutputType without action
  */
+export type BarberProfileCountOutputTypeCountClientPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientPlanWhereInput
+}
+
+/**
+ * BarberProfileCountOutputType without action
+ */
+export type BarberProfileCountOutputTypeCountPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlanWhereInput
+}
+
+/**
+ * BarberProfileCountOutputType without action
+ */
 export type BarberProfileCountOutputTypeCountExtraTimeDaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ExtraTimeDayWhereInput
 }
@@ -1021,6 +1281,8 @@ export type BarberProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   bookings?: boolean | Prisma.BarberProfile$bookingsArgs<ExtArgs>
   services?: boolean | Prisma.BarberProfile$servicesArgs<ExtArgs>
   disabledDays?: boolean | Prisma.BarberProfile$disabledDaysArgs<ExtArgs>
+  clientPlans?: boolean | Prisma.BarberProfile$clientPlansArgs<ExtArgs>
+  plans?: boolean | Prisma.BarberProfile$plansArgs<ExtArgs>
   extraTimeDays?: boolean | Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs>
   disabledTimes?: boolean | Prisma.BarberProfile$disabledTimesArgs<ExtArgs>
   _count?: boolean | Prisma.BarberProfileCountOutputTypeDefaultArgs<ExtArgs>
@@ -1043,6 +1305,8 @@ export type BarberProfileInclude<ExtArgs extends runtime.Types.Extensions.Intern
   bookings?: boolean | Prisma.BarberProfile$bookingsArgs<ExtArgs>
   services?: boolean | Prisma.BarberProfile$servicesArgs<ExtArgs>
   disabledDays?: boolean | Prisma.BarberProfile$disabledDaysArgs<ExtArgs>
+  clientPlans?: boolean | Prisma.BarberProfile$clientPlansArgs<ExtArgs>
+  plans?: boolean | Prisma.BarberProfile$plansArgs<ExtArgs>
   extraTimeDays?: boolean | Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs>
   disabledTimes?: boolean | Prisma.BarberProfile$disabledTimesArgs<ExtArgs>
   _count?: boolean | Prisma.BarberProfileCountOutputTypeDefaultArgs<ExtArgs>
@@ -1055,6 +1319,8 @@ export type $BarberProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
     bookings: Prisma.$BookingPayload<ExtArgs>[]
     services: Prisma.$BarberProfileToServicePayload<ExtArgs>[]
     disabledDays: Prisma.$DisabledDayPayload<ExtArgs>[]
+    clientPlans: Prisma.$ClientPlanPayload<ExtArgs>[]
+    plans: Prisma.$PlanPayload<ExtArgs>[]
     extraTimeDays: Prisma.$ExtraTimeDayPayload<ExtArgs>[]
     disabledTimes: Prisma.$DisabledTimePayload<ExtArgs>[]
   }
@@ -1409,6 +1675,8 @@ export interface Prisma__BarberProfileClient<T, Null = never, ExtArgs extends ru
   bookings<T extends Prisma.BarberProfile$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   services<T extends Prisma.BarberProfile$servicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$servicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BarberProfileToServicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disabledDays<T extends Prisma.BarberProfile$disabledDaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$disabledDaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  clientPlans<T extends Prisma.BarberProfile$clientPlansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$clientPlansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  plans<T extends Prisma.BarberProfile$plansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$plansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   extraTimeDays<T extends Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExtraTimeDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disabledTimes<T extends Prisma.BarberProfile$disabledTimesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$disabledTimesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1858,6 +2126,54 @@ export type BarberProfile$disabledDaysArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.DisabledDayScalarFieldEnum | Prisma.DisabledDayScalarFieldEnum[]
+}
+
+/**
+ * BarberProfile.clientPlans
+ */
+export type BarberProfile$clientPlansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientPlan
+   */
+  select?: Prisma.ClientPlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientPlan
+   */
+  omit?: Prisma.ClientPlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientPlanInclude<ExtArgs> | null
+  where?: Prisma.ClientPlanWhereInput
+  orderBy?: Prisma.ClientPlanOrderByWithRelationInput | Prisma.ClientPlanOrderByWithRelationInput[]
+  cursor?: Prisma.ClientPlanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientPlanScalarFieldEnum | Prisma.ClientPlanScalarFieldEnum[]
+}
+
+/**
+ * BarberProfile.plans
+ */
+export type BarberProfile$plansArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Plan
+   */
+  select?: Prisma.PlanSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Plan
+   */
+  omit?: Prisma.PlanOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanInclude<ExtArgs> | null
+  where?: Prisma.PlanWhereInput
+  orderBy?: Prisma.PlanOrderByWithRelationInput | Prisma.PlanOrderByWithRelationInput[]
+  cursor?: Prisma.PlanWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlanScalarFieldEnum | Prisma.PlanScalarFieldEnum[]
 }
 
 /**

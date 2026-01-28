@@ -75,11 +75,13 @@ export function DockMenu() {
       className="fixed z-90 bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center justify-center"
       initial={{ opacity: 0, y: 120 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1, delay: 4, type: "spring", bounce: 0.5 }}
+      transition={{ duration: 1, delay: 0.6, type: "spring", bounce: 0.5 }}
     >
       <Dock
         direction="middle"
-        className="bg-linear-30 from-gray-200/30 to-gray-400/30 text-white text-shadow-black/40 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20"
+        iconDistance={60}
+        iconSize={32}
+        className="bg-linear-30 from-gray-200/30 to-gray-400/30 text-white text-shadow-black/40 backdrop-blur-md border border-white/10 shadow-lg shadow-black/20 max-w-[90vw] gap-1 space-x-0 lg:gap-2 lg:space-x-1"
       >
         {DATA.navbar.map((item) => (
           <DockIcon key={item.label}>

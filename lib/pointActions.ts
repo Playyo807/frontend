@@ -3,32 +3,32 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
-import { getBarberProfiles } from "./serverFunctions";
+import { getBarberProfiles } from "./serverActions";
 import { createNotification } from "./notificationActions";
 
 function handleDiscount(
-    price: number,
-    services: ({
-      service: {
-        name: string;
-        id: string;
-        price: number;
-        duration: number;
-        keyword: string;
-        imagePath: string;
-      };
-    } & { bookingId: string; serviceId: string })[],
-  ): number {
-    let length = services.length == 0 ? 1 : services.length;
-    services.map((s) => {
-      if (s.service.keyword == "LZ") {
-        length = length - 1;
-      }
-    });
-    if (length < 1) length = 1;
-    const discountRate = (length - 1) * 5;
-    return price - discountRate;
-  }
+  price: number,
+  services: ({
+    service: {
+      name: string;
+      id: string;
+      price: number;
+      duration: number;
+      keyword: string;
+      imagePath: string;
+    };
+  } & { bookingId: string; serviceId: string })[],
+): number {
+  let length = services.length == 0 ? 1 : services.length;
+  services.map((s) => {
+    if (s.service.keyword == "LZ") {
+      length = length - 1;
+    }
+  });
+  if (length < 1) length = 1;
+  const discountRate = (length - 1) * 5;
+  return price - discountRate;
+}
 
 export async function getUserPointSystem() {
   const session = await auth();
@@ -57,7 +57,24 @@ export async function getUserPointSystem() {
           },
         },
       },
-      plan: true,
+      plan: {
+        include: {
+          barber: {
+            include: {
+              user: true,
+            },
+          },
+          plan: {
+            include: {
+              planToService: {
+                include: {
+                  service: true
+                }
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -109,7 +126,7 @@ export async function createPointSystem() {
   return { success: true, pointSystem };
 }
 
-export async function addPointsForBooking(bookingId: string) {
+export async function addPointsForBooking(bookingId: string, hasPlan: boolean) {
   const booking = await prisma.booking.findUnique({
     where: { id: bookingId },
     include: {
@@ -121,6 +138,7 @@ export async function addPointsForBooking(bookingId: string) {
       user: {
         include: {
           pointSystem: true,
+          plan: true,
         },
       },
     },
@@ -130,22 +148,22 @@ export async function addPointsForBooking(bookingId: string) {
     throw new Error("Agendamento não encontrado");
   }
 
-  if (!booking.user.pointSystem) {
+  if (!booking.user.pointSystem || hasPlan) {
     return;
   }
 
   const eligibleServices = booking.services.filter(
-    (s) => s.service.keyword !== "LZ" && s.service.keyword !== "PLA"
+    (s) => s.service.keyword !== "LZ" && s.service.keyword !== "PLA",
   );
 
   let pointsToAdd = 0;
-  let totalPrice = 0
+  let totalPrice = 0;
 
-  eligibleServices.map(s => {
+  eligibleServices.map((s) => {
     totalPrice += s.service.price;
-  })
+  });
 
-  pointsToAdd = handleDiscount(totalPrice, eligibleServices)
+  pointsToAdd = handleDiscount(totalPrice, eligibleServices);
 
   if (pointsToAdd === 0) {
     return { success: true, pointsAdded: 0 };
@@ -206,6 +224,8 @@ export async function redeemPointsForCoupon() {
     },
   });
 
+  const barbers = await getBarberProfiles();
+
   if (!user?.pointSystem) {
     throw new Error("Sistema de pontos não encontrado");
   }
@@ -213,7 +233,7 @@ export async function redeemPointsForCoupon() {
   // Check if user has enough points
   if (user.pointSystem.currentPoints < user.pointSystem.pointsNeededForReward) {
     throw new Error(
-      `Você precisa de ${user.pointSystem.pointsNeededForReward} pontos. Você tem ${user.pointSystem.currentPoints}.`
+      `Você precisa de ${user.pointSystem.pointsNeededForReward} pontos. Você tem ${user.pointSystem.currentPoints}.`,
     );
   }
 
@@ -237,30 +257,33 @@ export async function redeemPointsForCoupon() {
       },
     });
 
-    // Create transaction record
-    await tx.pointTransaction.create({
+    const transaction = await tx.pointTransaction.create({
       data: {
         pointSystemId: user.pointSystem!.id,
         points: -user.pointSystem!.pointsNeededForReward,
         type: "REDEEMED",
-        status: 'CONFIRMED',
+        status: "CONFIRMED",
         description: `Cupom de ${user.pointSystem!.discountPercentage}% resgatado`,
       },
+    });
+
+    barbers.map(async (b) => {
+      await createNotification(
+        b.id,
+        "COUPON_REDEEMED",
+        "Coupon Resgatado!",
+        `${session.user?.name} resgatou um coupon de ${user.pointSystem?.discountPercentage}% de desconto!`,
+        { userId: user.id, transactionId: transaction.id, couponId: coupon.id },
+      );
     });
 
     return { pointSystem: updatedPointSystem, coupon };
   });
 
-  const barbers = await getBarberProfiles();
-
-  barbers.map(async (b) => {
-    await createNotification(b.id, 'COUPON_REDEEMED', 'Coupon Resgatado!', `${session.user?.name} resgatou um coupon de ${user.pointSystem?.discountPercentage}% de desconto!`)
-  })
-
   revalidatePath("/client/dashboard");
-  return { 
-    success: true, 
+  return {
+    success: true,
     message: "Cupom criado com sucesso!",
-    coupon: result.coupon 
+    coupon: result.coupon,
   };
 }

@@ -28,8 +28,6 @@ import {
   Mail,
   User,
   Phone,
-  MapPin,
-  X,
   Filter,
   Search,
   Scissors,
@@ -40,8 +38,8 @@ import {
   BookOpen,
   UserCircle,
   Ticket,
+  Package,
 } from "lucide-react";
-import { UserBookings } from "./page";
 import { Separator } from "@radix-ui/react-separator";
 import {
   AccordionContent,
@@ -53,12 +51,6 @@ import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { cancelBooking } from "@/lib/bookingActions";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { createPointSystem, redeemPointsForCoupon } from "@/lib/pointActions";
@@ -69,17 +61,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import PlanManagementClient from "@/components/custom/planManagementClient";
+import * as types from "@/lib/types";
 
 type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED" | "PAST";
-type TabType = "profile" | "bookings" | "points";
+type TabType = "profile" | "bookings" | "points" | "plans";
 
 export default function ClientPage({
   bookings,
   pointSystem,
+  plan,
   availableCoupons,
 }: {
-  bookings: UserBookings[];
+  bookings: types.UserBookings[];
   pointSystem: any;
+  plan: any | null;
   availableCoupons: any[];
 }) {
   const searchParams = useSearchParams();
@@ -96,7 +92,7 @@ export default function ClientPage({
 
   const [barberProfileOpen, setBarberProfileOpen] = useState(false);
   const [selectedBarber, setSelectedBarber] = useState<
-    UserBookings["barber"] | null
+    types.UserBookings["barber"] | null
   >(null);
 
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
@@ -120,29 +116,29 @@ export default function ClientPage({
     }
   }, [success]);
 
-  function handleDiscount(
-    price: number,
-    services: ({
-      service: {
-        name: string;
-        id: string;
-        price: number;
-        duration: number;
-        keyword: string;
-        imagePath: string;
-      };
-    } & { bookingId: string; serviceId: string })[],
-  ): number {
-    let length = services.length == 0 ? 1 : services.length;
-    services.map((s) => {
-      if (s.service.keyword == "LZ") {
-        length = length - 1;
-      }
-    });
-    if (length < 1) length = 1;
-    const discountRate = (length - 1) * 5;
-    return price - discountRate;
-  }
+  // function handleDiscount(
+  //   price: number,
+  //   services: ({
+  //     service: {
+  //       name: string;
+  //       id: string;
+  //       price: number;
+  //       duration: number;
+  //       keyword: string;
+  //       imagePath: string;
+  //     };
+  //   } & { bookingId: string; serviceId: string })[],
+  // ): number {
+  //   let length = services.length == 0 ? 1 : services.length;
+  //   services.map((s) => {
+  //     if (s.service.keyword == "LZ") {
+  //       length = length - 1;
+  //     }
+  //   });
+  //   if (length < 1) length = 1;
+  //   const discountRate = (length - 1) * 5;
+  //   return price - discountRate;
+  // }
 
   function formatTime12Hour(date: Date): string {
     const hours = date.getHours();
@@ -218,9 +214,35 @@ export default function ClientPage({
     });
   };
 
-  const handleBarberClick = (barber: UserBookings["barber"]) => {
+  const handleBarberClick = (barber: types.UserBookings["barber"]) => {
     setSelectedBarber(barber);
     setBarberProfileOpen(true);
+  };
+
+  const handlePlanBgColor = (booking: types.UserBookings) => {
+    if (!booking || !booking.plan || !booking.plan.plan) return;
+    return booking.plan.plan.keyword === "BRO"
+      ? "from-amber-600 to-lime-700"
+      : booking.plan.plan.keyword === "PLA"
+        ? "from-gray-600 to-gray-800"
+        : booking.plan.plan.keyword == "OUR"
+          ? "from-amber-500 to-amber-900"
+          : booking.plan.plan.keyword === "DIA"
+            ? "from-black to-blue-600"
+            : "from-black to-black";
+  };
+
+  const handlePlanTextColor = (booking: types.UserBookings) => {
+    if (!booking || !booking.plan || !booking.plan.plan) return;
+    return booking.plan.plan.keyword === "BRO"
+      ? "text-white/80"
+      : booking.plan.plan.keyword === "PLA"
+        ? "text-white/80"
+        : booking.plan.plan.keyword == "OUR"
+          ? "text-white/80"
+          : booking.plan.plan.keyword === "DIA"
+            ? "text-white/80"
+            : "text-white/80";
   };
 
   // Filter bookings
@@ -468,7 +490,13 @@ export default function ClientPage({
               <span className="hidden sm:inline">Agendamentos</span>
             </button>
             <button
-              onClick={() => setActiveTab("points")}
+              onClick={() => {
+                if (plan) {
+                  setActiveTab("plans");
+                } else {
+                  setActiveTab("points");
+                }
+              }}
               className={`flex items-center gap-2 px-4 py-3 font-medium transition-all ${
                 activeTab === "points"
                   ? "text-sky-500 border-b-2 border-sky-500"
@@ -476,7 +504,9 @@ export default function ClientPage({
               }`}
             >
               <Trophy size={20} />
-              <span className="hidden sm:inline">Pontos</span>
+              <span className="hidden sm:inline">
+                {plan ? "Plano" : "Pontos"}
+              </span>
             </button>
           </div>
           {/* Profile Tab */}
@@ -677,10 +707,7 @@ export default function ClientPage({
                                 </span>
                                 <span className="bg-emerald-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-emerald-200 text-xs md:text-sm">
                                   <Banknote className="mr-1" size={14} />
-                                  {handleDiscount(
-                                    booking.totalPrice,
-                                    booking.services,
-                                  ).toLocaleString("pt-BR", {
+                                  {booking.totalPrice.toLocaleString("pt-BR", {
                                     style: "currency",
                                     currency: "BRL",
                                   })}
@@ -689,6 +716,14 @@ export default function ClientPage({
                                   <span className="bg-linear-to-r from-purple-500/80 to-pink-500/80 flex flex-row w-fit px-2 py-1 rounded-md items-center text-purple-100 text-xs md:text-sm border border-purple-300/30">
                                     <Ticket className="mr-1" size={14} />
                                     {booking.coupon.discountPercent}% OFF
+                                  </span>
+                                )}
+                                {booking.plan && (
+                                  <span
+                                    className={`bg-linear-to-r ${handlePlanBgColor(booking)} ${handlePlanTextColor(booking)} px-2 py-1 rounded text-xs flex items-center gap-1`}
+                                  >
+                                    <Package size={12} />
+                                    Plano
                                   </span>
                                 )}
                               </div>
@@ -854,6 +889,51 @@ export default function ClientPage({
                                   </div>
                                 </div>
                               )}
+                              {booking.plan && (
+                                <div
+                                  className={
+                                    "bg-linear-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-lg p-4"
+                                  }
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <div className="bg-purple-500/20 rounded-full p-2">
+                                      <Package
+                                        className={`${booking.plan.plan.keyword.match}`}
+                                        size={20}
+                                      />
+                                    </div>
+                                    <div className="flex-1">
+                                      <h4 className="font-semibold text-purple-200 mb-1">
+                                        {booking.plan.plan.name} Aplicado
+                                      </h4>
+                                      <p className="text-xs text-gray-400 mt-1">
+                                        Usado em{" "}
+                                        {new Date(
+                                          booking.createdAt,
+                                        ).toLocaleDateString("pt-BR")}
+                                      </p>
+                                    </div>
+                                    <div className="text-right">
+                                      <p className="text-xs text-gray-400">
+                                        Economia
+                                      </p>
+                                      <p className="text-lg font-bold text-emerald-400">
+                                        {(() => {
+                                          let ogPrice: number = 0;
+                                          booking.services.map(
+                                            (s) => (ogPrice += s.service.price),
+                                          );
+
+                                          return ogPrice - booking.totalPrice;
+                                        })().toLocaleString("pt-BR", {
+                                          style: "currency",
+                                          currency: "BRL",
+                                        })}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
 
                               {canCancel && (
                                 <div className="flex justify-end pt-2">
@@ -880,7 +960,7 @@ export default function ClientPage({
             </motion.div>
           )}
           {/* Points Tab */}
-          {activeTab === "points" && (
+          {activeTab === "points" && !plan && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -1043,7 +1123,9 @@ export default function ClientPage({
                         <CheckCircle2 className="text-emerald-500" size={20} />
                         <span className="flex flex-col justify-baseline items-start">
                           <span>Use cupons em qualquer agendamento* </span>
-                          <span className="text-xs text-gray-400">Exceto no serviço de luzes e platinado</span>
+                          <span className="text-xs text-gray-400">
+                            Exceto no serviço de luzes e platinado
+                          </span>
                         </span>
                       </li>
                     </ul>
@@ -1052,6 +1134,9 @@ export default function ClientPage({
               )}
             </motion.div>
           )}{" "}
+          {plan && activeTab == "plans" && (
+            <PlanManagementClient clientPlan={plan} />
+          )}
         </div>
       </main>
     </div>

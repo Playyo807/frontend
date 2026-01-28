@@ -219,7 +219,7 @@ export type UserWhereInput = {
   bookings?: Prisma.BookingListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   pointSystem?: Prisma.XOR<Prisma.PointSystemNullableScalarRelationFilter, Prisma.PointSystemWhereInput> | null
-  plan?: Prisma.XOR<Prisma.PlanNullableScalarRelationFilter, Prisma.PlanWhereInput> | null
+  plan?: Prisma.XOR<Prisma.ClientPlanNullableScalarRelationFilter, Prisma.ClientPlanWhereInput> | null
   notifications?: Prisma.NotificationListRelationFilter
 }
 
@@ -238,7 +238,7 @@ export type UserOrderByWithRelationInput = {
   bookings?: Prisma.BookingOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   pointSystem?: Prisma.PointSystemOrderByWithRelationInput
-  plan?: Prisma.PlanOrderByWithRelationInput
+  plan?: Prisma.ClientPlanOrderByWithRelationInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
@@ -261,7 +261,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   bookings?: Prisma.BookingListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   pointSystem?: Prisma.XOR<Prisma.PointSystemNullableScalarRelationFilter, Prisma.PointSystemWhereInput> | null
-  plan?: Prisma.XOR<Prisma.PlanNullableScalarRelationFilter, Prisma.PlanWhereInput> | null
+  plan?: Prisma.XOR<Prisma.ClientPlanNullableScalarRelationFilter, Prisma.ClientPlanWhereInput> | null
   notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "email">
 
@@ -310,7 +310,7 @@ export type UserCreateInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
@@ -329,7 +329,7 @@ export type UserUncheckedCreateInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -348,7 +348,7 @@ export type UserUpdateInput = {
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
@@ -367,7 +367,7 @@ export type UserUncheckedUpdateInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -593,7 +593,7 @@ export type UserCreateWithoutBarberProfileInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
@@ -611,7 +611,7 @@ export type UserUncheckedCreateWithoutBarberProfileInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -645,7 +645,7 @@ export type UserUpdateWithoutBarberProfileInput = {
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
@@ -663,7 +663,7 @@ export type UserUncheckedUpdateWithoutBarberProfileInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -681,7 +681,7 @@ export type UserCreateWithoutAccountsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
@@ -699,7 +699,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -733,7 +733,7 @@ export type UserUpdateWithoutAccountsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
@@ -751,7 +751,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -769,7 +769,7 @@ export type UserCreateWithoutSessionsInput = {
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
@@ -787,7 +787,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -821,7 +821,7 @@ export type UserUpdateWithoutSessionsInput = {
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
@@ -839,7 +839,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -857,7 +857,7 @@ export type UserCreateWithoutBookingsInput = {
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
@@ -875,7 +875,7 @@ export type UserUncheckedCreateWithoutBookingsInput = {
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -909,7 +909,7 @@ export type UserUpdateWithoutBookingsInput = {
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
@@ -927,7 +927,7 @@ export type UserUncheckedUpdateWithoutBookingsInput = {
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -945,7 +945,7 @@ export type UserCreateWithoutPointSystemInput = {
   barberProfile?: Prisma.BarberProfileCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
 }
 
@@ -963,7 +963,7 @@ export type UserUncheckedCreateWithoutPointSystemInput = {
   barberProfile?: Prisma.BarberProfileUncheckedCreateNestedOneWithoutUserInput
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -997,7 +997,7 @@ export type UserUpdateWithoutPointSystemInput = {
   barberProfile?: Prisma.BarberProfileUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
 }
 
@@ -1015,7 +1015,7 @@ export type UserUncheckedUpdateWithoutPointSystemInput = {
   barberProfile?: Prisma.BarberProfileUncheckedUpdateOneWithoutUserNestedInput
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1034,7 +1034,7 @@ export type UserCreateWithoutNotificationsInput = {
   bookings?: Prisma.BookingCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanCreateNestedOneWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1052,7 +1052,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   pointSystem?: Prisma.PointSystemUncheckedCreateNestedOneWithoutUserInput
-  plan?: Prisma.PlanUncheckedCreateNestedOneWithoutUserInput
+  plan?: Prisma.ClientPlanUncheckedCreateNestedOneWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1086,7 +1086,7 @@ export type UserUpdateWithoutNotificationsInput = {
   bookings?: Prisma.BookingUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUpdateOneWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1104,7 +1104,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   bookings?: Prisma.BookingUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   pointSystem?: Prisma.PointSystemUncheckedUpdateOneWithoutUserNestedInput
-  plan?: Prisma.PlanUncheckedUpdateOneWithoutUserNestedInput
+  plan?: Prisma.ClientPlanUncheckedUpdateOneWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPlanInput = {
@@ -1307,7 +1307,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     bookings: Prisma.$BookingPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     pointSystem: Prisma.$PointSystemPayload<ExtArgs> | null
-    plan: Prisma.$PlanPayload<ExtArgs> | null
+    plan: Prisma.$ClientPlanPayload<ExtArgs> | null
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1665,7 +1665,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   bookings<T extends Prisma.User$bookingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$bookingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   pointSystem<T extends Prisma.User$pointSystemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pointSystemArgs<ExtArgs>>): Prisma.Prisma__PointSystemClient<runtime.Types.Result.GetResult<Prisma.$PointSystemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  plan<T extends Prisma.User$planArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$planArgs<ExtArgs>>): Prisma.Prisma__PlanClient<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  plan<T extends Prisma.User$planArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$planArgs<ExtArgs>>): Prisma.Prisma__ClientPlanClient<runtime.Types.Result.GetResult<Prisma.$ClientPlanPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -2162,18 +2162,18 @@ export type User$pointSystemArgs<ExtArgs extends runtime.Types.Extensions.Intern
  */
 export type User$planArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Plan
+   * Select specific fields to fetch from the ClientPlan
    */
-  select?: Prisma.PlanSelect<ExtArgs> | null
+  select?: Prisma.ClientPlanSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Plan
+   * Omit specific fields from the ClientPlan
    */
-  omit?: Prisma.PlanOmit<ExtArgs> | null
+  omit?: Prisma.ClientPlanOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PlanInclude<ExtArgs> | null
-  where?: Prisma.PlanWhereInput
+  include?: Prisma.ClientPlanInclude<ExtArgs> | null
+  where?: Prisma.ClientPlanWhereInput
 }
 
 /**

@@ -1,16 +1,9 @@
 import { ReadonlyURLSearchParams } from 'next/navigation';
+import * as types from "@/lib/types"
 
-export type id = string;
+type id = string;
 
-export type BookingData = {
-  startedBooking: boolean;
-  selectedServices: [id, string][];
-  barberId: id | null;
-  appointmentDate: string | null;
-  appointmentTime: string | null;
-};
-
-export function encodeBookingData(data: Partial<BookingData>): URLSearchParams {
+export function encodeBookingData(data: Partial<types.BookingDataSearchParams>): URLSearchParams {
   const params = new URLSearchParams();
   
   if (data.startedBooking !== undefined) {
@@ -38,7 +31,7 @@ export function encodeBookingData(data: Partial<BookingData>): URLSearchParams {
 
 export function decodeBookingData(
   searchParams: ReadonlyURLSearchParams | { [key: string]: string | string[] | undefined }
-): BookingData {
+): types.BookingDataSearchParams {
   const get = (key: string): string | undefined => {
     if (searchParams instanceof URLSearchParams) {
       return searchParams.get(key) || undefined;

@@ -3,39 +3,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import UserDetailClient from "./ClientPage";
 import { BookingStatus } from "@/prisma/generated/prisma/enums";
-import { Prisma } from "@/prisma/generated/prisma/client";
-
-type b_ = {
-  barberProfile: {
-        id: string;
-        displayName: string;
-        userId: string;
-        createdAt: Date;
-        bio: string | null;
-        timeInterval: number;
-    } | null;
-} | null
-
-export type bookings_ = Prisma.UserGetPayload<{
-  include: {
-      pointSystem: {
-        include: {
-          coupons: { orderBy: { createdAt: "desc" } },
-          pointTransactions: {
-            orderBy: { createdAt: "desc" },
-            take: 20,
-          },
-        },
-      },
-      bookings: {
-        include: {
-          services: { include: { service: true } },
-          coupon: true,
-        },
-        orderBy: { date: "desc" },
-      },
-    },
-}>
+import * as type from "@/lib/types"
 
 const statusPriority: Record<BookingStatus, number> = {
   [BookingStatus.CONFIRMED]: 1,
@@ -55,7 +23,7 @@ export default async function UserDetailPage({
     redirect("/login");
   }
 
-  const barberUser: b_ = await prisma.user.findUnique({
+  const barberUser: type.barberUser_ = await prisma.user.findUnique({
     where: { email: session.user.email },
     include: { barberProfile: true },
   });
@@ -64,7 +32,7 @@ export default async function UserDetailPage({
     redirect("/");
   }
 
-  const user = await prisma.user.findUnique({
+  const user: type.bookings_ | null = await prisma.user.findUnique({
     where: { id: userId },
     include: {
       pointSystem: {
@@ -72,7 +40,7 @@ export default async function UserDetailPage({
           coupons: { orderBy: { createdAt: "desc" } },
           pointTransactions: {
             orderBy: { createdAt: "desc" },
-            take: 20,
+            take: 5,
           },
         },
       },
@@ -83,14 +51,19 @@ export default async function UserDetailPage({
         include: {
           services: { include: { service: true } },
           coupon: true,
+          plan: {
+            include: {
+              plan: true,
+            },
+          },
         },
         orderBy: { date: "desc" },
       },
     },
   });
 
-  user?.bookings.sort((a, b) =>
-    statusPriority[a.status] - statusPriority[b.status]
+  user?.bookings.sort(
+    (a, b) => statusPriority[a.status] - statusPriority[b.status],
   );
 
   if (!user) {

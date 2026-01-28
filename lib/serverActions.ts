@@ -1,19 +1,21 @@
-import "server-only";
+"use server";
 
 import prisma from "@/lib/prisma";
-import { Role } from "@/prisma/generated/prisma/enums";
 import {
   BarberProfile,
   BarberProfileToService,
   User,
 } from "@/prisma/generated/prisma/client";
+import { id } from "./types";
 
 export async function getUsers(role?: boolean): Promise<User[]> {
   if (role) {
     return await prisma.user.findMany({
-      where: { role: {
-        in: ["BARBER", "ADMIN"]
-      } },
+      where: {
+        role: {
+          in: ["BARBER", "ADMIN"],
+        },
+      },
     });
   }
 
@@ -29,7 +31,7 @@ export async function getBarberProfiles(): Promise<BarberProfile[]> {
 }
 
 export async function getBarberProfilesById(
-  id: id
+  id: id,
 ): Promise<BarberProfile | null> {
   return await prisma.barberProfile.findUnique({
     where: { id },
@@ -37,7 +39,7 @@ export async function getBarberProfilesById(
 }
 
 export async function getBarberProfilesByUserId(
-  userId: id
+  userId: id,
 ): Promise<BarberProfile | null> {
   return await prisma.barberProfile.findUnique({
     where: { userId },
@@ -51,7 +53,7 @@ export async function getBarberToServiceRelations(): Promise<
 }
 
 export async function getBarberToServiceRelationsByBarberId(
-  barberProfileId: id
+  barberProfileId: id,
 ): Promise<BarberProfileToService[]> {
   return await prisma.barberProfileToService.findMany({
     where: { barberProfileId },
@@ -59,9 +61,29 @@ export async function getBarberToServiceRelationsByBarberId(
 }
 
 export async function getBarberToServiceRelationsByServiceId(
-  serviceId: id
+  serviceId: id,
 ): Promise<BarberProfileToService[]> {
   return await prisma.barberProfileToService.findMany({
     where: { serviceId },
+  });
+}
+
+export async function getAllBookings() {
+  return await prisma.booking.findMany({
+    include: {
+      user: true,
+      barber: {
+        include: {
+          user: true,
+        },
+      },
+      plan: { include: { plan: true } },
+      coupon: true,
+      services: {
+        include: {
+          service: true,
+        },
+      },
+    },
   });
 }

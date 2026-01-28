@@ -1,8 +1,14 @@
-// app/barber/dashboard/page.tsx
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import BarberDashboard from "./ClientPage";
+import { Prisma } from "@/prisma/generated/prisma/client";
+
+type BarberProfile_ = Prisma.BarberProfileGetPayload<{
+  include: {
+    user: true
+  }
+}>
 
 export default async function BarberDashboardPage() {
   const session = await auth();
@@ -18,6 +24,8 @@ export default async function BarberDashboardPage() {
       barberProfile: true,
     },
   });
+
+  let barberProfiles: BarberProfile_[] = [];
 
   if (!user?.barberProfile) {
     return (
@@ -56,18 +64,44 @@ export default async function BarberDashboardPage() {
     },
   });
 
-  // Get all services
   const services = await prisma.service.findMany({
     orderBy: {
       name: "asc",
     },
   });
 
+  const plans = await prisma.plan.findMany({
+    include: {
+      planToService: {
+        include: {
+          service: true
+        }
+      },
+      clientPlans: {
+        include: {
+          user: true
+        }
+      }
+    }
+  });
+
+  if (user.role === "ADMIN") {
+    barberProfiles = await prisma.barberProfile.findMany({
+      include: {
+        user: true,
+      }
+    });
+  }
+
   return (
     <BarberDashboard
       barberId={user.barberProfile.id}
+      barberProfile={user}
+      barberProfiles={barberProfiles}
       users={users}
+      isAdmin={user.role === "ADMIN" || user.role === "SUPERADMIN"}
       services={services}
+      plans={plans}
     />
   );
 }

@@ -11,13 +11,23 @@ import { InteractiveHoverButtonC } from "@/components/custom/interactiveHoverBut
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { encodeBookingData } from "@/lib/bookingParams";
+import * as types from "@/lib/types";
+import { Service } from "@/prisma/generated/prisma/client";
 
-export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
+type bookingData = {
+  startedBooking: boolean;
+  selectedServices: [string, string][];
+  barberId: string | null;
+  appointmentDate: string | null | undefined;
+  appointmentTime: string | null | undefined;
+};
+
+export default function Home({ serviceData }: { serviceData: Service[] }) {
   const router = useRouter();
   const [wordSwitch, setWordSwitch] = useState(false);
   const [gridVisible, setGridVisible] = useState(false);
   const [selectedServices, setSelectedServices] = useState<[string, string][]>(
-    []
+    [],
   );
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
@@ -25,7 +35,7 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
   useEffect(() => {
     if (error === "no-services-selected") {
       toast.error(
-        "Ops, algo de errado aconteceu! Reconsidere voltar e escolher seus serviços novamente!"
+        "Ops, algo de errado aconteceu! Reconsidere voltar e escolher seus serviços novamente!",
       );
     }
   }, [error]);
@@ -72,7 +82,7 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     const servicesTab = document.getElementById("servicesTab");
@@ -89,7 +99,28 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
 
   return (
     <div>
-      <DockMenu />
+      {selectedServices.length === 0 && <DockMenu />}
+      <AnimatePresence>
+        {selectedServices.length > 0 && (
+          <motion.div className="fixed z-50 bottom-0 flex w-screen justify-center items-center">
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ type: "spring", bounce: 0.6, delay: 0.5 }}
+              className="flex mb-8 items-center justify-center align-middle mx-auto"
+            >
+              <InteractiveHoverButtonC
+                onClick={handleSubmit}
+                Arrow={ArrowRight}
+                className="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-md shadow-lg shadow-black/30 border-none mx-auto"
+              >
+                Finalizar Compra
+              </InteractiveHoverButtonC>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <div className="flex min-h-[115vh] items-center justify-center font-sans text-white relative">
         {/* Lens and background image as true background, with overflow-hidden and z-0 */}
         <div className="absolute inset-0 z-0 w-full h-[115vh] overflow-hidden">
@@ -112,7 +143,7 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
                   duration={1}
                   by="character"
                   once
-                  className="text-3xl font-bold z-2"
+                  className="text-2xl font-bold z-2"
                 >
                   Seja bem-vindo à
                 </TextAnimate>
@@ -140,7 +171,7 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
               className="mx-auto"
               initial={{ translateY: 130, opacity: 0 }}
               animate={{ translateY: 60, opacity: 1 }}
-              transition={{ delay: 3.5, duration: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
             >
               <a href="#servicesTab">
                 <InteractiveHoverButton className="bg-emerald-700 border-none">
@@ -172,25 +203,6 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
           >
             Escolha um ou mais serviços
           </motion.h2>
-          <AnimatePresence>
-            {selectedServices.length > 0 && (
-              <motion.div
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ type: "spring", bounce: 0.6, delay: 0.5 }}
-                className="mb-8"
-              >
-                <InteractiveHoverButtonC
-                  onClick={handleSubmit}
-                  Arrow={ArrowRight}
-                  className="mt-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded-md shadow-lg shadow-black/30 border-none"
-                >
-                  Finalizar Compra
-                </InteractiveHoverButtonC>
-              </motion.div>
-            )}
-          </AnimatePresence>
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-6xl"
             initial="hidden"
@@ -217,16 +229,18 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
               },
             }}
           >
-            {serviceData.map((service: ServiceProps) => (
+            {serviceData.map((service: Service) => (
               <motion.div
                 onClick={() => {
                   if (
                     selectedServices
                       .map((s) => s[1])
-                      .includes(service.keyword.substring(0, 2))
+                      .includes(service.keyword.substring(0, 2)) ||
+                    (service.keyword === "PE" &&
+                      selectedServices.map((s) => s[1]).includes("CR"))
                   ) {
                     setSelectedServices((prev) =>
-                      prev.filter((s) => s[0] !== service.id)
+                      prev.filter((s) => s[0] !== service.id),
                     );
                   } else {
                     setSelectedServices((prev) => [
@@ -246,7 +260,7 @@ export default function Home({ serviceData }: { serviceData: ServiceProps[] }) {
                     (selectedServices
                       .map((s) => s[1])
                       .includes(service.keyword.substring(0, 2)) ||
-                      (service.keyword == "PE" &&
+                      (service.keyword === "PE" &&
                         selectedServices.map((s) => s[1]).includes("CR"))) &&
                     !selectedServices.map((s) => s[0]).includes(service.id)
                       ? `bg-gray-900 filter grayscale`
