@@ -134,3 +134,8 @@ export type Plan = Prisma.PlanModel
  * 
  */
 export type PlanToService = Prisma.PlanToServiceModel
+/**
+ * Model PushSubscription
+ * 
+ */
+export type PushSubscription = Prisma.PushSubscriptionModel

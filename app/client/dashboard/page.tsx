@@ -3,11 +3,12 @@ import "server-only";
 import ClientPage from "./ClientPage";
 import { auth } from "@/auth";
 import { getUserBookings } from "@/lib/bookingActions";
-import { Prisma, BookingStatus } from "@/prisma/generated/prisma/client";
+import { BookingStatus } from "@/prisma/generated/prisma/client";
 import { Suspense } from "react";
 import { getAvailableCoupons, getUserPointSystem } from "@/lib/pointActions";
 
-import * as types from "@/lib/types"
+import * as types from "@/lib/types";
+import { sendPushToUser } from "@/lib/push";
 
 const statusPriority: Record<BookingStatus, number> = {
   [BookingStatus.CONFIRMED]: 1,

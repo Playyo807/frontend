@@ -9,6 +9,14 @@
 * 🟢 You can import this file directly.
 */
 
+export const NotificationRecipient = {
+  BARBER: 'BARBER',
+  USER: 'USER'
+} as const
+
+export type NotificationRecipient = (typeof NotificationRecipient)[keyof typeof NotificationRecipient]
+
+
 export const NotificationType = {
   COUPON_REDEEMED: 'COUPON_REDEEMED',
   POINTS_PENDING: 'POINTS_PENDING',

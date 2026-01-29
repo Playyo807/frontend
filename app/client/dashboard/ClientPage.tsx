@@ -63,6 +63,7 @@ import {
 } from "@/components/ui/select";
 import PlanManagementClient from "@/components/custom/planManagementClient";
 import * as types from "@/lib/types";
+import { enablePush } from "@/hooks/usePushNotifications";
 
 type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED" | "PAST";
 type TabType = "profile" | "bookings" | "points" | "plans";
@@ -115,6 +116,10 @@ export default function ClientPage({
       toast.success("Horário agendado com sucesso!");
     }
   }, [success]);
+
+  useEffect(() => {
+    enablePush();
+  }, []);
 
   // function handleDiscount(
   //   price: number,

@@ -30,7 +30,8 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "components/dataHandlers/backend/serviceData.ts",
-    "app/api/auth/[...nextauth].ts"
+    "app/api/auth/[...nextauth].ts",
+    "public/sw.js"
   ],
   "exclude": ["node_modules"]
 }

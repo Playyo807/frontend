@@ -6,12 +6,13 @@ import "./globals.css";
 import Providers from "./providers";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
+import { ServiceWorkerRegister } from "./registerSw";
 
 const poppins = Poppins({
-  weight: ['400', '700'], // Specify the weights you need
-  subsets: ['latin'], // Specify the subsets
-  display: 'swap', // Ensures text remains visible during font load
-  variable: '--font-poppins', // (Optional) for use with CSS variables
+  weight: ["400", "700"], // Specify the weights you need
+  subsets: ["latin"], // Specify the subsets
+  display: "swap", // Ensures text remains visible during font load
+  variable: "--font-poppins", // (Optional) for use with CSS variables
 });
 
 const geistSans = Geist({
@@ -48,6 +49,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Providers>
+            <ServiceWorkerRegister />
             {children}
             <Toaster position="top-center" richColors />
           </Providers>

@@ -3,6 +3,9 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { addMinutes } from "date-fns";
+import { sendPushToUser } from "./push";
+import { CreateNotificationSchema } from "./notifications/schema";
+import { NotificationRecipient } from "@/prisma/generated/prisma/enums";
 
 export async function getBarberNotifications(barberId: string) {
   const session = await auth();
@@ -19,9 +22,16 @@ export async function getBarberNotifications(barberId: string) {
     throw Error("Not allowed");
   }
 
+  const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+  const fromDate = new Date(Date.now() - THIRTY_DAYS);
+
   try {
     const notifications = await prisma.notification.findMany({
-      where: { barberId },
+      where: {
+        barberId,
+        recipientType: "BARBER",
+        createdAt: { gte: fromDate },
+      },
       include: {
         user: {
           select: { id: true, name: true, image: true },
@@ -37,7 +47,6 @@ export async function getBarberNotifications(barberId: string) {
         },
       },
       orderBy: { createdAt: "desc" },
-      take: 50,
     });
 
     return { notifications };
@@ -89,40 +98,71 @@ export async function markAllNotificationsRead(barberId: string) {
 }
 
 // Create notification
-export async function createNotification(
-  barberId: string,
-  type: string,
-  title: string,
-  message: string,
-  options?: {
-    userId?: string;
-    bookingId?: string;
-    couponId?: string;
-    transactionId?: string;
-    metadata?: any;
-  },
-) {
-  try {
-    const notification = await prisma.notification.create({
-      data: {
-        barberId,
-        type: type as any,
-        title,
-        message,
-        userId: options?.userId,
-        bookingId: options?.bookingId,
-        couponId: options?.couponId,
-        transactionId: options?.transactionId,
-        metadata: options?.metadata ? JSON.stringify(options.metadata) : null,
-      },
-    });
-    return { notification };
-  } catch (error) {
-    console.error("Error creating notification:", error);
-    throw error;
-  }
-}
+type CreateNotificationInput = {
+  type: string;
+  title: string;
+  message: string;
 
+  barberId: string;
+
+  userId?: string;
+  bookingId?: string;
+  couponId?: string;
+  transactionId?: string;
+  recipientType?: NotificationRecipient;
+
+  url: string;
+  metadata?: any;
+};
+
+export async function createNotification(input: CreateNotificationInput) {
+  const data = CreateNotificationSchema.parse(input);
+
+  const notification = await prisma.notification.create({
+    data: {
+      type: data.type,
+      recipientType: data.recipientType,
+
+      title: data.title,
+      message: data.message,
+
+      barberId: data.barberId,
+      userId: data.userId,
+
+      bookingId: data.bookingId,
+      couponId: data.couponId,
+      transactionId: data.transactionId,
+
+      metadata: data.metadata ? JSON.stringify(data.metadata) : null,
+    },
+  });
+
+  // 2️⃣ Decide who receives the push
+  let pushUserId: string | null = null;
+
+  if (data.recipientType === "USER" && data.userId) {
+    pushUserId = data.userId;
+  } else {
+    const barber = await prisma.barberProfile.findUnique({
+      where: { id: data.barberId },
+      select: { userId: true },
+    });
+
+    pushUserId = barber?.userId ?? null;
+  }
+
+  if (pushUserId) {
+    sendPushToUser(pushUserId, {
+      title: data.title,
+      message: data.message,
+      url: data.url,
+    }).catch((err) => {
+      console.error("Push failed:", err);
+    });
+  }
+
+  return { notification };
+}
 // Check and create pending points notifications
 export async function checkPendingPointsNotifications(barberId: string) {
   try {
@@ -173,16 +213,15 @@ export async function checkPendingPointsNotifications(barberId: string) {
         );
 
         if (!hasConfirmedTransaction) {
-          await createNotification(
-            barberId,
-            "POINTS_PENDING",
-            "Confirmar Pontos",
-            `${booking.user.name} completou um agendamento. Confirme os pontos ganhos.`,
-            {
-              userId: booking.userId,
-              bookingId: booking.id,
-            },
-          );
+          await createNotification({
+            type: "POINTS_PENDING",
+            title: "Confirmar Pontos",
+            barberId: barberId,
+            message: `${booking.user.name} completou um agendamento. Confirme os pontos ganhos.`,
+            userId: booking.userId,
+            bookingId: booking.id,
+            url: "/admin/barber/",
+          });
         }
       }
     }

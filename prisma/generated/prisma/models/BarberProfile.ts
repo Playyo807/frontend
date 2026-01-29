@@ -232,6 +232,7 @@ export type BarberProfileWhereInput = {
   plans?: Prisma.PlanListRelationFilter
   extraTimeDays?: Prisma.ExtraTimeDayListRelationFilter
   disabledTimes?: Prisma.DisabledTimeListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }
 
 export type BarberProfileOrderByWithRelationInput = {
@@ -249,6 +250,7 @@ export type BarberProfileOrderByWithRelationInput = {
   plans?: Prisma.PlanOrderByRelationAggregateInput
   extraTimeDays?: Prisma.ExtraTimeDayOrderByRelationAggregateInput
   disabledTimes?: Prisma.DisabledTimeOrderByRelationAggregateInput
+  notifications?: Prisma.NotificationOrderByRelationAggregateInput
   _relevance?: Prisma.BarberProfileOrderByRelevanceInput
 }
 
@@ -270,6 +272,7 @@ export type BarberProfileWhereUniqueInput = Prisma.AtLeast<{
   plans?: Prisma.PlanListRelationFilter
   extraTimeDays?: Prisma.ExtraTimeDayListRelationFilter
   disabledTimes?: Prisma.DisabledTimeListRelationFilter
+  notifications?: Prisma.NotificationListRelationFilter
 }, "id" | "userId">
 
 export type BarberProfileOrderByWithAggregationInput = {
@@ -312,6 +315,7 @@ export type BarberProfileCreateInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateInput = {
@@ -328,6 +332,7 @@ export type BarberProfileUncheckedCreateInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUpdateInput = {
@@ -344,6 +349,7 @@ export type BarberProfileUpdateInput = {
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateInput = {
@@ -360,6 +366,7 @@ export type BarberProfileUncheckedUpdateInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateManyInput = {
@@ -549,6 +556,22 @@ export type BarberProfileUpdateOneRequiredWithoutExtraTimeDaysNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BarberProfileUpdateToOneWithWhereWithoutExtraTimeDaysInput, Prisma.BarberProfileUpdateWithoutExtraTimeDaysInput>, Prisma.BarberProfileUncheckedUpdateWithoutExtraTimeDaysInput>
 }
 
+export type BarberProfileCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutNotificationsInput, Prisma.BarberProfileUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.BarberProfileWhereUniqueInput
+}
+
+export type BarberProfileUpdateOneWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutNotificationsInput, Prisma.BarberProfileUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.BarberProfileUpsertWithoutNotificationsInput
+  disconnect?: Prisma.BarberProfileWhereInput | boolean
+  delete?: Prisma.BarberProfileWhereInput | boolean
+  connect?: Prisma.BarberProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BarberProfileUpdateToOneWithWhereWithoutNotificationsInput, Prisma.BarberProfileUpdateWithoutNotificationsInput>, Prisma.BarberProfileUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type BarberProfileCreateNestedOneWithoutClientPlansInput = {
   create?: Prisma.XOR<Prisma.BarberProfileCreateWithoutClientPlansInput, Prisma.BarberProfileUncheckedCreateWithoutClientPlansInput>
   connectOrCreate?: Prisma.BarberProfileCreateOrConnectWithoutClientPlansInput
@@ -590,6 +613,7 @@ export type BarberProfileCreateWithoutUserInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutUserInput = {
@@ -605,6 +629,7 @@ export type BarberProfileUncheckedCreateWithoutUserInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutUserInput = {
@@ -636,6 +661,7 @@ export type BarberProfileUpdateWithoutUserInput = {
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutUserInput = {
@@ -651,6 +677,7 @@ export type BarberProfileUncheckedUpdateWithoutUserInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateWithoutServicesInput = {
@@ -666,6 +693,7 @@ export type BarberProfileCreateWithoutServicesInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutServicesInput = {
@@ -681,6 +709,7 @@ export type BarberProfileUncheckedCreateWithoutServicesInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutServicesInput = {
@@ -712,6 +741,7 @@ export type BarberProfileUpdateWithoutServicesInput = {
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutServicesInput = {
@@ -727,6 +757,7 @@ export type BarberProfileUncheckedUpdateWithoutServicesInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateWithoutBookingsInput = {
@@ -742,6 +773,7 @@ export type BarberProfileCreateWithoutBookingsInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutBookingsInput = {
@@ -757,6 +789,7 @@ export type BarberProfileUncheckedCreateWithoutBookingsInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutBookingsInput = {
@@ -788,6 +821,7 @@ export type BarberProfileUpdateWithoutBookingsInput = {
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutBookingsInput = {
@@ -803,6 +837,7 @@ export type BarberProfileUncheckedUpdateWithoutBookingsInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateWithoutDisabledDaysInput = {
@@ -818,6 +853,7 @@ export type BarberProfileCreateWithoutDisabledDaysInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutDisabledDaysInput = {
@@ -833,6 +869,7 @@ export type BarberProfileUncheckedCreateWithoutDisabledDaysInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutDisabledDaysInput = {
@@ -864,6 +901,7 @@ export type BarberProfileUpdateWithoutDisabledDaysInput = {
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutDisabledDaysInput = {
@@ -879,6 +917,7 @@ export type BarberProfileUncheckedUpdateWithoutDisabledDaysInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateWithoutDisabledTimesInput = {
@@ -894,6 +933,7 @@ export type BarberProfileCreateWithoutDisabledTimesInput = {
   clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutDisabledTimesInput = {
@@ -909,6 +949,7 @@ export type BarberProfileUncheckedCreateWithoutDisabledTimesInput = {
   clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutDisabledTimesInput = {
@@ -940,6 +981,7 @@ export type BarberProfileUpdateWithoutDisabledTimesInput = {
   clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutDisabledTimesInput = {
@@ -955,6 +997,7 @@ export type BarberProfileUncheckedUpdateWithoutDisabledTimesInput = {
   clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateWithoutExtraTimeDaysInput = {
@@ -970,6 +1013,7 @@ export type BarberProfileCreateWithoutExtraTimeDaysInput = {
   clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutExtraTimeDaysInput = {
@@ -985,6 +1029,7 @@ export type BarberProfileUncheckedCreateWithoutExtraTimeDaysInput = {
   clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutExtraTimeDaysInput = {
@@ -1016,6 +1061,7 @@ export type BarberProfileUpdateWithoutExtraTimeDaysInput = {
   clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutExtraTimeDaysInput = {
@@ -1030,6 +1076,87 @@ export type BarberProfileUncheckedUpdateWithoutExtraTimeDaysInput = {
   disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
   clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
+  disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
+}
+
+export type BarberProfileCreateWithoutNotificationsInput = {
+  id?: string
+  displayName: string
+  bio?: string | null
+  timeInterval?: number
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutBarberProfileInput
+  bookings?: Prisma.BookingCreateNestedManyWithoutBarberInput
+  services?: Prisma.BarberProfileToServiceCreateNestedManyWithoutBarberProfileInput
+  disabledDays?: Prisma.DisabledDayCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
+  extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
+  disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+}
+
+export type BarberProfileUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  userId: string
+  displayName: string
+  bio?: string | null
+  timeInterval?: number
+  createdAt?: Date | string
+  bookings?: Prisma.BookingUncheckedCreateNestedManyWithoutBarberInput
+  services?: Prisma.BarberProfileToServiceUncheckedCreateNestedManyWithoutBarberProfileInput
+  disabledDays?: Prisma.DisabledDayUncheckedCreateNestedManyWithoutBarberInput
+  clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
+  plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
+  extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
+  disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+}
+
+export type BarberProfileCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.BarberProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.BarberProfileCreateWithoutNotificationsInput, Prisma.BarberProfileUncheckedCreateWithoutNotificationsInput>
+}
+
+export type BarberProfileUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.BarberProfileUpdateWithoutNotificationsInput, Prisma.BarberProfileUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.BarberProfileCreateWithoutNotificationsInput, Prisma.BarberProfileUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.BarberProfileWhereInput
+}
+
+export type BarberProfileUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.BarberProfileWhereInput
+  data: Prisma.XOR<Prisma.BarberProfileUpdateWithoutNotificationsInput, Prisma.BarberProfileUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type BarberProfileUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeInterval?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutBarberProfileNestedInput
+  bookings?: Prisma.BookingUpdateManyWithoutBarberNestedInput
+  services?: Prisma.BarberProfileToServiceUpdateManyWithoutBarberProfileNestedInput
+  disabledDays?: Prisma.DisabledDayUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
+  extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
+  disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+}
+
+export type BarberProfileUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.StringFieldUpdateOperationsInput | string
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timeInterval?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  bookings?: Prisma.BookingUncheckedUpdateManyWithoutBarberNestedInput
+  services?: Prisma.BarberProfileToServiceUncheckedUpdateManyWithoutBarberProfileNestedInput
+  disabledDays?: Prisma.DisabledDayUncheckedUpdateManyWithoutBarberNestedInput
+  clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
+  plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
+  extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
 }
 
@@ -1046,6 +1173,7 @@ export type BarberProfileCreateWithoutClientPlansInput = {
   plans?: Prisma.PlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutClientPlansInput = {
@@ -1061,6 +1189,7 @@ export type BarberProfileUncheckedCreateWithoutClientPlansInput = {
   plans?: Prisma.PlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutClientPlansInput = {
@@ -1092,6 +1221,7 @@ export type BarberProfileUpdateWithoutClientPlansInput = {
   plans?: Prisma.PlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutClientPlansInput = {
@@ -1107,6 +1237,7 @@ export type BarberProfileUncheckedUpdateWithoutClientPlansInput = {
   plans?: Prisma.PlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileCreateWithoutPlansInput = {
@@ -1122,6 +1253,7 @@ export type BarberProfileCreateWithoutPlansInput = {
   clientPlans?: Prisma.ClientPlanCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileUncheckedCreateWithoutPlansInput = {
@@ -1137,6 +1269,7 @@ export type BarberProfileUncheckedCreateWithoutPlansInput = {
   clientPlans?: Prisma.ClientPlanUncheckedCreateNestedManyWithoutBarberInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedCreateNestedManyWithoutBarberInput
   disabledTimes?: Prisma.DisabledTimeUncheckedCreateNestedManyWithoutBarberInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutBarberInput
 }
 
 export type BarberProfileCreateOrConnectWithoutPlansInput = {
@@ -1168,6 +1301,7 @@ export type BarberProfileUpdateWithoutPlansInput = {
   clientPlans?: Prisma.ClientPlanUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutBarberNestedInput
 }
 
 export type BarberProfileUncheckedUpdateWithoutPlansInput = {
@@ -1183,6 +1317,7 @@ export type BarberProfileUncheckedUpdateWithoutPlansInput = {
   clientPlans?: Prisma.ClientPlanUncheckedUpdateManyWithoutBarberNestedInput
   extraTimeDays?: Prisma.ExtraTimeDayUncheckedUpdateManyWithoutBarberNestedInput
   disabledTimes?: Prisma.DisabledTimeUncheckedUpdateManyWithoutBarberNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutBarberNestedInput
 }
 
 
@@ -1198,6 +1333,7 @@ export type BarberProfileCountOutputType = {
   plans: number
   extraTimeDays: number
   disabledTimes: number
+  notifications: number
 }
 
 export type BarberProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1208,6 +1344,7 @@ export type BarberProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Ext
   plans?: boolean | BarberProfileCountOutputTypeCountPlansArgs
   extraTimeDays?: boolean | BarberProfileCountOutputTypeCountExtraTimeDaysArgs
   disabledTimes?: boolean | BarberProfileCountOutputTypeCountDisabledTimesArgs
+  notifications?: boolean | BarberProfileCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -1269,6 +1406,13 @@ export type BarberProfileCountOutputTypeCountDisabledTimesArgs<ExtArgs extends r
   where?: Prisma.DisabledTimeWhereInput
 }
 
+/**
+ * BarberProfileCountOutputType without action
+ */
+export type BarberProfileCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationWhereInput
+}
+
 
 export type BarberProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1285,6 +1429,7 @@ export type BarberProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   plans?: boolean | Prisma.BarberProfile$plansArgs<ExtArgs>
   extraTimeDays?: boolean | Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs>
   disabledTimes?: boolean | Prisma.BarberProfile$disabledTimesArgs<ExtArgs>
+  notifications?: boolean | Prisma.BarberProfile$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.BarberProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["barberProfile"]>
 
@@ -1309,6 +1454,7 @@ export type BarberProfileInclude<ExtArgs extends runtime.Types.Extensions.Intern
   plans?: boolean | Prisma.BarberProfile$plansArgs<ExtArgs>
   extraTimeDays?: boolean | Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs>
   disabledTimes?: boolean | Prisma.BarberProfile$disabledTimesArgs<ExtArgs>
+  notifications?: boolean | Prisma.BarberProfile$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.BarberProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1323,6 +1469,7 @@ export type $BarberProfilePayload<ExtArgs extends runtime.Types.Extensions.Inter
     plans: Prisma.$PlanPayload<ExtArgs>[]
     extraTimeDays: Prisma.$ExtraTimeDayPayload<ExtArgs>[]
     disabledTimes: Prisma.$DisabledTimePayload<ExtArgs>[]
+    notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1679,6 +1826,7 @@ export interface Prisma__BarberProfileClient<T, Null = never, ExtArgs extends ru
   plans<T extends Prisma.BarberProfile$plansArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$plansArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   extraTimeDays<T extends Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$extraTimeDaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExtraTimeDayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   disabledTimes<T extends Prisma.BarberProfile$disabledTimesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$disabledTimesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledTimePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.BarberProfile$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BarberProfile$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2222,6 +2370,30 @@ export type BarberProfile$disabledTimesArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.DisabledTimeScalarFieldEnum | Prisma.DisabledTimeScalarFieldEnum[]
+}
+
+/**
+ * BarberProfile.notifications
+ */
+export type BarberProfile$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Notification
+   */
+  select?: Prisma.NotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Notification
+   */
+  omit?: Prisma.NotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationInclude<ExtArgs> | null
+  where?: Prisma.NotificationWhereInput
+  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

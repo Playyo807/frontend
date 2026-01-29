@@ -1,7 +1,14 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { startOfDay, endOfDay, addMinutes, isBefore, isAfter } from "date-fns";
+import {
+  startOfDay,
+  endOfDay,
+  addMinutes,
+  isBefore,
+  isAfter,
+  format,
+} from "date-fns";
 import { auth } from "@/auth"; // Auth.js v5
 import {
   DisabledDay,
@@ -10,8 +17,8 @@ import {
 } from "@/prisma/generated/prisma/client";
 import { addPointsForBooking } from "./pointActions";
 import { getBarberBookingsForDayType_ } from "./types";
-import * as types from "@/lib/types"
-
+import * as types from "@/lib/types";
+import { createNotification } from "./notificationActions";
 
 function handleDiscount(
   price: number,
@@ -265,28 +272,30 @@ export async function getBarberSlots(
     const now = new Date();
 
     // Mark slots as available/unavailable
-    const slotsWithAvailability: types.TimeSlotResponse[] = slots.map((slot) => {
-      const isPast = isBefore(slot.start, now);
+    const slotsWithAvailability: types.TimeSlotResponse[] = slots.map(
+      (slot) => {
+        const isPast = isBefore(slot.start, now);
 
-      const isBooked = bookings.some((booking) => {
-        const bookingStart = new Date(booking.date);
-        const bookingEnd = addMinutes(bookingStart, booking.totalDuration);
+        const isBooked = bookings.some((booking) => {
+          const bookingStart = new Date(booking.date);
+          const bookingEnd = addMinutes(bookingStart, booking.totalDuration);
 
-        return (
-          (slot.start >= bookingStart && slot.start < bookingEnd) ||
-          (slot.end > bookingStart && slot.end <= bookingEnd) ||
-          (slot.start <= bookingStart && slot.end >= bookingEnd)
-        );
-      });
+          return (
+            (slot.start >= bookingStart && slot.start < bookingEnd) ||
+            (slot.end > bookingStart && slot.end <= bookingEnd) ||
+            (slot.start <= bookingStart && slot.end >= bookingEnd)
+          );
+        });
 
-      return {
-        start: slot.start.toISOString(),
-        end: slot.end.toISOString(),
-        isAvailable: !isPast && !isBooked,
-        isPast,
-        isBooked,
-      };
-    });
+        return {
+          start: slot.start.toISOString(),
+          end: slot.end.toISOString(),
+          isAvailable: !isPast && !isBooked,
+          isPast,
+          isBooked,
+        };
+      },
+    );
 
     return { slots: slotsWithAvailability };
   } catch (error) {
@@ -568,6 +577,18 @@ export async function createBooking(
     });
 
     addPointsForBooking(booking.id, activePlan !== null);
+
+    createNotification({
+      type: "BOOKING_CREATED",
+      title: "Agendamento confirmado ✂️",
+      barberId,
+      message: `Horário marcado para ${format(booking.date, "dd/MM 'às' HH:mm")}.`,
+      recipientType: "USER",
+      userId: user.id,
+      bookingId: booking.id,
+      couponId,
+      url: "/client/dashboard/",
+    });
 
     return {
       success: true,

@@ -69,7 +69,8 @@ export const ModelName = {
   Notification: 'Notification',
   ClientPlan: 'ClientPlan',
   Plan: 'Plan',
-  PlanToService: 'PlanToService'
+  PlanToService: 'PlanToService',
+  PushSubscription: 'PushSubscription'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -277,6 +278,7 @@ export const NotificationScalarFieldEnum = {
   title: 'title',
   message: 'message',
   read: 'read',
+  recipientType: 'recipientType',
   barberId: 'barberId',
   userId: 'userId',
   bookingId: 'bookingId',
@@ -324,6 +326,19 @@ export const PlanToServiceScalarFieldEnum = {
 } as const
 
 export type PlanToServiceScalarFieldEnum = (typeof PlanToServiceScalarFieldEnum)[keyof typeof PlanToServiceScalarFieldEnum]
+
+
+export const PushSubscriptionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type PushSubscriptionScalarFieldEnum = (typeof PushSubscriptionScalarFieldEnum)[keyof typeof PushSubscriptionScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -528,4 +543,16 @@ export const PlanToServiceOrderByRelevanceFieldEnum = {
 } as const
 
 export type PlanToServiceOrderByRelevanceFieldEnum = (typeof PlanToServiceOrderByRelevanceFieldEnum)[keyof typeof PlanToServiceOrderByRelevanceFieldEnum]
+
+
+export const PushSubscriptionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  endpoint: 'endpoint',
+  p256dh: 'p256dh',
+  auth: 'auth',
+  userAgent: 'userAgent'
+} as const
+
+export type PushSubscriptionOrderByRelevanceFieldEnum = (typeof PushSubscriptionOrderByRelevanceFieldEnum)[keyof typeof PushSubscriptionOrderByRelevanceFieldEnum]
 

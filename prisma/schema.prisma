@@ -42,6 +42,7 @@ model BarberProfile {
   plans         Plan[]
   extraTimeDays ExtraTimeDay[]
   disabledTimes DisabledTime[]
+  notifications Notification[]
 }
 
 model Account {
@@ -222,28 +223,36 @@ model PointTransaction {
 }
 
 model Notification {
-  id            String             @id @default(cuid())
+  id            String                 @id @default(cuid())
   type          NotificationType
   title         String
   message       String
-  read          Boolean            @default(false)
-  barberId      String
+  read          Boolean                @default(false)
+
+  recipientType NotificationRecipient  @default(BARBER)
+  barberId      String?
   userId        String?
   bookingId     String?
   couponId      String?
   transactionId String?
-  metadata      String?            @db.Text
-  createdAt     DateTime           @default(now())
+  metadata      String?                @db.Text
+  createdAt     DateTime               @default(now())
 
-  user          User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  booking       Booking?          @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-  coupon        Coupon?           @relation(fields: [couponId], references: [id], onDelete: Cascade)
-  transaction   PointTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  user          User?                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking       Booking?              @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  coupon        Coupon?               @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  transaction   PointTransaction?     @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  barber        BarberProfile?        @relation(fields: [barberId], references: [id], onDelete: Cascade)
 
   @@index([barberId])
   @@index([userId])
   @@index([bookingId])
   @@index([read])
+}
+
+enum NotificationRecipient {
+  BARBER
+  USER
 }
 
 enum NotificationType {
