@@ -63,7 +63,9 @@ import {
 } from "@/components/ui/select";
 import PlanManagementClient from "@/components/custom/planManagementClient";
 import * as types from "@/lib/types";
-import { enablePush } from "@/hooks/usePushNotifications";
+import NotificationToggle from "@/components/custom/notificationToggle";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+import ClientNotificationPopover from "@/components/custom/clientNotificationCenterPopover";
 
 type BookingStatus = "ALL" | "CONFIRMED" | "PENDING" | "CANCELED" | "PAST";
 type TabType = "profile" | "bookings" | "points" | "plans";
@@ -79,6 +81,8 @@ export default function ClientPage({
   plan: any | null;
   availableCoupons: any[];
 }) {
+  const { isSupported, isSubscribed, subscribeToPush, unsubscribeFromPush } =
+    usePushNotifications();
   const searchParams = useSearchParams();
   const phoneUtil = new PhoneNumberUtil();
   const { data: session, update } = useSession();
@@ -118,7 +122,14 @@ export default function ClientPage({
   }, [success]);
 
   useEffect(() => {
-    enablePush();
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.log("Notification permission granted.");
+        subscribeToPush();
+      } else {
+        console.log("Notification permission denied.");
+      }
+    });
   }, []);
 
   // function handleDiscount(
@@ -271,6 +282,7 @@ export default function ClientPage({
 
   return (
     <div className="min-h-screen bg-slate-900">
+      {" "}
       <AnimatePresence>
         {alert && (
           <motion.div
@@ -290,7 +302,6 @@ export default function ClientPage({
           </motion.div>
         )}
       </AnimatePresence>
-
       {/* Phone Input Dialog */}
       <Dialog open={phoneModal}>
         <DialogContent>
@@ -350,7 +361,6 @@ export default function ClientPage({
           </DialogHeader>
         </DialogContent>
       </Dialog>
-
       {/* Barber Profile Dialog */}
       <Dialog open={barberProfileOpen} onOpenChange={setBarberProfileOpen}>
         <DialogContent className="sm:max-w-md">
@@ -399,7 +409,6 @@ export default function ClientPage({
           )}
         </DialogContent>
       </Dialog>
-
       {/* Cancel Booking Dialog */}
       <Dialog open={cancelDialogOpen} onOpenChange={setCancelDialogOpen}>
         <DialogContent className="sm:max-w-md">
@@ -428,7 +437,6 @@ export default function ClientPage({
           </div>
         </DialogContent>
       </Dialog>
-
       <main className="font-poppins">
         {/* Header */}
         <header className="bg-black w-full p-4 flex flex-row align-middle justify-between sticky top-0 z-40">
@@ -450,6 +458,7 @@ export default function ClientPage({
             <h1 className="text-lg md:text-xl font-semibold hidden sm:block">
               {session?.user?.name}
             </h1>
+            <ClientNotificationPopover />
           </div>
           <div className="flex flex-row align-middle items-center">
             <a

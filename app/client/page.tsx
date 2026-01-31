@@ -1,7 +1,6 @@
 import "server-only";
 import ClientPage from "./ClientPage";
 import dotenv from "dotenv";
-import { auth } from "../../auth";
 import prisma from "@/lib/prisma";
 import { Suspense } from "react";
 dotenv.config();

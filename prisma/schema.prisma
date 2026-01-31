@@ -315,14 +315,14 @@ model PlanToService {
 
 model PushSubscription {
   id        String    @id @default(cuid())
-  userId    String
+  userId    String?
   endpoint  String    @db.VarChar(768)
   p256dh    String    @db.Text
   auth      String    @db.Text
   userAgent String?
   createdAt DateTime  @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([endpoint])
   @@index([userId])

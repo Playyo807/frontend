@@ -7,7 +7,7 @@ import { createNotification } from "./notificationActions";
 
 export async function getUserBookingsForBarber(
   userId: string,
-  barberId: string
+  barberId: string,
 ) {
   try {
     const session = await auth();
@@ -42,7 +42,7 @@ export async function editBooking(
     date?: string;
     serviceIds?: string[];
     status?: string;
-  }
+  },
 ) {
   try {
     const session = await auth();
@@ -133,13 +133,15 @@ export async function editBooking(
     });
 
     // Create notification
-    await createNotification(
+    await createNotification({
       barberId,
-      "BOOKING_EDITED",
-      "Agendamento Editado",
-      `Agendamento de ${booking.user.name} foi editado`,
-      { userId: booking.userId, bookingId }
-    );
+      type: "BOOKING_EDITED",
+      title: "Agendamento Editado",
+      message: `Agendamento de ${booking.user.name} foi editado`,
+      userId: booking.userId,
+      bookingId,
+      url: "/admin/barber",
+    });
 
     return { success: true, booking: updated };
   } catch (error) {

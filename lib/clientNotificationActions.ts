@@ -25,15 +25,15 @@ export async function getUserNotifications() {
     where: {
       userId: user.id,
       recipientType: "USER",
-      createdAt: { gte: fromDate },
+      createdAt: {
+        gte: fromDate,
+      },
     },
     include: {
       barber: {
         select: {
           id: true,
           displayName: true,
-        },
-        include: {
           user: {
             select: {
               image: true,

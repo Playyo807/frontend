@@ -36,8 +36,6 @@ type Notification = Prisma.NotificationGetPayload<{
       select: {
         id: true;
         displayName: true;
-      };
-      include: {
         user: {
           select: {
             image: true;
