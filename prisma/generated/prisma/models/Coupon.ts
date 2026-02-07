@@ -257,7 +257,6 @@ export type CouponOrderByWithRelationInput = {
   pointSystem?: Prisma.PointSystemOrderByWithRelationInput
   booking?: Prisma.BookingOrderByWithRelationInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
-  _relevance?: Prisma.CouponOrderByRelevanceInput
 }
 
 export type CouponWhereUniqueInput = Prisma.AtLeast<{
@@ -399,12 +398,6 @@ export type CouponListRelationFilter = {
 
 export type CouponOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type CouponOrderByRelevanceInput = {
-  fields: Prisma.CouponOrderByRelevanceFieldEnum | Prisma.CouponOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type CouponCountOrderByAggregateInput = {
@@ -812,7 +805,31 @@ export type CouponSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   _count?: boolean | Prisma.CouponCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["coupon"]>
 
+export type CouponSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  pointSystemId?: boolean
+  discountPercent?: boolean
+  isUsed?: boolean
+  usedAt?: boolean
+  bookingId?: boolean
+  createdAt?: boolean
+  expiresAt?: boolean
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+  booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
+}, ExtArgs["result"]["coupon"]>
 
+export type CouponSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  pointSystemId?: boolean
+  discountPercent?: boolean
+  isUsed?: boolean
+  usedAt?: boolean
+  bookingId?: boolean
+  createdAt?: boolean
+  expiresAt?: boolean
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+  booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
+}, ExtArgs["result"]["coupon"]>
 
 export type CouponSelectScalar = {
   id?: boolean
@@ -831,6 +848,14 @@ export type CouponInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
   notifications?: boolean | Prisma.Coupon$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.CouponCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type CouponIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+  booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
+}
+export type CouponIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+  booking?: boolean | Prisma.Coupon$bookingArgs<ExtArgs>
 }
 
 export type $CouponPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -967,6 +992,30 @@ export interface CouponDelegate<ExtArgs extends runtime.Types.Extensions.Interna
   createMany<T extends CouponCreateManyArgs>(args?: Prisma.SelectSubset<T, CouponCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many Coupons and returns the data saved in the database.
+   * @param {CouponCreateManyAndReturnArgs} args - Arguments to create many Coupons.
+   * @example
+   * // Create many Coupons
+   * const coupon = await prisma.coupon.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many Coupons and only return the `id`
+   * const couponWithIdOnly = await prisma.coupon.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends CouponCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, CouponCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a Coupon.
    * @param {CouponDeleteArgs} args - Arguments to delete one Coupon.
    * @example
@@ -1029,6 +1078,36 @@ export interface CouponDelegate<ExtArgs extends runtime.Types.Extensions.Interna
    * 
    */
   updateMany<T extends CouponUpdateManyArgs>(args: Prisma.SelectSubset<T, CouponUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more Coupons and returns the data updated in the database.
+   * @param {CouponUpdateManyAndReturnArgs} args - Arguments to update many Coupons.
+   * @example
+   * // Update many Coupons
+   * const coupon = await prisma.coupon.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more Coupons and only return the `id`
+   * const couponWithIdOnly = await prisma.coupon.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends CouponUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, CouponUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CouponPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one Coupon.
@@ -1462,6 +1541,29 @@ export type CouponCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
 }
 
 /**
+ * Coupon createManyAndReturn
+ */
+export type CouponCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Coupon
+   */
+  select?: Prisma.CouponSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Coupon
+   */
+  omit?: Prisma.CouponOmit<ExtArgs> | null
+  /**
+   * The data used to create many Coupons.
+   */
+  data: Prisma.CouponCreateManyInput | Prisma.CouponCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * Coupon update
  */
 export type CouponUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1503,6 +1605,36 @@ export type CouponUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Limit how many Coupons to update.
    */
   limit?: number
+}
+
+/**
+ * Coupon updateManyAndReturn
+ */
+export type CouponUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Coupon
+   */
+  select?: Prisma.CouponSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the Coupon
+   */
+  omit?: Prisma.CouponOmit<ExtArgs> | null
+  /**
+   * The data used to update Coupons.
+   */
+  data: Prisma.XOR<Prisma.CouponUpdateManyMutationInput, Prisma.CouponUncheckedUpdateManyInput>
+  /**
+   * Filter which Coupons to update
+   */
+  where?: Prisma.CouponWhereInput
+  /**
+   * Limit how many Coupons to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CouponIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

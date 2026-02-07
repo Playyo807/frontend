@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "./generated/prisma"
+  engineType = "client" 
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
+  relationMode = "foreignKeys"
 }
 
 model User {
@@ -61,7 +63,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId], map: "Account_userId_fkey")
+  @@index([userId])
 }
 
 model Session {
@@ -71,7 +73,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId], map: "Session_userId_fkey")
+  @@index([userId])
 }
 
 model VerificationToken {
@@ -111,7 +113,7 @@ model BookingService {
   service   Service @relation(fields: [serviceId], references: [id])
 
   @@id([bookingId, serviceId])
-  @@index([serviceId], map: "BookingService_serviceId_fkey")
+  @@index([serviceId])
 }
 
 model Booking {

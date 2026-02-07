@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import { getAvailableCoupons, getUserPointSystem } from "@/lib/pointActions";
 
 import * as types from "@/lib/types";
-import { sendPushToUser } from "@/lib/push";
 
 const statusPriority: Record<BookingStatus, number> = {
   [BookingStatus.CONFIRMED]: 1,

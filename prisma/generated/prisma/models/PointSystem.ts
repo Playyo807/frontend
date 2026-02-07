@@ -269,7 +269,6 @@ export type PointSystemOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   coupons?: Prisma.CouponOrderByRelationAggregateInput
   pointTransactions?: Prisma.PointTransactionOrderByRelationAggregateInput
-  _relevance?: Prisma.PointSystemOrderByRelevanceInput
 }
 
 export type PointSystemWhereUniqueInput = Prisma.AtLeast<{
@@ -406,12 +405,6 @@ export type PointSystemUncheckedUpdateManyInput = {
 export type PointSystemNullableScalarRelationFilter = {
   is?: Prisma.PointSystemWhereInput | null
   isNot?: Prisma.PointSystemWhereInput | null
-}
-
-export type PointSystemOrderByRelevanceInput = {
-  fields: Prisma.PointSystemOrderByRelevanceFieldEnum | Prisma.PointSystemOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type PointSystemCountOrderByAggregateInput = {
@@ -773,7 +766,29 @@ export type PointSystemSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   _count?: boolean | Prisma.PointSystemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pointSystem"]>
 
+export type PointSystemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  currentPoints?: boolean
+  pointsPerService?: boolean
+  pointsNeededForReward?: boolean
+  discountPercentage?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["pointSystem"]>
 
+export type PointSystemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  currentPoints?: boolean
+  pointsPerService?: boolean
+  pointsNeededForReward?: boolean
+  discountPercentage?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["pointSystem"]>
 
 export type PointSystemSelectScalar = {
   id?: boolean
@@ -792,6 +807,12 @@ export type PointSystemInclude<ExtArgs extends runtime.Types.Extensions.Internal
   coupons?: boolean | Prisma.PointSystem$couponsArgs<ExtArgs>
   pointTransactions?: boolean | Prisma.PointSystem$pointTransactionsArgs<ExtArgs>
   _count?: boolean | Prisma.PointSystemCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type PointSystemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type PointSystemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $PointSystemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -928,6 +949,30 @@ export interface PointSystemDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends PointSystemCreateManyArgs>(args?: Prisma.SelectSubset<T, PointSystemCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many PointSystems and returns the data saved in the database.
+   * @param {PointSystemCreateManyAndReturnArgs} args - Arguments to create many PointSystems.
+   * @example
+   * // Create many PointSystems
+   * const pointSystem = await prisma.pointSystem.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many PointSystems and only return the `id`
+   * const pointSystemWithIdOnly = await prisma.pointSystem.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends PointSystemCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PointSystemCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointSystemPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a PointSystem.
    * @param {PointSystemDeleteArgs} args - Arguments to delete one PointSystem.
    * @example
@@ -990,6 +1035,36 @@ export interface PointSystemDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends PointSystemUpdateManyArgs>(args: Prisma.SelectSubset<T, PointSystemUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more PointSystems and returns the data updated in the database.
+   * @param {PointSystemUpdateManyAndReturnArgs} args - Arguments to update many PointSystems.
+   * @example
+   * // Update many PointSystems
+   * const pointSystem = await prisma.pointSystem.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more PointSystems and only return the `id`
+   * const pointSystemWithIdOnly = await prisma.pointSystem.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends PointSystemUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PointSystemUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointSystemPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one PointSystem.
@@ -1423,6 +1498,29 @@ export type PointSystemCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * PointSystem createManyAndReturn
+ */
+export type PointSystemCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointSystem
+   */
+  select?: Prisma.PointSystemSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PointSystem
+   */
+  omit?: Prisma.PointSystemOmit<ExtArgs> | null
+  /**
+   * The data used to create many PointSystems.
+   */
+  data: Prisma.PointSystemCreateManyInput | Prisma.PointSystemCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PointSystemIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * PointSystem update
  */
 export type PointSystemUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1464,6 +1562,36 @@ export type PointSystemUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many PointSystems to update.
    */
   limit?: number
+}
+
+/**
+ * PointSystem updateManyAndReturn
+ */
+export type PointSystemUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointSystem
+   */
+  select?: Prisma.PointSystemSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PointSystem
+   */
+  omit?: Prisma.PointSystemOmit<ExtArgs> | null
+  /**
+   * The data used to update PointSystems.
+   */
+  data: Prisma.XOR<Prisma.PointSystemUpdateManyMutationInput, Prisma.PointSystemUncheckedUpdateManyInput>
+  /**
+   * Filter which PointSystems to update
+   */
+  where?: Prisma.PointSystemWhereInput
+  /**
+   * Limit how many PointSystems to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PointSystemIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

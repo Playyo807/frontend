@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `Plan` ADD COLUMN `keyword` VARCHAR(191) NOT NULL DEFAULT 'BRZ';

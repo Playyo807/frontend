@@ -167,7 +167,6 @@ export type BookingServiceOrderByWithRelationInput = {
   serviceId?: Prisma.SortOrder
   booking?: Prisma.BookingOrderByWithRelationInput
   service?: Prisma.ServiceOrderByWithRelationInput
-  _relevance?: Prisma.BookingServiceOrderByRelevanceInput
 }
 
 export type BookingServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -239,12 +238,6 @@ export type BookingServiceListRelationFilter = {
 
 export type BookingServiceOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type BookingServiceOrderByRelevanceInput = {
-  fields: Prisma.BookingServiceOrderByRelevanceFieldEnum | Prisma.BookingServiceOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type BookingServiceBookingIdServiceIdCompoundUniqueInput = {
@@ -468,7 +461,19 @@ export type BookingServiceSelect<ExtArgs extends runtime.Types.Extensions.Intern
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["bookingService"]>
 
+export type BookingServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  bookingId?: boolean
+  serviceId?: boolean
+  booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["bookingService"]>
 
+export type BookingServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  bookingId?: boolean
+  serviceId?: boolean
+  booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["bookingService"]>
 
 export type BookingServiceSelectScalar = {
   bookingId?: boolean
@@ -477,6 +482,14 @@ export type BookingServiceSelectScalar = {
 
 export type BookingServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"bookingId" | "serviceId", ExtArgs["result"]["bookingService"]>
 export type BookingServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}
+export type BookingServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}
+export type BookingServiceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   booking?: boolean | Prisma.BookingDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }
@@ -608,6 +621,30 @@ export interface BookingServiceDelegate<ExtArgs extends runtime.Types.Extensions
   createMany<T extends BookingServiceCreateManyArgs>(args?: Prisma.SelectSubset<T, BookingServiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many BookingServices and returns the data saved in the database.
+   * @param {BookingServiceCreateManyAndReturnArgs} args - Arguments to create many BookingServices.
+   * @example
+   * // Create many BookingServices
+   * const bookingService = await prisma.bookingService.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many BookingServices and only return the `bookingId`
+   * const bookingServiceWithBookingIdOnly = await prisma.bookingService.createManyAndReturn({
+   *   select: { bookingId: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends BookingServiceCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BookingServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a BookingService.
    * @param {BookingServiceDeleteArgs} args - Arguments to delete one BookingService.
    * @example
@@ -670,6 +707,36 @@ export interface BookingServiceDelegate<ExtArgs extends runtime.Types.Extensions
    * 
    */
   updateMany<T extends BookingServiceUpdateManyArgs>(args: Prisma.SelectSubset<T, BookingServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more BookingServices and returns the data updated in the database.
+   * @param {BookingServiceUpdateManyAndReturnArgs} args - Arguments to update many BookingServices.
+   * @example
+   * // Update many BookingServices
+   * const bookingService = await prisma.bookingService.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more BookingServices and only return the `bookingId`
+   * const bookingServiceWithBookingIdOnly = await prisma.bookingService.updateManyAndReturn({
+   *   select: { bookingId: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends BookingServiceUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BookingServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BookingServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one BookingService.
@@ -1096,6 +1163,29 @@ export type BookingServiceCreateManyArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
+ * BookingService createManyAndReturn
+ */
+export type BookingServiceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BookingService
+   */
+  select?: Prisma.BookingServiceSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BookingService
+   */
+  omit?: Prisma.BookingServiceOmit<ExtArgs> | null
+  /**
+   * The data used to create many BookingServices.
+   */
+  data: Prisma.BookingServiceCreateManyInput | Prisma.BookingServiceCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingServiceIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * BookingService update
  */
 export type BookingServiceUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1137,6 +1227,36 @@ export type BookingServiceUpdateManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many BookingServices to update.
    */
   limit?: number
+}
+
+/**
+ * BookingService updateManyAndReturn
+ */
+export type BookingServiceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BookingService
+   */
+  select?: Prisma.BookingServiceSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BookingService
+   */
+  omit?: Prisma.BookingServiceOmit<ExtArgs> | null
+  /**
+   * The data used to update BookingServices.
+   */
+  data: Prisma.XOR<Prisma.BookingServiceUpdateManyMutationInput, Prisma.BookingServiceUncheckedUpdateManyInput>
+  /**
+   * Filter which BookingServices to update
+   */
+  where?: Prisma.BookingServiceWhereInput
+  /**
+   * Limit how many BookingServices to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BookingServiceIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

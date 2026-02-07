@@ -192,7 +192,6 @@ export type DisabledDayOrderByWithRelationInput = {
   reason?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   barber?: Prisma.BarberProfileOrderByWithRelationInput
-  _relevance?: Prisma.DisabledDayOrderByRelevanceInput
 }
 
 export type DisabledDayWhereUniqueInput = Prisma.AtLeast<{
@@ -293,12 +292,6 @@ export type DisabledDayListRelationFilter = {
 
 export type DisabledDayOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type DisabledDayOrderByRelevanceInput = {
-  fields: Prisma.DisabledDayOrderByRelevanceFieldEnum | Prisma.DisabledDayOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type DisabledDayBarberIdDateCompoundUniqueInput = {
@@ -462,7 +455,23 @@ export type DisabledDaySelect<ExtArgs extends runtime.Types.Extensions.InternalA
   barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["disabledDay"]>
 
+export type DisabledDaySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  barberId?: boolean
+  date?: boolean
+  reason?: boolean
+  createdAt?: boolean
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["disabledDay"]>
 
+export type DisabledDaySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  barberId?: boolean
+  date?: boolean
+  reason?: boolean
+  createdAt?: boolean
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["disabledDay"]>
 
 export type DisabledDaySelectScalar = {
   id?: boolean
@@ -474,6 +483,12 @@ export type DisabledDaySelectScalar = {
 
 export type DisabledDayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "barberId" | "date" | "reason" | "createdAt", ExtArgs["result"]["disabledDay"]>
 export type DisabledDayInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}
+export type DisabledDayIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}
+export type DisabledDayIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
 }
 
@@ -606,6 +621,30 @@ export interface DisabledDayDelegate<ExtArgs extends runtime.Types.Extensions.In
   createMany<T extends DisabledDayCreateManyArgs>(args?: Prisma.SelectSubset<T, DisabledDayCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many DisabledDays and returns the data saved in the database.
+   * @param {DisabledDayCreateManyAndReturnArgs} args - Arguments to create many DisabledDays.
+   * @example
+   * // Create many DisabledDays
+   * const disabledDay = await prisma.disabledDay.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many DisabledDays and only return the `id`
+   * const disabledDayWithIdOnly = await prisma.disabledDay.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends DisabledDayCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, DisabledDayCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledDayPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a DisabledDay.
    * @param {DisabledDayDeleteArgs} args - Arguments to delete one DisabledDay.
    * @example
@@ -668,6 +707,36 @@ export interface DisabledDayDelegate<ExtArgs extends runtime.Types.Extensions.In
    * 
    */
   updateMany<T extends DisabledDayUpdateManyArgs>(args: Prisma.SelectSubset<T, DisabledDayUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more DisabledDays and returns the data updated in the database.
+   * @param {DisabledDayUpdateManyAndReturnArgs} args - Arguments to update many DisabledDays.
+   * @example
+   * // Update many DisabledDays
+   * const disabledDay = await prisma.disabledDay.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more DisabledDays and only return the `id`
+   * const disabledDayWithIdOnly = await prisma.disabledDay.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends DisabledDayUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, DisabledDayUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledDayPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one DisabledDay.
@@ -1096,6 +1165,29 @@ export type DisabledDayCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
+ * DisabledDay createManyAndReturn
+ */
+export type DisabledDayCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DisabledDay
+   */
+  select?: Prisma.DisabledDaySelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the DisabledDay
+   */
+  omit?: Prisma.DisabledDayOmit<ExtArgs> | null
+  /**
+   * The data used to create many DisabledDays.
+   */
+  data: Prisma.DisabledDayCreateManyInput | Prisma.DisabledDayCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DisabledDayIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * DisabledDay update
  */
 export type DisabledDayUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1137,6 +1229,36 @@ export type DisabledDayUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many DisabledDays to update.
    */
   limit?: number
+}
+
+/**
+ * DisabledDay updateManyAndReturn
+ */
+export type DisabledDayUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DisabledDay
+   */
+  select?: Prisma.DisabledDaySelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the DisabledDay
+   */
+  omit?: Prisma.DisabledDayOmit<ExtArgs> | null
+  /**
+   * The data used to update DisabledDays.
+   */
+  data: Prisma.XOR<Prisma.DisabledDayUpdateManyMutationInput, Prisma.DisabledDayUncheckedUpdateManyInput>
+  /**
+   * Filter which DisabledDays to update
+   */
+  where?: Prisma.DisabledDayWhereInput
+  /**
+   * Limit how many DisabledDays to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DisabledDayIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

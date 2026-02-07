@@ -226,7 +226,6 @@ export type ExtraTimeDayOrderByWithRelationInput = {
   amount?: Prisma.SortOrder
   createdAT?: Prisma.SortOrder
   barber?: Prisma.BarberProfileOrderByWithRelationInput
-  _relevance?: Prisma.ExtraTimeDayOrderByRelevanceInput
 }
 
 export type ExtraTimeDayWhereUniqueInput = Prisma.AtLeast<{
@@ -329,12 +328,6 @@ export type ExtraTimeDayListRelationFilter = {
 
 export type ExtraTimeDayOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type ExtraTimeDayOrderByRelevanceInput = {
-  fields: Prisma.ExtraTimeDayOrderByRelevanceFieldEnum | Prisma.ExtraTimeDayOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type ExtraTimeDayBarberIdDateCompoundUniqueInput = {
@@ -506,7 +499,23 @@ export type ExtraTimeDaySelect<ExtArgs extends runtime.Types.Extensions.Internal
   barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["extraTimeDay"]>
 
+export type ExtraTimeDaySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  date?: boolean
+  barberId?: boolean
+  amount?: boolean
+  createdAT?: boolean
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["extraTimeDay"]>
 
+export type ExtraTimeDaySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  date?: boolean
+  barberId?: boolean
+  amount?: boolean
+  createdAT?: boolean
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["extraTimeDay"]>
 
 export type ExtraTimeDaySelectScalar = {
   id?: boolean
@@ -518,6 +527,12 @@ export type ExtraTimeDaySelectScalar = {
 
 export type ExtraTimeDayOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "barberId" | "amount" | "createdAT", ExtArgs["result"]["extraTimeDay"]>
 export type ExtraTimeDayInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}
+export type ExtraTimeDayIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}
+export type ExtraTimeDayIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
 }
 
@@ -650,6 +665,30 @@ export interface ExtraTimeDayDelegate<ExtArgs extends runtime.Types.Extensions.I
   createMany<T extends ExtraTimeDayCreateManyArgs>(args?: Prisma.SelectSubset<T, ExtraTimeDayCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many ExtraTimeDays and returns the data saved in the database.
+   * @param {ExtraTimeDayCreateManyAndReturnArgs} args - Arguments to create many ExtraTimeDays.
+   * @example
+   * // Create many ExtraTimeDays
+   * const extraTimeDay = await prisma.extraTimeDay.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many ExtraTimeDays and only return the `id`
+   * const extraTimeDayWithIdOnly = await prisma.extraTimeDay.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ExtraTimeDayCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ExtraTimeDayCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExtraTimeDayPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a ExtraTimeDay.
    * @param {ExtraTimeDayDeleteArgs} args - Arguments to delete one ExtraTimeDay.
    * @example
@@ -712,6 +751,36 @@ export interface ExtraTimeDayDelegate<ExtArgs extends runtime.Types.Extensions.I
    * 
    */
   updateMany<T extends ExtraTimeDayUpdateManyArgs>(args: Prisma.SelectSubset<T, ExtraTimeDayUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more ExtraTimeDays and returns the data updated in the database.
+   * @param {ExtraTimeDayUpdateManyAndReturnArgs} args - Arguments to update many ExtraTimeDays.
+   * @example
+   * // Update many ExtraTimeDays
+   * const extraTimeDay = await prisma.extraTimeDay.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more ExtraTimeDays and only return the `id`
+   * const extraTimeDayWithIdOnly = await prisma.extraTimeDay.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ExtraTimeDayUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ExtraTimeDayUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExtraTimeDayPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ExtraTimeDay.
@@ -1140,6 +1209,29 @@ export type ExtraTimeDayCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
+ * ExtraTimeDay createManyAndReturn
+ */
+export type ExtraTimeDayCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExtraTimeDay
+   */
+  select?: Prisma.ExtraTimeDaySelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExtraTimeDay
+   */
+  omit?: Prisma.ExtraTimeDayOmit<ExtArgs> | null
+  /**
+   * The data used to create many ExtraTimeDays.
+   */
+  data: Prisma.ExtraTimeDayCreateManyInput | Prisma.ExtraTimeDayCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExtraTimeDayIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * ExtraTimeDay update
  */
 export type ExtraTimeDayUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1181,6 +1273,36 @@ export type ExtraTimeDayUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many ExtraTimeDays to update.
    */
   limit?: number
+}
+
+/**
+ * ExtraTimeDay updateManyAndReturn
+ */
+export type ExtraTimeDayUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ExtraTimeDay
+   */
+  select?: Prisma.ExtraTimeDaySelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ExtraTimeDay
+   */
+  omit?: Prisma.ExtraTimeDayOmit<ExtArgs> | null
+  /**
+   * The data used to update ExtraTimeDays.
+   */
+  data: Prisma.XOR<Prisma.ExtraTimeDayUpdateManyMutationInput, Prisma.ExtraTimeDayUncheckedUpdateManyInput>
+  /**
+   * Filter which ExtraTimeDays to update
+   */
+  where?: Prisma.ExtraTimeDayWhereInput
+  /**
+   * Limit how many ExtraTimeDays to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExtraTimeDayIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

@@ -1,7 +1,20 @@
+// lib/prisma.ts
 import { PrismaClient } from "../prisma/generated/prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { Pool } from "pg";
 
-const adapter = new PrismaMariaDb(process.env.DATABASE_URL as string);
+// Parse connection string manually to avoid adapter bug
+const connectionString = process.env.DATABASE_URL!;
+
+const pool = new Pool({
+  connectionString: connectionString,
+  // Fix SSL issues with Supabase
+  ssl: {
+    rejectUnauthorized: false, // Accept Supabase certificates
+  },
+});
+
+const adapter = new PrismaPg(pool);
 
 declare global {
   var prisma: PrismaClient;

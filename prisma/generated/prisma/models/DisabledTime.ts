@@ -183,7 +183,6 @@ export type DisabledTimeOrderByWithRelationInput = {
   barberId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   barber?: Prisma.BarberProfileOrderByWithRelationInput
-  _relevance?: Prisma.DisabledTimeOrderByRelevanceInput
 }
 
 export type DisabledTimeWhereUniqueInput = Prisma.AtLeast<{
@@ -274,12 +273,6 @@ export type DisabledTimeListRelationFilter = {
 
 export type DisabledTimeOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type DisabledTimeOrderByRelevanceInput = {
-  fields: Prisma.DisabledTimeOrderByRelevanceFieldEnum | Prisma.DisabledTimeOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type DisabledTimeBarberIdDateCompoundUniqueInput = {
@@ -432,7 +425,21 @@ export type DisabledTimeSelect<ExtArgs extends runtime.Types.Extensions.Internal
   barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["disabledTime"]>
 
+export type DisabledTimeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  date?: boolean
+  barberId?: boolean
+  createdAt?: boolean
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["disabledTime"]>
 
+export type DisabledTimeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  date?: boolean
+  barberId?: boolean
+  createdAt?: boolean
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["disabledTime"]>
 
 export type DisabledTimeSelectScalar = {
   id?: boolean
@@ -443,6 +450,12 @@ export type DisabledTimeSelectScalar = {
 
 export type DisabledTimeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "date" | "barberId" | "createdAt", ExtArgs["result"]["disabledTime"]>
 export type DisabledTimeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}
+export type DisabledTimeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+}
+export type DisabledTimeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
 }
 
@@ -574,6 +587,30 @@ export interface DisabledTimeDelegate<ExtArgs extends runtime.Types.Extensions.I
   createMany<T extends DisabledTimeCreateManyArgs>(args?: Prisma.SelectSubset<T, DisabledTimeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many DisabledTimes and returns the data saved in the database.
+   * @param {DisabledTimeCreateManyAndReturnArgs} args - Arguments to create many DisabledTimes.
+   * @example
+   * // Create many DisabledTimes
+   * const disabledTime = await prisma.disabledTime.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many DisabledTimes and only return the `id`
+   * const disabledTimeWithIdOnly = await prisma.disabledTime.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends DisabledTimeCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, DisabledTimeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledTimePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a DisabledTime.
    * @param {DisabledTimeDeleteArgs} args - Arguments to delete one DisabledTime.
    * @example
@@ -636,6 +673,36 @@ export interface DisabledTimeDelegate<ExtArgs extends runtime.Types.Extensions.I
    * 
    */
   updateMany<T extends DisabledTimeUpdateManyArgs>(args: Prisma.SelectSubset<T, DisabledTimeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more DisabledTimes and returns the data updated in the database.
+   * @param {DisabledTimeUpdateManyAndReturnArgs} args - Arguments to update many DisabledTimes.
+   * @example
+   * // Update many DisabledTimes
+   * const disabledTime = await prisma.disabledTime.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more DisabledTimes and only return the `id`
+   * const disabledTimeWithIdOnly = await prisma.disabledTime.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends DisabledTimeUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, DisabledTimeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DisabledTimePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one DisabledTime.
@@ -1063,6 +1130,29 @@ export type DisabledTimeCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
 }
 
 /**
+ * DisabledTime createManyAndReturn
+ */
+export type DisabledTimeCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DisabledTime
+   */
+  select?: Prisma.DisabledTimeSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the DisabledTime
+   */
+  omit?: Prisma.DisabledTimeOmit<ExtArgs> | null
+  /**
+   * The data used to create many DisabledTimes.
+   */
+  data: Prisma.DisabledTimeCreateManyInput | Prisma.DisabledTimeCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DisabledTimeIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * DisabledTime update
  */
 export type DisabledTimeUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1104,6 +1194,36 @@ export type DisabledTimeUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many DisabledTimes to update.
    */
   limit?: number
+}
+
+/**
+ * DisabledTime updateManyAndReturn
+ */
+export type DisabledTimeUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DisabledTime
+   */
+  select?: Prisma.DisabledTimeSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the DisabledTime
+   */
+  omit?: Prisma.DisabledTimeOmit<ExtArgs> | null
+  /**
+   * The data used to update DisabledTimes.
+   */
+  data: Prisma.XOR<Prisma.DisabledTimeUpdateManyMutationInput, Prisma.DisabledTimeUncheckedUpdateManyInput>
+  /**
+   * Filter which DisabledTimes to update
+   */
+  where?: Prisma.DisabledTimeWhereInput
+  /**
+   * Limit how many DisabledTimes to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DisabledTimeIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

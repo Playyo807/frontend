@@ -19,7 +19,6 @@ import { addPointsForBooking } from "./pointActions";
 import { getBarberBookingsForDayType_ } from "./types";
 import * as types from "@/lib/types";
 import { createNotification } from "./notificationActions";
-import { create } from "domain";
 
 function handleDiscount(
   price: number,

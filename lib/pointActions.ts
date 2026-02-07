@@ -68,8 +68,8 @@ export async function getUserPointSystem() {
             include: {
               planToService: {
                 include: {
-                  service: true
-                }
+                  service: true,
+                },
               },
             },
           },
@@ -268,13 +268,18 @@ export async function redeemPointsForCoupon() {
     });
 
     barbers.map(async (b) => {
-      await createNotification(
-        b.id,
-        "COUPON_REDEEMED",
-        "Coupon Resgatado!",
-        `${session.user?.name} resgatou um coupon de ${user.pointSystem?.discountPercentage}% de desconto!`,
-        { userId: user.id, transactionId: transaction.id, couponId: coupon.id },
-      );
+      await createNotification({
+        barberId: b.id,
+        type: "COUPON_REDEEMED",
+        title: "Coupon Resgatado!",
+        message: `${session.user?.name} resgatou um coupon de ${user.pointSystem?.discountPercentage}% de desconto!`,
+        metadata: {
+          userId: user.id,
+          transactionId: transaction.id,
+          couponId: coupon.id,
+        },
+        url: "/admin/barber",
+      });
     });
 
     return { pointSystem: updatedPointSystem, coupon };

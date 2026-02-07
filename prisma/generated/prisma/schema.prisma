@@ -1,0 +1,357 @@
+generator client {
+  provider   = "prisma-client-js"
+  output     = "./generated/prisma"
+  engineType = "client"
+}
+
+datasource db {
+  provider     = "postgresql"
+  relationMode = "foreignKeys"
+}
+
+model User {
+  id                String             @id @default(cuid())
+  name              String?
+  email             String?            @unique
+  emailVerified     DateTime?
+  image             String?
+  phone             String?
+  createdAt         DateTime           @default(now())
+  role              Role               @default(USER)
+  updatedAt         DateTime           @default(now()) @updatedAt
+  accounts          Account[]
+  barberProfile     BarberProfile?
+  bookings          Booking[]
+  sessions          Session[]
+  pointSystem       PointSystem?
+  plan              ClientPlan?
+  notifications     Notification[]
+  pushSubscriptions PushSubscription[]
+}
+
+model BarberProfile {
+  id            String                   @id @default(cuid())
+  userId        String                   @unique
+  displayName   String
+  bio           String?
+  timeInterval  Int                      @default(40)
+  createdAt     DateTime                 @default(now())
+  user          User                     @relation(fields: [userId], references: [id])
+  bookings      Booking[]
+  services      BarberProfileToService[]
+  disabledDays  DisabledDay[]
+  clientPlans   ClientPlan[]
+  plans         Plan[]
+  extraTimeDays ExtraTimeDay[]
+  disabledTimes DisabledTime[]
+  notifications Notification[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Service {
+  id            String                   @id @default(cuid())
+  name          String
+  price         Int
+  duration      Int
+  keyword       String                   @unique
+  imagePath     String
+  bookings      BookingService[]
+  barbers       BarberProfileToService[]
+  planToService PlanToService[]
+}
+
+model BarberProfileToService {
+  barberProfileId String
+  serviceId       String
+  barberProfile   BarberProfile @relation(fields: [barberProfileId], references: [id], onDelete: Cascade)
+  service         Service       @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([barberProfileId, serviceId])
+  @@index([serviceId])
+}
+
+model BookingService {
+  bookingId String
+  serviceId String
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@id([bookingId, serviceId])
+  @@index([serviceId])
+}
+
+model Booking {
+  id            String           @id @default(cuid())
+  date          DateTime
+  status        BookingStatus
+  userId        String
+  planId        String?
+  barberId      String
+  totalPrice    Int
+  totalDuration Int
+  createdAt     DateTime         @default(now())
+  barber        BarberProfile    @relation(fields: [barberId], references: [id])
+  user          User             @relation(fields: [userId], references: [id])
+  plan          ClientPlan?      @relation(fields: [planId], references: [id])
+  services      BookingService[]
+  coupon        Coupon?
+  notifications Notification[]
+
+  @@index([barberId, userId, status])
+}
+
+model DisabledDay {
+  id        String   @id @default(cuid())
+  barberId  String
+  date      DateTime
+  reason    String?
+  createdAt DateTime @default(now())
+
+  barber BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, date])
+  @@index([barberId])
+}
+
+model DisabledTime {
+  id        String   @id @default(cuid())
+  date      DateTime
+  barberId  String
+  createdAt DateTime @default(now())
+
+  barber BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, date])
+  @@index([barberId])
+}
+
+model ExtraTimeDay {
+  id        String        @id @default(cuid())
+  date      DateTime
+  barberId  String
+  amount    Int
+  createdAT DateTime      @default(now())
+  barber    BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@unique([barberId, date])
+  @@index([barberId])
+}
+
+model PointSystem {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  currentPoints         Int      @default(0)
+  pointsPerService      Int      @default(5)
+  pointsNeededForReward Int      @default(500)
+  discountPercentage    Int      @default(40)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  coupons           Coupon[]
+  pointTransactions PointTransaction[]
+}
+
+model Coupon {
+  id              String    @id @default(cuid())
+  pointSystemId   String
+  discountPercent Int
+  isUsed          Boolean   @default(false)
+  usedAt          DateTime?
+  bookingId       String?   @unique
+  createdAt       DateTime  @default(now())
+  expiresAt       DateTime?
+
+  pointSystem   PointSystem    @relation(fields: [pointSystemId], references: [id], onDelete: Cascade)
+  booking       Booking?       @relation(fields: [bookingId], references: [id])
+  notifications Notification[]
+
+  @@index([pointSystemId])
+}
+
+model PointTransaction {
+  id            String          @id @default(cuid())
+  pointSystemId String
+  points        Int
+  type          TransactionType
+  description   String?
+  bookingId     String?
+  createdAt     DateTime        @default(now())
+
+  pointSystem   PointSystem       @relation(fields: [pointSystemId], references: [id], onDelete: Cascade)
+  status        TransactionStatus @default(PENDING)
+  confirmedAt   DateTime?
+  confirmedBy   String?
+  notifications Notification[]
+
+  @@index([pointSystemId])
+}
+
+model Notification {
+  id      String           @id @default(cuid())
+  type    NotificationType
+  title   String
+  message String
+  read    Boolean          @default(false)
+
+  recipientType NotificationRecipient @default(BARBER)
+  barberId      String?
+  userId        String?
+  bookingId     String?
+  couponId      String?
+  transactionId String?
+  metadata      String?               @db.Text
+  createdAt     DateTime              @default(now())
+
+  user        User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  booking     Booking?          @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  coupon      Coupon?           @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  transaction PointTransaction? @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  barber      BarberProfile?    @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@index([barberId])
+  @@index([userId])
+  @@index([bookingId])
+  @@index([read])
+}
+
+enum NotificationRecipient {
+  BARBER
+  USER
+}
+
+enum NotificationType {
+  COUPON_REDEEMED
+  POINTS_PENDING
+  POINTS_CONFIRMED
+  POINTS_REJECTED
+  POINTS_ADJUSTED
+  BOOKING_CREATED
+  BOOKING_EDITED
+  BOOKING_CANCELLED
+  BOOKING_REMINDER
+}
+
+model ClientPlan {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  barberId  String
+  planId    String
+  useAmount Int
+  starts    DateTime @default(now())
+  expires   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  barber  BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+  plan    Plan          @relation(fields: [planId], references: [id], onDelete: Cascade)
+  booking Booking[]
+
+  @@unique([userId, barberId])
+  @@index([userId, planId, expires])
+}
+
+model Plan {
+  id            String          @id @default(cuid())
+  barberId      String          @default("cmkfsgh1j0000c0ycy8k4sy05")
+  name          String
+  price         Int
+  keyword       String          @default("BRZ")
+  description   String?
+  planToService PlanToService[]
+  clientPlans   ClientPlan[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  barber BarberProfile @relation(fields: [barberId], references: [id], onDelete: Cascade)
+
+  @@index([barberId])
+}
+
+model PlanToService {
+  planId    String
+  serviceId String
+
+  plan    Plan    @relation(fields: [planId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+
+  @@id([planId, serviceId])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String?
+  endpoint  String   @db.VarChar(768)
+  p256dh    String   @db.Text
+  auth      String   @db.Text
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([endpoint])
+  @@index([userId])
+}
+
+enum TransactionType {
+  EARNED
+  REDEEMED
+  EXPIRED
+  ADJUSTED
+}
+
+enum Role {
+  USER
+  BARBER
+  ADMIN
+  SUPERADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELED
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  REJECTED
+}

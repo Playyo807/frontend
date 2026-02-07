@@ -167,7 +167,6 @@ export type BarberProfileToServiceOrderByWithRelationInput = {
   serviceId?: Prisma.SortOrder
   barberProfile?: Prisma.BarberProfileOrderByWithRelationInput
   service?: Prisma.ServiceOrderByWithRelationInput
-  _relevance?: Prisma.BarberProfileToServiceOrderByRelevanceInput
 }
 
 export type BarberProfileToServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -239,12 +238,6 @@ export type BarberProfileToServiceListRelationFilter = {
 
 export type BarberProfileToServiceOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type BarberProfileToServiceOrderByRelevanceInput = {
-  fields: Prisma.BarberProfileToServiceOrderByRelevanceFieldEnum | Prisma.BarberProfileToServiceOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type BarberProfileToServiceBarberProfileIdServiceIdCompoundUniqueInput = {
@@ -468,7 +461,19 @@ export type BarberProfileToServiceSelect<ExtArgs extends runtime.Types.Extension
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["barberProfileToService"]>
 
+export type BarberProfileToServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  barberProfileId?: boolean
+  serviceId?: boolean
+  barberProfile?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["barberProfileToService"]>
 
+export type BarberProfileToServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  barberProfileId?: boolean
+  serviceId?: boolean
+  barberProfile?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["barberProfileToService"]>
 
 export type BarberProfileToServiceSelectScalar = {
   barberProfileId?: boolean
@@ -477,6 +482,14 @@ export type BarberProfileToServiceSelectScalar = {
 
 export type BarberProfileToServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"barberProfileId" | "serviceId", ExtArgs["result"]["barberProfileToService"]>
 export type BarberProfileToServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barberProfile?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}
+export type BarberProfileToServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  barberProfile?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}
+export type BarberProfileToServiceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   barberProfile?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }
@@ -608,6 +621,30 @@ export interface BarberProfileToServiceDelegate<ExtArgs extends runtime.Types.Ex
   createMany<T extends BarberProfileToServiceCreateManyArgs>(args?: Prisma.SelectSubset<T, BarberProfileToServiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many BarberProfileToServices and returns the data saved in the database.
+   * @param {BarberProfileToServiceCreateManyAndReturnArgs} args - Arguments to create many BarberProfileToServices.
+   * @example
+   * // Create many BarberProfileToServices
+   * const barberProfileToService = await prisma.barberProfileToService.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many BarberProfileToServices and only return the `barberProfileId`
+   * const barberProfileToServiceWithBarberProfileIdOnly = await prisma.barberProfileToService.createManyAndReturn({
+   *   select: { barberProfileId: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends BarberProfileToServiceCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BarberProfileToServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BarberProfileToServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a BarberProfileToService.
    * @param {BarberProfileToServiceDeleteArgs} args - Arguments to delete one BarberProfileToService.
    * @example
@@ -670,6 +707,36 @@ export interface BarberProfileToServiceDelegate<ExtArgs extends runtime.Types.Ex
    * 
    */
   updateMany<T extends BarberProfileToServiceUpdateManyArgs>(args: Prisma.SelectSubset<T, BarberProfileToServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more BarberProfileToServices and returns the data updated in the database.
+   * @param {BarberProfileToServiceUpdateManyAndReturnArgs} args - Arguments to update many BarberProfileToServices.
+   * @example
+   * // Update many BarberProfileToServices
+   * const barberProfileToService = await prisma.barberProfileToService.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more BarberProfileToServices and only return the `barberProfileId`
+   * const barberProfileToServiceWithBarberProfileIdOnly = await prisma.barberProfileToService.updateManyAndReturn({
+   *   select: { barberProfileId: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends BarberProfileToServiceUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BarberProfileToServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BarberProfileToServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one BarberProfileToService.
@@ -1096,6 +1163,29 @@ export type BarberProfileToServiceCreateManyArgs<ExtArgs extends runtime.Types.E
 }
 
 /**
+ * BarberProfileToService createManyAndReturn
+ */
+export type BarberProfileToServiceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BarberProfileToService
+   */
+  select?: Prisma.BarberProfileToServiceSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BarberProfileToService
+   */
+  omit?: Prisma.BarberProfileToServiceOmit<ExtArgs> | null
+  /**
+   * The data used to create many BarberProfileToServices.
+   */
+  data: Prisma.BarberProfileToServiceCreateManyInput | Prisma.BarberProfileToServiceCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BarberProfileToServiceIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * BarberProfileToService update
  */
 export type BarberProfileToServiceUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1137,6 +1227,36 @@ export type BarberProfileToServiceUpdateManyArgs<ExtArgs extends runtime.Types.E
    * Limit how many BarberProfileToServices to update.
    */
   limit?: number
+}
+
+/**
+ * BarberProfileToService updateManyAndReturn
+ */
+export type BarberProfileToServiceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BarberProfileToService
+   */
+  select?: Prisma.BarberProfileToServiceSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BarberProfileToService
+   */
+  omit?: Prisma.BarberProfileToServiceOmit<ExtArgs> | null
+  /**
+   * The data used to update BarberProfileToServices.
+   */
+  data: Prisma.XOR<Prisma.BarberProfileToServiceUpdateManyMutationInput, Prisma.BarberProfileToServiceUncheckedUpdateManyInput>
+  /**
+   * Filter which BarberProfileToServices to update
+   */
+  where?: Prisma.BarberProfileToServiceWhereInput
+  /**
+   * Limit how many BarberProfileToServices to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BarberProfileToServiceIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

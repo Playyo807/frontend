@@ -273,7 +273,6 @@ export type PointTransactionOrderByWithRelationInput = {
   confirmedBy?: Prisma.SortOrderInput | Prisma.SortOrder
   pointSystem?: Prisma.PointSystemOrderByWithRelationInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
-  _relevance?: Prisma.PointTransactionOrderByRelevanceInput
 }
 
 export type PointTransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -430,12 +429,6 @@ export type PointTransactionListRelationFilter = {
 
 export type PointTransactionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type PointTransactionOrderByRelevanceInput = {
-  fields: Prisma.PointTransactionOrderByRelevanceFieldEnum | Prisma.PointTransactionOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type PointTransactionCountOrderByAggregateInput = {
@@ -789,7 +782,33 @@ export type PointTransactionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   _count?: boolean | Prisma.PointTransactionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pointTransaction"]>
 
+export type PointTransactionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  pointSystemId?: boolean
+  points?: boolean
+  type?: boolean
+  description?: boolean
+  bookingId?: boolean
+  createdAt?: boolean
+  status?: boolean
+  confirmedAt?: boolean
+  confirmedBy?: boolean
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["pointTransaction"]>
 
+export type PointTransactionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  pointSystemId?: boolean
+  points?: boolean
+  type?: boolean
+  description?: boolean
+  bookingId?: boolean
+  createdAt?: boolean
+  status?: boolean
+  confirmedAt?: boolean
+  confirmedBy?: boolean
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["pointTransaction"]>
 
 export type PointTransactionSelectScalar = {
   id?: boolean
@@ -809,6 +828,12 @@ export type PointTransactionInclude<ExtArgs extends runtime.Types.Extensions.Int
   pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
   notifications?: boolean | Prisma.PointTransaction$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.PointTransactionCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type PointTransactionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
+}
+export type PointTransactionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  pointSystem?: boolean | Prisma.PointSystemDefaultArgs<ExtArgs>
 }
 
 export type $PointTransactionPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -946,6 +971,30 @@ export interface PointTransactionDelegate<ExtArgs extends runtime.Types.Extensio
   createMany<T extends PointTransactionCreateManyArgs>(args?: Prisma.SelectSubset<T, PointTransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many PointTransactions and returns the data saved in the database.
+   * @param {PointTransactionCreateManyAndReturnArgs} args - Arguments to create many PointTransactions.
+   * @example
+   * // Create many PointTransactions
+   * const pointTransaction = await prisma.pointTransaction.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many PointTransactions and only return the `id`
+   * const pointTransactionWithIdOnly = await prisma.pointTransaction.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends PointTransactionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PointTransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a PointTransaction.
    * @param {PointTransactionDeleteArgs} args - Arguments to delete one PointTransaction.
    * @example
@@ -1008,6 +1057,36 @@ export interface PointTransactionDelegate<ExtArgs extends runtime.Types.Extensio
    * 
    */
   updateMany<T extends PointTransactionUpdateManyArgs>(args: Prisma.SelectSubset<T, PointTransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more PointTransactions and returns the data updated in the database.
+   * @param {PointTransactionUpdateManyAndReturnArgs} args - Arguments to update many PointTransactions.
+   * @example
+   * // Update many PointTransactions
+   * const pointTransaction = await prisma.pointTransaction.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more PointTransactions and only return the `id`
+   * const pointTransactionWithIdOnly = await prisma.pointTransaction.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends PointTransactionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PointTransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PointTransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one PointTransaction.
@@ -1442,6 +1521,29 @@ export type PointTransactionCreateManyArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
+ * PointTransaction createManyAndReturn
+ */
+export type PointTransactionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointTransaction
+   */
+  select?: Prisma.PointTransactionSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PointTransaction
+   */
+  omit?: Prisma.PointTransactionOmit<ExtArgs> | null
+  /**
+   * The data used to create many PointTransactions.
+   */
+  data: Prisma.PointTransactionCreateManyInput | Prisma.PointTransactionCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PointTransactionIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * PointTransaction update
  */
 export type PointTransactionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1483,6 +1585,36 @@ export type PointTransactionUpdateManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many PointTransactions to update.
    */
   limit?: number
+}
+
+/**
+ * PointTransaction updateManyAndReturn
+ */
+export type PointTransactionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PointTransaction
+   */
+  select?: Prisma.PointTransactionSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PointTransaction
+   */
+  omit?: Prisma.PointTransactionOmit<ExtArgs> | null
+  /**
+   * The data used to update PointTransactions.
+   */
+  data: Prisma.XOR<Prisma.PointTransactionUpdateManyMutationInput, Prisma.PointTransactionUncheckedUpdateManyInput>
+  /**
+   * Filter which PointTransactions to update
+   */
+  where?: Prisma.PointTransactionWhereInput
+  /**
+   * Limit how many PointTransactions to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PointTransactionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

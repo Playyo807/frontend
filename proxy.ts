@@ -1,16 +1,28 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
-export default auth((req) => {
+export default auth(async (req) => {
   const { pathname } = req.nextUrl;
   const publicPaths = ["/login", "/api/auth"];
 
-  const isPublic = publicPaths.some((path) =>
-    req.nextUrl.pathname.startsWith(path)
-  );
+  // ✅ SAFE public path check: exact match OR path + slash
+  const isPublic = publicPaths.some((path) => {
+    const cleanPath = path.replace(/\/$/, "");
+    return pathname === cleanPath || pathname.startsWith(`${cleanPath}/`);
+  });
+
   if (isPublic) return NextResponse.next();
-  if (!req.auth) {
-    return NextResponse.redirect(new URL("/login", req.url));
+
+  const user = await prisma.user.findUnique({
+    where: { email: req.auth?.user?.email ?? "" },
+  });
+
+  // ✅ CRITICAL: Redirect UNAUTHENTICATED users from ANY /client route
+  if (!req.auth?.user || !user) {
+    // Use origin (NOT req.url) to avoid malformed redirects
+    const loginUrl = new URL("/login", req.nextUrl.origin);
+    loginUrl.searchParams.set("callbackUrl", pathname); // Preserve destination
+    return NextResponse.redirect(loginUrl);
   }
 
   //@ts-expect-error

@@ -210,7 +210,6 @@ export type PushSubscriptionOrderByWithRelationInput = {
   userAgent?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  _relevance?: Prisma.PushSubscriptionOrderByRelevanceInput
 }
 
 export type PushSubscriptionWhereUniqueInput = Prisma.AtLeast<{
@@ -330,12 +329,6 @@ export type PushSubscriptionListRelationFilter = {
 
 export type PushSubscriptionOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type PushSubscriptionOrderByRelevanceInput = {
-  fields: Prisma.PushSubscriptionOrderByRelevanceFieldEnum | Prisma.PushSubscriptionOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type PushSubscriptionCountOrderByAggregateInput = {
@@ -516,7 +509,27 @@ export type PushSubscriptionSelect<ExtArgs extends runtime.Types.Extensions.Inte
   user?: boolean | Prisma.PushSubscription$userArgs<ExtArgs>
 }, ExtArgs["result"]["pushSubscription"]>
 
+export type PushSubscriptionSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  endpoint?: boolean
+  p256dh?: boolean
+  auth?: boolean
+  userAgent?: boolean
+  createdAt?: boolean
+  user?: boolean | Prisma.PushSubscription$userArgs<ExtArgs>
+}, ExtArgs["result"]["pushSubscription"]>
 
+export type PushSubscriptionSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  endpoint?: boolean
+  p256dh?: boolean
+  auth?: boolean
+  userAgent?: boolean
+  createdAt?: boolean
+  user?: boolean | Prisma.PushSubscription$userArgs<ExtArgs>
+}, ExtArgs["result"]["pushSubscription"]>
 
 export type PushSubscriptionSelectScalar = {
   id?: boolean
@@ -530,6 +543,12 @@ export type PushSubscriptionSelectScalar = {
 
 export type PushSubscriptionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "endpoint" | "p256dh" | "auth" | "userAgent" | "createdAt", ExtArgs["result"]["pushSubscription"]>
 export type PushSubscriptionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.PushSubscription$userArgs<ExtArgs>
+}
+export type PushSubscriptionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.PushSubscription$userArgs<ExtArgs>
+}
+export type PushSubscriptionIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.PushSubscription$userArgs<ExtArgs>
 }
 
@@ -664,6 +683,30 @@ export interface PushSubscriptionDelegate<ExtArgs extends runtime.Types.Extensio
   createMany<T extends PushSubscriptionCreateManyArgs>(args?: Prisma.SelectSubset<T, PushSubscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many PushSubscriptions and returns the data saved in the database.
+   * @param {PushSubscriptionCreateManyAndReturnArgs} args - Arguments to create many PushSubscriptions.
+   * @example
+   * // Create many PushSubscriptions
+   * const pushSubscription = await prisma.pushSubscription.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many PushSubscriptions and only return the `id`
+   * const pushSubscriptionWithIdOnly = await prisma.pushSubscription.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends PushSubscriptionCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PushSubscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a PushSubscription.
    * @param {PushSubscriptionDeleteArgs} args - Arguments to delete one PushSubscription.
    * @example
@@ -726,6 +769,36 @@ export interface PushSubscriptionDelegate<ExtArgs extends runtime.Types.Extensio
    * 
    */
   updateMany<T extends PushSubscriptionUpdateManyArgs>(args: Prisma.SelectSubset<T, PushSubscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more PushSubscriptions and returns the data updated in the database.
+   * @param {PushSubscriptionUpdateManyAndReturnArgs} args - Arguments to update many PushSubscriptions.
+   * @example
+   * // Update many PushSubscriptions
+   * const pushSubscription = await prisma.pushSubscription.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more PushSubscriptions and only return the `id`
+   * const pushSubscriptionWithIdOnly = await prisma.pushSubscription.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends PushSubscriptionUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PushSubscriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PushSubscriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one PushSubscription.
@@ -1156,6 +1229,29 @@ export type PushSubscriptionCreateManyArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
+ * PushSubscription createManyAndReturn
+ */
+export type PushSubscriptionCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PushSubscription
+   */
+  select?: Prisma.PushSubscriptionSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PushSubscription
+   */
+  omit?: Prisma.PushSubscriptionOmit<ExtArgs> | null
+  /**
+   * The data used to create many PushSubscriptions.
+   */
+  data: Prisma.PushSubscriptionCreateManyInput | Prisma.PushSubscriptionCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PushSubscriptionIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * PushSubscription update
  */
 export type PushSubscriptionUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1197,6 +1293,36 @@ export type PushSubscriptionUpdateManyArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many PushSubscriptions to update.
    */
   limit?: number
+}
+
+/**
+ * PushSubscription updateManyAndReturn
+ */
+export type PushSubscriptionUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PushSubscription
+   */
+  select?: Prisma.PushSubscriptionSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PushSubscription
+   */
+  omit?: Prisma.PushSubscriptionOmit<ExtArgs> | null
+  /**
+   * The data used to update PushSubscriptions.
+   */
+  data: Prisma.XOR<Prisma.PushSubscriptionUpdateManyMutationInput, Prisma.PushSubscriptionUncheckedUpdateManyInput>
+  /**
+   * Filter which PushSubscriptions to update
+   */
+  where?: Prisma.PushSubscriptionWhereInput
+  /**
+   * Limit how many PushSubscriptions to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PushSubscriptionIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

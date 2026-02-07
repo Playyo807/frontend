@@ -251,7 +251,6 @@ export type BarberProfileOrderByWithRelationInput = {
   extraTimeDays?: Prisma.ExtraTimeDayOrderByRelationAggregateInput
   disabledTimes?: Prisma.DisabledTimeOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
-  _relevance?: Prisma.BarberProfileOrderByRelevanceInput
 }
 
 export type BarberProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -398,12 +397,6 @@ export type BarberProfileUncheckedUpdateManyInput = {
 export type BarberProfileNullableScalarRelationFilter = {
   is?: Prisma.BarberProfileWhereInput | null
   isNot?: Prisma.BarberProfileWhereInput | null
-}
-
-export type BarberProfileOrderByRelevanceInput = {
-  fields: Prisma.BarberProfileOrderByRelevanceFieldEnum | Prisma.BarberProfileOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type BarberProfileCountOrderByAggregateInput = {
@@ -1433,7 +1426,25 @@ export type BarberProfileSelect<ExtArgs extends runtime.Types.Extensions.Interna
   _count?: boolean | Prisma.BarberProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["barberProfile"]>
 
+export type BarberProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  displayName?: boolean
+  bio?: boolean
+  timeInterval?: boolean
+  createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["barberProfile"]>
 
+export type BarberProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  displayName?: boolean
+  bio?: boolean
+  timeInterval?: boolean
+  createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["barberProfile"]>
 
 export type BarberProfileSelectScalar = {
   id?: boolean
@@ -1456,6 +1467,12 @@ export type BarberProfileInclude<ExtArgs extends runtime.Types.Extensions.Intern
   disabledTimes?: boolean | Prisma.BarberProfile$disabledTimesArgs<ExtArgs>
   notifications?: boolean | Prisma.BarberProfile$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.BarberProfileCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type BarberProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type BarberProfileIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $BarberProfilePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1596,6 +1613,30 @@ export interface BarberProfileDelegate<ExtArgs extends runtime.Types.Extensions.
   createMany<T extends BarberProfileCreateManyArgs>(args?: Prisma.SelectSubset<T, BarberProfileCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many BarberProfiles and returns the data saved in the database.
+   * @param {BarberProfileCreateManyAndReturnArgs} args - Arguments to create many BarberProfiles.
+   * @example
+   * // Create many BarberProfiles
+   * const barberProfile = await prisma.barberProfile.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many BarberProfiles and only return the `id`
+   * const barberProfileWithIdOnly = await prisma.barberProfile.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends BarberProfileCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, BarberProfileCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BarberProfilePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a BarberProfile.
    * @param {BarberProfileDeleteArgs} args - Arguments to delete one BarberProfile.
    * @example
@@ -1658,6 +1699,36 @@ export interface BarberProfileDelegate<ExtArgs extends runtime.Types.Extensions.
    * 
    */
   updateMany<T extends BarberProfileUpdateManyArgs>(args: Prisma.SelectSubset<T, BarberProfileUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more BarberProfiles and returns the data updated in the database.
+   * @param {BarberProfileUpdateManyAndReturnArgs} args - Arguments to update many BarberProfiles.
+   * @example
+   * // Update many BarberProfiles
+   * const barberProfile = await prisma.barberProfile.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more BarberProfiles and only return the `id`
+   * const barberProfileWithIdOnly = await prisma.barberProfile.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends BarberProfileUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, BarberProfileUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BarberProfilePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one BarberProfile.
@@ -2095,6 +2166,29 @@ export type BarberProfileCreateManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
+ * BarberProfile createManyAndReturn
+ */
+export type BarberProfileCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BarberProfile
+   */
+  select?: Prisma.BarberProfileSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BarberProfile
+   */
+  omit?: Prisma.BarberProfileOmit<ExtArgs> | null
+  /**
+   * The data used to create many BarberProfiles.
+   */
+  data: Prisma.BarberProfileCreateManyInput | Prisma.BarberProfileCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BarberProfileIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * BarberProfile update
  */
 export type BarberProfileUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2136,6 +2230,36 @@ export type BarberProfileUpdateManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many BarberProfiles to update.
    */
   limit?: number
+}
+
+/**
+ * BarberProfile updateManyAndReturn
+ */
+export type BarberProfileUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the BarberProfile
+   */
+  select?: Prisma.BarberProfileSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the BarberProfile
+   */
+  omit?: Prisma.BarberProfileOmit<ExtArgs> | null
+  /**
+   * The data used to update BarberProfiles.
+   */
+  data: Prisma.XOR<Prisma.BarberProfileUpdateManyMutationInput, Prisma.BarberProfileUncheckedUpdateManyInput>
+  /**
+   * Filter which BarberProfiles to update
+   */
+  where?: Prisma.BarberProfileWhereInput
+  /**
+   * Limit how many BarberProfiles to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BarberProfileIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

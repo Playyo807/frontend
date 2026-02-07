@@ -63,7 +63,6 @@ import {
 } from "@/components/ui/select";
 import PlanManagementClient from "@/components/custom/planManagementClient";
 import * as types from "@/lib/types";
-import NotificationToggle from "@/components/custom/notificationToggle";
 import { usePushNotifications } from "@/hooks/usePushNotifications";
 import ClientNotificationPopover from "@/components/custom/clientNotificationCenterPopover";
 

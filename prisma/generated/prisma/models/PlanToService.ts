@@ -167,7 +167,6 @@ export type PlanToServiceOrderByWithRelationInput = {
   serviceId?: Prisma.SortOrder
   plan?: Prisma.PlanOrderByWithRelationInput
   service?: Prisma.ServiceOrderByWithRelationInput
-  _relevance?: Prisma.PlanToServiceOrderByRelevanceInput
 }
 
 export type PlanToServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -239,12 +238,6 @@ export type PlanToServiceListRelationFilter = {
 
 export type PlanToServiceOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type PlanToServiceOrderByRelevanceInput = {
-  fields: Prisma.PlanToServiceOrderByRelevanceFieldEnum | Prisma.PlanToServiceOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type PlanToServicePlanIdServiceIdCompoundUniqueInput = {
@@ -468,7 +461,19 @@ export type PlanToServiceSelect<ExtArgs extends runtime.Types.Extensions.Interna
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["planToService"]>
 
+export type PlanToServiceSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  planId?: boolean
+  serviceId?: boolean
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["planToService"]>
 
+export type PlanToServiceSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  planId?: boolean
+  serviceId?: boolean
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["planToService"]>
 
 export type PlanToServiceSelectScalar = {
   planId?: boolean
@@ -477,6 +482,14 @@ export type PlanToServiceSelectScalar = {
 
 export type PlanToServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"planId" | "serviceId", ExtArgs["result"]["planToService"]>
 export type PlanToServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}
+export type PlanToServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+  service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
+}
+export type PlanToServiceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
 }
@@ -608,6 +621,30 @@ export interface PlanToServiceDelegate<ExtArgs extends runtime.Types.Extensions.
   createMany<T extends PlanToServiceCreateManyArgs>(args?: Prisma.SelectSubset<T, PlanToServiceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many PlanToServices and returns the data saved in the database.
+   * @param {PlanToServiceCreateManyAndReturnArgs} args - Arguments to create many PlanToServices.
+   * @example
+   * // Create many PlanToServices
+   * const planToService = await prisma.planToService.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many PlanToServices and only return the `planId`
+   * const planToServiceWithPlanIdOnly = await prisma.planToService.createManyAndReturn({
+   *   select: { planId: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends PlanToServiceCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, PlanToServiceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanToServicePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a PlanToService.
    * @param {PlanToServiceDeleteArgs} args - Arguments to delete one PlanToService.
    * @example
@@ -670,6 +707,36 @@ export interface PlanToServiceDelegate<ExtArgs extends runtime.Types.Extensions.
    * 
    */
   updateMany<T extends PlanToServiceUpdateManyArgs>(args: Prisma.SelectSubset<T, PlanToServiceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more PlanToServices and returns the data updated in the database.
+   * @param {PlanToServiceUpdateManyAndReturnArgs} args - Arguments to update many PlanToServices.
+   * @example
+   * // Update many PlanToServices
+   * const planToService = await prisma.planToService.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more PlanToServices and only return the `planId`
+   * const planToServiceWithPlanIdOnly = await prisma.planToService.updateManyAndReturn({
+   *   select: { planId: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends PlanToServiceUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, PlanToServiceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlanToServicePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one PlanToService.
@@ -1096,6 +1163,29 @@ export type PlanToServiceCreateManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
+ * PlanToService createManyAndReturn
+ */
+export type PlanToServiceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanToService
+   */
+  select?: Prisma.PlanToServiceSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanToService
+   */
+  omit?: Prisma.PlanToServiceOmit<ExtArgs> | null
+  /**
+   * The data used to create many PlanToServices.
+   */
+  data: Prisma.PlanToServiceCreateManyInput | Prisma.PlanToServiceCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanToServiceIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * PlanToService update
  */
 export type PlanToServiceUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1137,6 +1227,36 @@ export type PlanToServiceUpdateManyArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many PlanToServices to update.
    */
   limit?: number
+}
+
+/**
+ * PlanToService updateManyAndReturn
+ */
+export type PlanToServiceUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlanToService
+   */
+  select?: Prisma.PlanToServiceSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlanToService
+   */
+  omit?: Prisma.PlanToServiceOmit<ExtArgs> | null
+  /**
+   * The data used to update PlanToServices.
+   */
+  data: Prisma.XOR<Prisma.PlanToServiceUpdateManyMutationInput, Prisma.PlanToServiceUncheckedUpdateManyInput>
+  /**
+   * Filter which PlanToServices to update
+   */
+  where?: Prisma.PlanToServiceWhereInput
+  /**
+   * Limit how many PlanToServices to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlanToServiceIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

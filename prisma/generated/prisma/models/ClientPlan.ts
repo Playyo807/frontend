@@ -268,7 +268,6 @@ export type ClientPlanOrderByWithRelationInput = {
   barber?: Prisma.BarberProfileOrderByWithRelationInput
   plan?: Prisma.PlanOrderByWithRelationInput
   booking?: Prisma.BookingOrderByRelationAggregateInput
-  _relevance?: Prisma.ClientPlanOrderByRelevanceInput
 }
 
 export type ClientPlanWhereUniqueInput = Prisma.AtLeast<{
@@ -421,12 +420,6 @@ export type ClientPlanListRelationFilter = {
 
 export type ClientPlanOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type ClientPlanOrderByRelevanceInput = {
-  fields: Prisma.ClientPlanOrderByRelevanceFieldEnum | Prisma.ClientPlanOrderByRelevanceFieldEnum[]
-  sort: Prisma.SortOrder
-  search: string
 }
 
 export type ClientPlanUserIdBarberIdCompoundUniqueInput = {
@@ -993,7 +986,35 @@ export type ClientPlanSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   _count?: boolean | Prisma.ClientPlanCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["clientPlan"]>
 
+export type ClientPlanSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  barberId?: boolean
+  planId?: boolean
+  useAmount?: boolean
+  starts?: boolean
+  expires?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["clientPlan"]>
 
+export type ClientPlanSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+  id?: boolean
+  userId?: boolean
+  barberId?: boolean
+  planId?: boolean
+  useAmount?: boolean
+  starts?: boolean
+  expires?: boolean
+  createdAt?: boolean
+  updatedAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+}, ExtArgs["result"]["clientPlan"]>
 
 export type ClientPlanSelectScalar = {
   id?: boolean
@@ -1014,6 +1035,16 @@ export type ClientPlanInclude<ExtArgs extends runtime.Types.Extensions.InternalA
   plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
   booking?: boolean | Prisma.ClientPlan$bookingArgs<ExtArgs>
   _count?: boolean | Prisma.ClientPlanCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type ClientPlanIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
+}
+export type ClientPlanIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  barber?: boolean | Prisma.BarberProfileDefaultArgs<ExtArgs>
+  plan?: boolean | Prisma.PlanDefaultArgs<ExtArgs>
 }
 
 export type $ClientPlanPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1152,6 +1183,30 @@ export interface ClientPlanDelegate<ExtArgs extends runtime.Types.Extensions.Int
   createMany<T extends ClientPlanCreateManyArgs>(args?: Prisma.SelectSubset<T, ClientPlanCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
 
   /**
+   * Create many ClientPlans and returns the data saved in the database.
+   * @param {ClientPlanCreateManyAndReturnArgs} args - Arguments to create many ClientPlans.
+   * @example
+   * // Create many ClientPlans
+   * const clientPlan = await prisma.clientPlan.createManyAndReturn({
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Create many ClientPlans and only return the `id`
+   * const clientPlanWithIdOnly = await prisma.clientPlan.createManyAndReturn({
+   *   select: { id: true },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  createManyAndReturn<T extends ClientPlanCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, ClientPlanCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPlanPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+  /**
    * Delete a ClientPlan.
    * @param {ClientPlanDeleteArgs} args - Arguments to delete one ClientPlan.
    * @example
@@ -1214,6 +1269,36 @@ export interface ClientPlanDelegate<ExtArgs extends runtime.Types.Extensions.Int
    * 
    */
   updateMany<T extends ClientPlanUpdateManyArgs>(args: Prisma.SelectSubset<T, ClientPlanUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>
+
+  /**
+   * Update zero or more ClientPlans and returns the data updated in the database.
+   * @param {ClientPlanUpdateManyAndReturnArgs} args - Arguments to update many ClientPlans.
+   * @example
+   * // Update many ClientPlans
+   * const clientPlan = await prisma.clientPlan.updateManyAndReturn({
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * 
+   * // Update zero or more ClientPlans and only return the `id`
+   * const clientPlanWithIdOnly = await prisma.clientPlan.updateManyAndReturn({
+   *   select: { id: true },
+   *   where: {
+   *     // ... provide filter here
+   *   },
+   *   data: [
+   *     // ... provide data here
+   *   ]
+   * })
+   * Note, that providing `undefined` is treated as the value not being there.
+   * Read more here: https://pris.ly/d/null-undefined
+   * 
+   */
+  updateManyAndReturn<T extends ClientPlanUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, ClientPlanUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPlanPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
   /**
    * Create or update one ClientPlan.
@@ -1649,6 +1734,29 @@ export type ClientPlanCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * ClientPlan createManyAndReturn
+ */
+export type ClientPlanCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientPlan
+   */
+  select?: Prisma.ClientPlanSelectCreateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientPlan
+   */
+  omit?: Prisma.ClientPlanOmit<ExtArgs> | null
+  /**
+   * The data used to create many ClientPlans.
+   */
+  data: Prisma.ClientPlanCreateManyInput | Prisma.ClientPlanCreateManyInput[]
+  skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientPlanIncludeCreateManyAndReturn<ExtArgs> | null
+}
+
+/**
  * ClientPlan update
  */
 export type ClientPlanUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1690,6 +1798,36 @@ export type ClientPlanUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many ClientPlans to update.
    */
   limit?: number
+}
+
+/**
+ * ClientPlan updateManyAndReturn
+ */
+export type ClientPlanUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientPlan
+   */
+  select?: Prisma.ClientPlanSelectUpdateManyAndReturn<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientPlan
+   */
+  omit?: Prisma.ClientPlanOmit<ExtArgs> | null
+  /**
+   * The data used to update ClientPlans.
+   */
+  data: Prisma.XOR<Prisma.ClientPlanUpdateManyMutationInput, Prisma.ClientPlanUncheckedUpdateManyInput>
+  /**
+   * Filter which ClientPlans to update
+   */
+  where?: Prisma.ClientPlanWhereInput
+  /**
+   * Limit how many ClientPlans to update.
+   */
+  limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientPlanIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

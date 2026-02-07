@@ -7,7 +7,7 @@ import { createNotification } from "./notificationActions";
 // Confirm points for a booking
 export async function confirmBookingPoints(
   bookingId: string,
-  barberId: string
+  barberId: string,
 ) {
   try {
     const session = await auth();
@@ -27,30 +27,30 @@ export async function confirmBookingPoints(
     // Get or create point system
     let pointSystem = booking.user.pointSystem;
     if (!pointSystem) {
-      throw Error('User does not have point system');
+      throw Error("User does not have point system");
     }
 
     const pendingTransaction = await prisma.pointTransaction.findFirst({
-        where: {
-            bookingId,
-            type: 'EARNED',
-        }
+      where: {
+        bookingId,
+        type: "EARNED",
+      },
     });
 
     if (!pendingTransaction) {
-        throw Error('No pending transaction found');
+      throw Error("No pending transaction found");
     }
 
     const pointsToAdd = pendingTransaction.points;
 
     const updatedTransaction = await prisma.pointTransaction.update({
-        where: {
-            id: pendingTransaction.id,
-        },
-        data: {
-            status: 'CONFIRMED',
-        }
-    })
+      where: {
+        id: pendingTransaction.id,
+      },
+      data: {
+        status: "CONFIRMED",
+      },
+    });
 
     // Update points
     const newTotal = pointSystem.currentPoints + pointsToAdd;
@@ -60,13 +60,18 @@ export async function confirmBookingPoints(
     });
 
     // Create notification
-    await createNotification(
+    await createNotification({
       barberId,
-      "POINTS_CONFIRMED",
-      "Pontos Confirmados",
-      `${pointsToAdd} pontos confirmados para ${booking.user.name}`,
-      { userId: booking.user.id, bookingId, transactionId: updatedTransaction.id }
-    );
+      type: "POINTS_CONFIRMED",
+      title: "Pontos Confirmados",
+      message: `${pointsToAdd} pontos confirmados para ${booking.user.name}`,
+      metadata: {
+        userId: booking.user.id,
+        bookingId,
+        transactionId: updatedTransaction.id,
+      },
+      url: "/admin/barber",
+    });
 
     // Mark pending notification as read
     await prisma.notification.updateMany({
@@ -85,7 +90,7 @@ export async function confirmBookingPoints(
 export async function rejectBookingPoints(
   bookingId: string,
   barberId: string,
-  reason?: string
+  reason?: string,
 ) {
   try {
     const session = await auth();
@@ -132,7 +137,7 @@ export async function adjustUserPoints(
   userId: string,
   barberId: string,
   points: number,
-  reason: string
+  reason: string,
 ) {
   try {
     const session = await auth();
@@ -163,13 +168,14 @@ export async function adjustUserPoints(
       data: { currentPoints: { increment: points } },
     });
 
-    await createNotification(
+    await createNotification({
       barberId,
-      "POINTS_ADJUSTED",
-      "Pontos Ajustados",
-      `${points > 0 ? "+" : ""}${points} pontos para usuário`,
-      { userId }
-    );
+      type: "POINTS_ADJUSTED",
+      title: "Pontos Ajustados",
+      message: `${points > 0 ? "+" : ""}${points} pontos para usuário`,
+      userId,
+      url: "/admin/barber",
+    });
 
     return { success: true };
   } catch (error) {
