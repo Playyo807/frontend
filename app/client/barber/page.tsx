@@ -1,4 +1,6 @@
-import "server-only";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import prisma from "@/lib/prisma";
 import type { BarberProfile, User } from "@/prisma/generated/prisma/client";
 import { redirect } from "next/navigation";

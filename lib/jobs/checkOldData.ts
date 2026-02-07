@@ -1,4 +1,5 @@
 import "server-only";
+import prisma from "../prisma";
 
 export default async function checkOldData() {
   const twoYearsAgo = new Date();

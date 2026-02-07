@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import prisma from "./lib/prisma";
 
 export default auth(async (req) => {
   const { pathname } = req.nextUrl;

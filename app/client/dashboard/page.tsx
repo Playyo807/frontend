@@ -1,4 +1,5 @@
-import "server-only";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 import ClientPage from "./ClientPage";
 import { auth } from "@/auth";

@@ -11,7 +11,6 @@ import { InteractiveHoverButtonC } from "@/components/custom/interactiveHoverBut
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { encodeBookingData } from "@/lib/bookingParams";
-import * as types from "@/lib/types";
 import { Service } from "@/prisma/generated/prisma/client";
 
 type bookingData = {

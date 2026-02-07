@@ -1,4 +1,6 @@
-import "server-only";
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 import ClientPage from "./ClientPage";
 import dotenv from "dotenv";
 import prisma from "@/lib/prisma";

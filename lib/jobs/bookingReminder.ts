@@ -1,5 +1,6 @@
 import "server-only";
 import { createNotification } from "../notificationActions";
+import prisma from "../prisma";
 
 export default async function bookingReminder() {
   const now = new Date();
