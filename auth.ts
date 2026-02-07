@@ -1,4 +1,4 @@
-import NextAuth, { Account } from "next-auth";
+import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "./lib/prisma";
@@ -82,13 +82,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return token;
     },
 
-    async session({
-      session,
-      token,
-    }: {
-      session: { user: User; expires: string };
-      token: any;
-    }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (!token.phone) {
         const account = await prisma.account.findFirst({
           where: { providerAccountId: token.id as string },
