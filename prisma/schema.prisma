@@ -264,6 +264,7 @@ enum NotificationType {
   BOOKING_CREATED
   BOOKING_EDITED
   BOOKING_CANCELLED
+  BOOKING_REMINDER
 }
 
 model ClientPlan {

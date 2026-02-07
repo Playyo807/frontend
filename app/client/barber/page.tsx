@@ -123,7 +123,7 @@ export default async function serverWrapper({
       barberImages={barbersImages}
       activePlan={activePlan}
       servicesPrices={servicePrices}
-      services={services}
+      services={wantedServices}
       disabledBarbers={disabledBarbers}
       availableCoupons={availableCoupons}
     />

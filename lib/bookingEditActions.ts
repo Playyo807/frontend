@@ -139,6 +139,7 @@ export async function editBooking(
       title: "Agendamento Editado",
       message: `Agendamento de ${booking.user.name} foi editado`,
       userId: booking.userId,
+      recipientType: "BARBER",
       bookingId,
       url: "/admin/barber",
     });

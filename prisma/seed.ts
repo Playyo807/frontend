@@ -1,15 +1,27 @@
 import prisma from "@/lib/prisma";
 
 async function main() {
-  const services = await prisma.service.findMany();
+  const barberProfileToServiceCount =
+    await prisma.barberProfileToService.findMany({
+      where: {
+        barberProfileId: "cmkx0lrwa0000efyc3q2f1oam",
+      },
+    });
+  const services = await prisma.service.findMany({
+    where: {
+      id: {
+        notIn: barberProfileToServiceCount.map((b) => b.serviceId),
+      },
+    },
+  });
   await prisma.barberProfileToService.createMany({
-    data: services.map(s => {
+    data: services.map((s) => {
       return {
         barberProfileId: "cmkx0lrwa0000efyc3q2f1oam",
-        serviceId: s.id
-      }
-    })
-  })
+        serviceId: s.id,
+      };
+    }),
+  });
 }
 
 main()

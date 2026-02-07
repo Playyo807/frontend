@@ -46,6 +46,7 @@ export type getBarberBookingsForDayType_ = Prisma.BookingGetPayload<{
 }>;
 
 export type barberUser_ = {
+  role: string;
   barberProfile: {
     id: string;
     displayName: string;
@@ -78,7 +79,6 @@ export type bookings_ = Prisma.UserGetPayload<{
   };
 }>;
 
-
 export type User = {
   id: string;
   name: string | null;
@@ -90,7 +90,7 @@ export type User = {
   _count: {
     bookings: number;
   };
-}
+};
 
 export type Plan = {
   id: string;
@@ -113,7 +113,7 @@ export type Plan = {
       image: string | null;
     };
   }>;
-}
+};
 
 export type TimeSlot = {
   start: string;
@@ -121,21 +121,20 @@ export type TimeSlot = {
   isAvailable: boolean;
   isPast: boolean;
   isBooked: boolean;
-}
-
+};
 
 export type TimeSlotBA = {
   start: Date;
   end: Date;
   isAvailable: boolean;
-}
+};
 
 export type DayAvailability = {
   date: string;
   status: "available" | "partial" | "full" | "past";
   availableSlots: number;
   totalSlots: number;
-}
+};
 
 export type TimeSlotResponse = {
   start: string;
@@ -143,7 +142,7 @@ export type TimeSlotResponse = {
   isAvailable: boolean;
   isPast: boolean;
   isBooked: boolean;
-}
+};
 
 export type BookingWithRelations = Prisma.BookingGetPayload<{
   include: {

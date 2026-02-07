@@ -48,21 +48,29 @@ const Icons = {
 const DATA = {
   navbar: [
     { href: "/client", icon: HomeIcon, label: "Início" },
-    { href: "#", icon: CalendarIcon, label: "Meus Agendamentos" },
-    { href: "#", icon: MailIcon, label: "Mensagens" },
+    {
+      href: "/client/dashboard",
+      icon: CalendarIcon,
+      label: "Meus Agendamentos",
+    },
+    { href: "/client/dashboard", icon: MailIcon, label: "Mensagens" },
     { href: "/client/dashboard", icon: User2, label: "Perfil" },
-    { href: "#", icon: Headset, label: "Suporte" },
+    {
+      href: "https://api.whatsapp.com/send?phone=5588999406080&text=Ol%C3%A1%2C%20procuro%20suporte!",
+      icon: Headset,
+      label: "Suporte",
+    },
   ],
   contact: {
     social: {
       GitHub: {
         name: "Github do Criador",
-        url: "#",
+        url: "https://github.com/Playyo807",
         icon: Icons.github,
       },
       Instagram: {
         name: "Instagram da Barbearia",
-        url: "#",
+        url: "https://www.instagram.com/dantas_barbearia/",
         icon: Icons.instagram,
       },
     },
@@ -92,15 +100,13 @@ export function DockMenu() {
                   aria-label={item.label}
                   className={cn(
                     buttonVariants({ variant: "ghost", size: "icon" }),
-                    "size-12 rounded-full"
+                    "size-12 rounded-full",
                   )}
                 >
                   <item.icon className="size-4" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent>
-                {item.label}
-              </TooltipContent>
+              <TooltipContent>{item.label}</TooltipContent>
             </Tooltip>
           </DockIcon>
         ))}
@@ -112,17 +118,16 @@ export function DockMenu() {
                 <Link
                   href={social.url}
                   aria-label={social.name}
+                  target="_blank"
                   className={cn(
                     buttonVariants({ variant: "ghost", size: "icon" }),
-                    "size-12 rounded-full"
+                    "size-12 rounded-full",
                   )}
                 >
                   <social.icon className="size-4" />
                 </Link>
               </TooltipTrigger>
-              <TooltipContent>
-                {social.name}
-              </TooltipContent>
+              <TooltipContent>{social.name}</TooltipContent>
             </Tooltip>
           </DockIcon>
         ))}

@@ -19,6 +19,7 @@ import { addPointsForBooking } from "./pointActions";
 import { getBarberBookingsForDayType_ } from "./types";
 import * as types from "@/lib/types";
 import { createNotification } from "./notificationActions";
+import { create } from "domain";
 
 function handleDiscount(
   price: number,
@@ -27,7 +28,7 @@ function handleDiscount(
 ): number {
   let length = length_ == 0 ? 1 : length_;
   services.map((s) => {
-    if (s.id == "LZ") {
+    if (s.keyword === "LZ" || s.keyword === "PLA") {
       length = length - 1;
     }
   });
@@ -237,14 +238,11 @@ export async function getBarberSlots(
 
     // For Sundays: reversed logic (need to be ENABLED via disabledDays table)
     if (isSunday) {
-      // If Sunday is NOT in table, it's disabled by default
       if (!isDisabled) {
         return { slots: [] };
       }
-      // If Sunday IS in table, it's enabled, continue to show slots
     }
 
-    // For non-Sundays: normal logic (in table = disabled)
     if (!isSunday && isDisabled) {
       return { slots: [] };
     }
@@ -267,11 +265,9 @@ export async function getBarberSlots(
       },
     });
 
-    // Generate time slots - THIS IS THE KEY FIX
     const slots = await generateTimeSlots(date, barberId, barber.timeInterval);
     const now = new Date();
 
-    // Mark slots as available/unavailable
     const slotsWithAvailability: types.TimeSlotResponse[] = slots.map(
       (slot) => {
         const isPast = isBefore(slot.start, now);
@@ -446,8 +442,10 @@ export async function createBooking(
       }
     }
 
-    totalPrice = handleDiscount(totalPrice, servicesById, serviceIds.length);
+    totalPrice = handleDiscount(totalPrice, servicesById, servicesById.length);
     planPrice = handleDiscount(planPrice, servicesById, serviceLength);
+
+    console.log(serviceIds, servicesById, totalPrice, planPrice);
 
     if ((couponId || coupon) && (usePlan || activePlan)) {
       throw new Error("Não é possível usar cupom e plano ao mesmo tempo");
@@ -619,9 +617,14 @@ export async function getUserBookings(): Promise<{
       throw new Error("User not found");
     }
 
+    const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+
     const bookings = await prisma.booking.findMany({
       where: {
         userId: user.id,
+        createdAt: {
+          gte: new Date(Date.now() - THIRTY_DAYS),
+        },
       },
       include: {
         services: {
@@ -1375,8 +1378,11 @@ export async function cancelBooking(bookingId: string): Promise<{
       where: { id: bookingId },
       select: {
         userId: true,
+        user: true,
         status: true,
         date: true,
+        barberId: true,
+        barber: true,
       },
     });
 
@@ -1403,6 +1409,34 @@ export async function cancelBooking(bookingId: string): Promise<{
     await prisma.booking.update({
       where: { id: bookingId },
       data: { status: "CANCELED" },
+    });
+
+    createNotification({
+      type: "BOOKING_CANCELLED",
+      title: "Agendamento cancelado ❌",
+      barberId: booking.barberId,
+      message: `O agendamento para ${format(
+        new Date(booking.date),
+        "dd/MM 'às' HH:mm",
+      )} com ${booking.user.name} foi cancelado.`,
+      recipientType: "BARBER",
+      userId: booking.userId,
+      bookingId,
+      url: "/barber/dashboard/",
+    });
+
+    createNotification({
+      type: "BOOKING_CANCELLED",
+      title: "Agendamento cancelado ❌",
+      barberId: booking.barberId,
+      message: `O agendamento para ${format(
+        new Date(booking.date),
+        "dd/MM 'às' HH:mm",
+      )} com ${booking.barber.displayName} foi cancelado.`,
+      recipientType: "USER",
+      userId: booking.userId,
+      bookingId,
+      url: "/client/dashboard/",
     });
 
     return { success: true };

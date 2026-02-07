@@ -25,7 +25,8 @@ export const NotificationType = {
   POINTS_ADJUSTED: 'POINTS_ADJUSTED',
   BOOKING_CREATED: 'BOOKING_CREATED',
   BOOKING_EDITED: 'BOOKING_EDITED',
-  BOOKING_CANCELLED: 'BOOKING_CANCELLED'
+  BOOKING_CANCELLED: 'BOOKING_CANCELLED',
+  BOOKING_REMINDER: 'BOOKING_REMINDER'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

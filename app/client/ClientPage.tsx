@@ -97,6 +97,8 @@ export default function Home({ serviceData }: { serviceData: Service[] }) {
     };
   }, []);
 
+  console.log(selectedServices);
+
   return (
     <div>
       {selectedServices.length === 0 && <DockMenu />}
@@ -235,9 +237,19 @@ export default function Home({ serviceData }: { serviceData: Service[] }) {
                   if (
                     selectedServices
                       .map((s) => s[1])
-                      .includes(service.keyword.substring(0, 2)) ||
+                      .includes(
+                        service.keyword.substring(0, 2) === "CR"
+                          ? "CR"
+                          : service.keyword,
+                      ) ||
                     (service.keyword === "PE" &&
-                      selectedServices.map((s) => s[1]).includes("CR"))
+                      selectedServices.map((s) => s[1]).includes("CR")) ||
+                    (service.keyword.substring(0, 2) === "CR" &&
+                      selectedServices.map((s) => s[1]).includes("PE")) ||
+                    (service.keyword === "LZ" &&
+                      selectedServices.map((s) => s[1]).includes("PLA")) ||
+                    (service.keyword === "PLA" &&
+                      selectedServices.map((s) => s[1]).includes("LZ"))
                   ) {
                     setSelectedServices((prev) =>
                       prev.filter((s) => s[0] !== service.id),
@@ -245,7 +257,12 @@ export default function Home({ serviceData }: { serviceData: Service[] }) {
                   } else {
                     setSelectedServices((prev) => [
                       ...prev,
-                      [service.id, service.keyword.substring(0, 2)],
+                      [
+                        service.id,
+                        service.keyword.substring(0, 2) === "CR"
+                          ? "CR"
+                          : service.keyword,
+                      ],
                     ]);
                   }
                 }}
@@ -259,9 +276,19 @@ export default function Home({ serviceData }: { serviceData: Service[] }) {
                   className={`flex items-center gap-4 ${
                     (selectedServices
                       .map((s) => s[1])
-                      .includes(service.keyword.substring(0, 2)) ||
+                      .includes(
+                        service.keyword.substring(0, 2) === "CR"
+                          ? "CR"
+                          : service.keyword,
+                      ) ||
                       (service.keyword === "PE" &&
-                        selectedServices.map((s) => s[1]).includes("CR"))) &&
+                        selectedServices.map((s) => s[1]).includes("CR")) ||
+                      (service.keyword.substring(0, 2) === "CR" &&
+                        selectedServices.map((s) => s[1]).includes("PE")) ||
+                      (service.keyword === "LZ" &&
+                        selectedServices.map((s) => s[1]).includes("PLA")) ||
+                      (service.keyword === "PLA" &&
+                        selectedServices.map((s) => s[1]).includes("LZ"))) &&
                     !selectedServices.map((s) => s[0]).includes(service.id)
                       ? `bg-gray-900 filter grayscale`
                       : `bg-slate-900/80 hover:bg-black hover:scale-105 cursor-pointer`

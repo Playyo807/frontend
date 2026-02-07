@@ -71,6 +71,7 @@ export default function ClientPage({
     return sum + price;
   }, 0);
   const [usePlan, setUsePlan] = useState(false);
+  const [selectedPlanState, setSelectedPlanState] = useState<boolean>(false);
 
   if (!selectedServices) {
     alert(
@@ -94,7 +95,7 @@ export default function ClientPage({
       const planServiceIds = activePlan.plan.planToService.map(
         (ps) => ps.service.id,
       );
-      const selectedServicesIds = selectedServices.map(s => s[0]);
+      const selectedServicesIds = selectedServices.map((s) => s[0]);
       planServiceIds.map((id) => {
         services.map((s) => {
           if (s.id === id && selectedServicesIds.includes(s.id)) {
@@ -109,7 +110,7 @@ export default function ClientPage({
       });
     }
     selectedServices.map((s) => {
-      if (s[1] == "LZ") {
+      if (s[1] === "LZ" || s[1] === "PLA") {
         length = length - 1;
       }
     });
@@ -125,8 +126,19 @@ export default function ClientPage({
     const coupon = availableCoupons.find((c) => c.id === selectedCoupon);
     if (!coupon) return 0;
 
+    let totalPrice__ = 0;
+    let remainingPrice = totalPrice;
+
+    services.map((service) => {
+      if (service.keyword === "LZ" || service.keyword === "PLA") return;
+      totalPrice__ += service.price;
+    });
+
+    remainingPrice -= totalPrice__;
+
     return Math.floor(
-      (handleDiscount(totalPrice) * coupon.discountPercent) / 100,
+      remainingPrice +
+        (handleDiscount(totalPrice__) * coupon.discountPercent) / 100,
     );
   };
 
@@ -243,7 +255,7 @@ export default function ClientPage({
                   setSelectedDate(e);
                   setTimeout(() => {
                     window.location.href = "#timeSelection";
-                  }, 600)
+                  }, 600);
                 }}
               />
             </div>
@@ -257,14 +269,17 @@ export default function ClientPage({
                     setSelectedSlot(e);
                     setTimeout(() => {
                       window.location.href = "#slotConfirmation";
-                    }, 1000)
+                    }, 1000);
                   }}
                   selectedSlot={selectedSlot}
                 />
               </div>
 
               {selectedSlot && (
-                <div id="slotConfirmation" className="mt-8 p-6 bg-slate-800 rounded-lg space-y-4">
+                <div
+                  id="slotConfirmation"
+                  className="mt-8 p-6 bg-slate-800 rounded-lg space-y-4"
+                >
                   <h3 className="text-xl font-bold mb-4">
                     Resumo do Agendamento
                   </h3>
@@ -287,8 +302,8 @@ export default function ClientPage({
                       <strong>Serviços:</strong>
                     </p>
                     <ul className="list-disc list-inside ml-4">
-                      {selectedServices?.map((service) => (
-                        <li key={service[0]}>{service[1]}</li>
+                      {services?.map((service) => (
+                        <li key={service.id}>{service.name}</li>
                       ))}
                     </ul>
                   </div>
@@ -365,6 +380,8 @@ export default function ClientPage({
                       activePlan={activePlan}
                       onUsePlanChange={setUsePlan}
                       selectedServices={selectedServices.map((s) => s[0])}
+                      setSelectedPlanState={setSelectedPlanState}
+                      selectPlanState={selectedPlanState}
                     />
                   )}
 
@@ -381,13 +398,15 @@ export default function ClientPage({
                     </h4>
                   </div>
 
-                  <button
-                    onClick={handleBooking}
-                    disabled={isPending}
-                    className="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg text-xl font-bold transition-all"
-                  >
-                    {isPending ? "Agendando..." : "Confirmar Agendamento"}
-                  </button>
+                  {(!activePlan || selectedPlanState) && (
+                    <button
+                      onClick={handleBooking}
+                      disabled={isPending}
+                      className="w-full mt-6 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-600 disabled:cursor-not-allowed px-6 py-3 rounded-lg text-xl font-bold transition-all"
+                    >
+                      {isPending ? "Agendando..." : "Confirmar Agendamento"}
+                    </button>
+                  )}
                 </div>
               )}
             </div>

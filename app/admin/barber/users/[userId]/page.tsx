@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import UserDetailClient from "./ClientPage";
 import { BookingStatus } from "@/prisma/generated/prisma/enums";
-import * as type from "@/lib/types"
+import * as type from "@/lib/types";
 
 const statusPriority: Record<BookingStatus, number> = {
   [BookingStatus.CONFIRMED]: 1,
@@ -45,9 +45,6 @@ export default async function UserDetailPage({
         },
       },
       bookings: {
-        where: {
-          barberId: barberUser.barberProfile.id,
-        },
         include: {
           services: { include: { service: true } },
           coupon: true,
@@ -74,11 +71,25 @@ export default async function UserDetailPage({
     orderBy: { name: "asc" },
   });
 
+  let isAdmin = false;
+
+  if (barberUser?.role === "ADMIN" || barberUser?.role === "SUPERADMIN") {
+    isAdmin = true;
+  }
+
+  const barberProfiles = await prisma.barberProfile.findMany({
+    include: {
+      user: true,
+    },
+  });
+
   return (
     <UserDetailClient
       user={user}
       barberId={barberUser.barberProfile.id}
       services={services}
+      isAdmin={isAdmin}
+      barberProfiles={barberProfiles}
     />
   );
 }

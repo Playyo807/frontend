@@ -13,7 +13,12 @@ export function ComboCheckout({
 }) {
   function handleDiscount(price: number): number {
     let length = selectedServices.length == 0 ? 1 : selectedServices.length;
-    if (selectedServices[1]?.includes('LZ')) length = length - 1;
+    selectedServices.map((s) => {
+      if (s[1] === "LZ" || s[1] === "PLA") {
+        length -= 1;
+        length = Math.max(length, 1);
+      }
+    });
     const discountRate = (length - 1) * 5;
     return price - discountRate;
   }
@@ -65,10 +70,14 @@ export function ComboCheckout({
             <span className="text-sm">Descontos:</span>
             <span className="text-sm text-red-400 flex flex-row">
               -
-              {(priceSum() - handleDiscount(priceSum())).toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })} <BanknoteArrowDown size={20} className="ml-1" />
+              {(priceSum() - handleDiscount(priceSum())).toLocaleString(
+                "pt-BR",
+                {
+                  style: "currency",
+                  currency: "BRL",
+                },
+              )}{" "}
+              <BanknoteArrowDown size={20} className="ml-1" />
             </span>
           </p>
           <h2>
@@ -77,7 +86,8 @@ export function ComboCheckout({
               {handleDiscount(priceSum()).toLocaleString("pt-BR", {
                 style: "currency",
                 currency: "BRL",
-              })} <Banknote size={24} className="ml-1" />
+              })}{" "}
+              <Banknote size={24} className="ml-1" />
             </span>
           </h2>
         </div>

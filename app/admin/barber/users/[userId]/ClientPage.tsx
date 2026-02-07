@@ -37,17 +37,29 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { Service } from "@/prisma/generated/prisma/client";
-import * as types from "@/lib/types"
+import { Prisma, Service } from "@/prisma/generated/prisma/client";
+import * as types from "@/lib/types";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+type BarberProfile_ = Prisma.BarberProfileGetPayload<{
+  include: {
+    user: true;
+  };
+}>;
 
 export default function UserDetailClient({
   user,
   barberId,
   services,
+  barberProfiles,
+  isAdmin,
 }: {
   user: types.bookings_;
   barberId: string;
   services: Service[];
+  barberProfiles?: BarberProfile_[];
+  isAdmin?: boolean;
 }) {
   const router: AppRouterInstance = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -55,12 +67,14 @@ export default function UserDetailClient({
   const [pointsAmount, setPointsAmount] = useState<string>("");
   const [pointsReason, setPointsReason] = useState<string>("");
   const [filter, setFilter] = useState<string>("ALL");
-  const [bookings, setBookings] = useState<types.bookings_['bookings']>();
+  const [bookings, setBookings] = useState<types.bookings_["bookings"]>();
+  const [activeBarberId, setActiveBarberId] = useState<string>(barberId);
 
   useEffect(() => {
     setBookings(
       user.bookings.filter((b) => {
         const isPast = b.date < new Date();
+        if (b.barberId !== activeBarberId) return false;
         if (filter == "ALL") return true;
         if (filter == "PAST" && isPast) return true;
         if (!isPast) {
@@ -68,7 +82,7 @@ export default function UserDetailClient({
         }
       }),
     );
-  }, [filter]);
+  }, [filter, activeBarberId]);
 
   const handleAdjustPoints = () => {
     const points = parseInt(pointsAmount);
@@ -124,6 +138,30 @@ export default function UserDetailClient({
               <p className="text-gray-400">{user.email}</p>
               <p className="text-gray-400">{user.phone}</p>
             </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {isAdmin && barberProfiles && (
+              <Select value={activeBarberId} onValueChange={setActiveBarberId}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {barberProfiles.map((pro) => {
+                    return (
+                      <SelectItem key={pro.id} value={pro.id}>
+                        <Avatar className="h-6 w-6">
+                          <AvatarImage src={pro.user.image ?? undefined} />
+                          <AvatarFallback>
+                            {pro.displayName?.[0] ?? "B"}
+                          </AvatarFallback>
+                        </Avatar>
+                        {pro.displayName}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </div>
 
@@ -298,7 +336,7 @@ export default function UserDetailClient({
               </Select>
             </div>
           </h3>
-          {!bookings || user.bookings.length === 0 ? (
+          {!bookings || bookings.length === 0 ? (
             <p className="text-gray-400 text-center py-8">
               Nenhum agendamento encontrado
             </p>
@@ -308,7 +346,7 @@ export default function UserDetailClient({
                 <BookingEditDialog
                   key={booking.id}
                   booking={booking}
-                  barberId={barberId}
+                  barberId={activeBarberId}
                   services={services}
                 />
               ))}

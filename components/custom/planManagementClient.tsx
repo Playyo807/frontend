@@ -1,6 +1,12 @@
 "use client";
 
-import { Calendar, Clock, Package, CheckCircle2, AlertCircle } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Package,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Progress } from "@/components/ui/progress";
@@ -48,8 +54,8 @@ export default function PlanManagementClient({
         </div>
         <h2 className="text-2xl font-bold text-gray-300">Sem Plano Ativo</h2>
         <p className="text-gray-400 text-center max-w-md">
-          Você não possui nenhum plano ativo no momento. Entre em contato com seu
-          barbeiro para saber mais sobre os planos disponíveis.
+          Você não possui nenhum plano ativo no momento. Entre em contato com
+          seu barbeiro para saber mais sobre os planos disponíveis.
         </p>
       </div>
     );
@@ -58,13 +64,12 @@ export default function PlanManagementClient({
   const isExpired = new Date(clientPlan.expires) < new Date();
   const daysRemaining = differenceInDays(
     new Date(clientPlan.expires),
-    new Date()
+    new Date(),
   );
   const isExpiringSoon = daysRemaining <= 7 && daysRemaining > 0;
 
   // Calculate initial use amount (this is a simplified version)
   // In production, you might want to store the initial amount
-  const totalServices = clientPlan.plan.planToService.length;
 
   return (
     <div className="space-y-6">
@@ -147,10 +152,7 @@ export default function PlanManagementClient({
               {clientPlan.useAmount}
             </span>
           </div>
-          <Progress
-            value={clientPlan.useAmount * 10}
-            className="h-3"
-          />
+          <Progress value={clientPlan.useAmount * 10} className="h-3" />
           <p className="text-xs text-gray-400 mt-2">
             {clientPlan.useAmount === 0
               ? "Sem usos restantes"

@@ -15,6 +15,8 @@ interface PlanSelectorProps {
   selectedServices: string[];
   usePlan: boolean;
   onUsePlanChange: (use: boolean) => void;
+  setSelectedPlanState?: React.Dispatch<React.SetStateAction<boolean>>;
+  selectPlanState?: boolean;
 }
 
 export default function PlanSelector({
@@ -22,18 +24,19 @@ export default function PlanSelector({
   selectedServices,
   usePlan,
   onUsePlanChange,
+  setSelectedPlanState,
+  selectPlanState,
 }: PlanSelectorProps) {
   if (!activePlan) return null;
 
-  // Check if all selected services are in the plan
   const planServiceIds = activePlan.plan.planToService.map(
-    (ps) => ps.service.id
+    (ps) => ps.service.id,
   );
   const allServicesInPlan = selectedServices.every((id) =>
-    planServiceIds.includes(id)
+    planServiceIds.includes(id),
   );
 
-  console.log("Selected: ", selectedServices, planServiceIds)
+  console.log("Selected: ", selectedServices, planServiceIds);
 
   if (!allServicesInPlan) {
     return (
@@ -47,41 +50,41 @@ export default function PlanSelector({
               <span className="font-semibold">{activePlan.plan.name}</span>.
             </p>
             <h4 className="font-semibold mb-3 flex items-center gap-2">
-        <Package className="text-emerald-500" size={20} />
-        Usar Plano
-      </h4>
+              <Package className="text-emerald-500" size={20} />
+              Usar Plano
+            </h4>
 
-      <div
-        className={`border rounded-lg p-4 cursor-pointer transition-all ${
-          usePlan
-            ? "border-emerald-500 bg-emerald-500/10"
-            : "border-slate-600 hover:border-slate-500"
-        }`}
-        onClick={() => onUsePlanChange(!usePlan)}
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Checkbox
-              checked={usePlan}
-              onCheckedChange={onUsePlanChange}
-            />
-            <div>
-              <p className="font-bold text-emerald-400">
-                {activePlan.plan.name}
-              </p>
-              <p className="text-sm text-gray-400">
-                {activePlan.useAmount} uso(s) restante(s)
-              </p>
+            <div
+              className={`border rounded-lg p-4 cursor-pointer transition-all ${
+                usePlan
+                  ? "border-emerald-500 bg-emerald-500/10"
+                  : "border-slate-600 hover:border-slate-500"
+              }`}
+              onClick={() => onUsePlanChange(!usePlan)}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    checked={usePlan}
+                    onCheckedChange={onUsePlanChange}
+                  />
+                  <div>
+                    <p className="font-bold text-emerald-400">
+                      {activePlan.plan.name}
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      {activePlan.useAmount} uso(s) restante(s)
+                    </p>
+                  </div>
+                </div>
+                {usePlan && (
+                  <div className="text-emerald-400 font-semibold flex items-center gap-2">
+                    <CheckCircle2 size={20} />
+                    Aplicado!
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-          {usePlan && (
-            <div className="text-emerald-400 font-semibold flex items-center gap-2">
-              <CheckCircle2 size={20} />
-              Aplicado!
-            </div>
-          )}
-        </div>
-      </div>
           </div>
         </div>
       </div>
@@ -97,17 +100,20 @@ export default function PlanSelector({
 
       <div
         className={`border rounded-lg p-4 cursor-pointer transition-all ${
-          usePlan
+          usePlan && selectPlanState
             ? "border-emerald-500 bg-emerald-500/10"
             : "border-slate-600 hover:border-slate-500"
         }`}
-        onClick={() => onUsePlanChange(!usePlan)}
+        onClick={() => {
+          onUsePlanChange(true);
+          setSelectedPlanState && setSelectedPlanState(true);
+        }}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Checkbox
-              checked={usePlan}
-              onCheckedChange={onUsePlanChange}
+              checked={usePlan && selectPlanState}
+              onCheckedChange={() => onUsePlanChange(true)}
             />
             <div>
               <p className="font-bold text-emerald-400">
@@ -124,6 +130,27 @@ export default function PlanSelector({
               Aplicado!
             </div>
           )}
+        </div>
+      </div>
+      <div
+        className={`border rounded-lg mt-2 p-4 cursor-pointer transition-all ${
+          !usePlan && selectPlanState
+            ? "border-emerald-500 bg-emerald-500/10"
+            : "border-slate-600 hover:border-slate-500"
+        }`}
+        onClick={() => {
+          onUsePlanChange(false);
+          setSelectedPlanState && setSelectedPlanState(true);
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <Checkbox
+            checked={!usePlan && selectPlanState}
+            onCheckedChange={() => onUsePlanChange(false)}
+          />
+          <div>
+            <p className="font-bold text-emerald-400">Não usar plano</p>
+          </div>
         </div>
       </div>
 
@@ -143,7 +170,7 @@ export default function PlanSelector({
 // 1. Fetch the user's active plan when loading the page
 // 2. Add state: const [usePlan, setUsePlan] = useState(false);
 // 3. Add the component before the coupon selector:
-// <PlanSelector 
+// <PlanSelector
 //   activePlan={activePlan}
 //   selectedServices={selectedServices?.map(s => s[0]) || []}
 //   usePlan={usePlan}

@@ -11,7 +11,7 @@ export default async function checkOldData() {
       },
     },
   });
-  const deletedBookings = await prisma.notification.deleteMany({
+  const deletedBookings = await prisma.booking.deleteMany({
     where: {
       createdAt: {
         lte: twoYearsAgo,
@@ -25,4 +25,8 @@ export default async function checkOldData() {
       },
     },
   });
+
+  console.log(
+    `Old data cleanup completed. Deleted notifications: ${deletedNotifications.count}, Deleted bookings: ${deletedBookings.count}, Deleted point transactions: ${deletedPointTransactions.count}`,
+  );
 }
