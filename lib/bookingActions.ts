@@ -116,7 +116,7 @@ export async function getBarberAvailability(
           availableSlots: 0,
           totalSlots: 0,
         });
-        current.setDate(current.getDate() + 1);
+        current.setUTCDate(current.getUTCDate() + 1);
         continue;
       }
 
@@ -129,7 +129,7 @@ export async function getBarberAvailability(
           availableSlots: 0,
           totalSlots: 0,
         });
-        current.setDate(current.getDate() + 1);
+        current.setUTCDate(current.getUTCDate() + 1);
         continue;
       }
 
@@ -141,7 +141,7 @@ export async function getBarberAvailability(
           availableSlots: 0,
           totalSlots: 0,
         });
-        current.setDate(current.getDate() + 1);
+        current.setUTCDate(current.getDate() + 1);
         continue;
       }
 
@@ -196,7 +196,7 @@ export async function getBarberAvailability(
         totalSlots,
       });
 
-      current.setDate(current.getDate() + 1);
+      current.setUTCDate(current.getDate() + 1);
     }
 
     return { availability };
@@ -676,11 +676,11 @@ async function generateTimeSlots(
   const isWeekend_ = workStart.getDay() == 0 || workStart.getDay() == 6;
 
   if (isWeekend_) {
-    workStart.setHours(8, 0, 0, 0);
-    workEnd.setHours(19, 0, 0, 0);
+    workStart.setUTCHours(8, 0, 0, 0);
+    workEnd.setUTCHours(19, 0, 0, 0);
   } else {
-    workStart.setHours(8, 0, 0, 0);
-    workEnd.setHours(21, 0, 0, 0);
+    workStart.setUTCHours(8, 0, 0, 0);
+    workEnd.setUTCHours(21, 0, 0, 0);
   }
 
   console.log("⏰ Work End BEFORE extra time:", workEnd); // DEBUG
@@ -698,9 +698,9 @@ async function generateTimeSlots(
   while (isBefore(currentSlot, workEnd)) {
     const slotEnd = addMinutes(currentSlot, intervalMinutes);
     const interval1 = new Date(workStart);
-    interval1.setHours(11, 20, 0, 0);
+    interval1.setUTCHours(11, 20, 0, 0);
     const interval2 = new Date(workStart);
-    interval2.setHours(12, 30, 0, 0);
+    interval2.setUTCHours(12, 30, 0, 0);
 
     const currentSlotDisabled = disabledDates.some(
       (d) => d.getTime() === currentSlot.getTime(),
@@ -719,9 +719,9 @@ async function generateTimeSlots(
     // Lunch break logic
     if (currentSlot > interval1 && currentSlot < interval2) {
       if (isWeekend_) {
-        currentSlot.setHours(13, 0, 0, 0);
+        currentSlot.setUTCHours(13, 0, 0, 0);
       } else {
-        currentSlot.setHours(14, 0, 0, 0);
+        currentSlot.setUTCHours(14, 0, 0, 0);
       }
       continue;
     }
