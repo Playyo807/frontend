@@ -1,4 +1,5 @@
 import "server-only";
+import "@/lib/server-timezone";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
