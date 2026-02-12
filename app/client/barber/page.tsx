@@ -66,11 +66,7 @@ export default async function serverWrapper({
   });
 
   // Filter barbers that DON'T have ALL selected services
-  const disabledBarbers: BarberProfile[] = barbersProfiles.filter(
-    (barber) =>
-      (barberServiceCount.get(barber.id) || 0) < selectedServiceIds.length,
-  );
-
+  const disabledBarbers: BarberProfile[] = [];
   const barbersImages: string[] = barbersProfiles.map((b) => {
     const user = barbersUsers.find((v) => v.id == b.userId);
     const image = user?.image ?? "";
